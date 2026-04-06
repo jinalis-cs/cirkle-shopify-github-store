@@ -1,0 +1,54 @@
+{% style %}
+  @media screen and (min-width: 990px) {
+    .addon-product .product__media-wrapper {
+        max-width: 30% !important;
+        width: calc(65% - var(--grid-desktop-horizontal-spacing) / 2);
+    }
+    .product--large:not(.product--no-media) .product__info-wrapper {
+        padding: 0 0 0 2rem;
+        max-width: 70%;
+        width: calc(35% - var(--grid-desktop-horizontal-spacing) / 2);
+    }
+    .addon-product .thumbnail-slider{
+      display: none;
+    }
+  }
+{% endstyle %}
+<product-info
+  id="MainProduct-{{ section.id }}"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} addon-product"
+  data-section="{{ section.id }}"
+  data-product-id="{{ addon_product.id }}"
+  data-update-url="false"
+  data-url="{{ addon_product.url }}"
+  {% if section.settings.image_zoom == 'hover' %}
+    data-zoom-on-hover
+  {% endif %}
+>
+  <div class="product grid">
+    <div class="grid__item product__media-wrapper">
+      {% assign variant_images = addon_product.images | where: 'attached_to_variant?', true | map: 'src' %}
+      {% render 'product-media-gallery', variant_images: variant_images %}
+    </div>
+    <div class="product__info-wrapper grid__item">
+      <section
+        id="ProductInfo-{{ section.id }}-{{ addon_product.id }}"
+        class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
+      >
+        {%- assign product_form_id = 'product-form-' | append: section.id | append: '-' | append: product.id -%}
+        <div class="product__title" {{ block.shopify_attributes }}>
+          <h5>{{ addon_product.title | escape }}</h5>
+        </div>
+        <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+          {%- render 'price',
+            product: addon_product,
+            use_variant: true,
+            show_badges: false,
+            price_class: ''
+          -%}
+        </div>
+        {% render 'product-variant-picker', product: addon_product, block: block, product_form_id: product_form_id %}
+      </section>
+    </div>
+  </div>
+</product-info>

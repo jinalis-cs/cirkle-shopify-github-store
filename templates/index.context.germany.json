@@ -1,0 +1,109 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "index.json",
+  "context": {
+    "market": "europe"
+  },
+  "sections": {
+    "featured_collection": {
+      "disabled": true,
+      "settings": {},
+      "blocks": {}
+    },
+    "featured_product_rqr4F": {
+      "type": "featured-product",
+      "disabled": false,
+      "settings": {
+        "product": "gold-luxury-bed-sheet",
+        "color_scheme": "",
+        "secondary_background": false,
+        "header-a3c9fa6c95e65e8ef75f9292e8363e87": null,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "header-3d82b561010396caba5e100029a9c5ed": null,
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "text_TzWaX": {
+          "type": "text",
+          "disabled": false,
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_4fjJx": {
+          "type": "title",
+          "disabled": false,
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_83wVF": {
+          "type": "price",
+          "disabled": false,
+          "settings": {}
+        },
+        "variant_picker_MEtdy": {
+          "type": "variant_picker",
+          "disabled": false,
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_nDUtr": {
+          "type": "quantity_selector",
+          "disabled": false,
+          "settings": {}
+        },
+        "buy_buttons_N36m8": {
+          "type": "buy_buttons",
+          "disabled": false,
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_7J7cn": {
+          "type": "share",
+          "disabled": false,
+          "settings": {
+            "share_label": "Share",
+            "paragraph-bf11e12b49040476fa1082033f02dfcf": null,
+            "paragraph-793aec5f4f18612dfd0ea25f8d7f8f71": null
+          }
+        }
+      },
+      "block_order": [
+        "text_TzWaX",
+        "title_4fjJx",
+        "price_83wVF",
+        "variant_picker_MEtdy",
+        "quantity_selector_nDUtr",
+        "buy_buttons_N36m8",
+        "share_7J7cn"
+      ],
+      "name": "t:sections.featured-product.presets.name"
+    }
+  },
+  "order": [
+    "slideshow_WbYn3j",
+    "featured_collection",
+    "featured_product_rqr4F"
+  ]
+}

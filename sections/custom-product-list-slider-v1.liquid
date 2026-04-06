@@ -1,0 +1,473 @@
+{% style %}
+  .product-images img{
+    width: 150px;
+    height: 150px;
+    display: block;
+    object-fit: contain;
+  }
+  .prod-variants{
+    display: flex;
+    /* gap: 10px; */
+  }
+  .prod-variants .swatch{
+    width: 20px;
+    height: 20px;
+    display: block;
+    border: 1px solid grey;
+  }
+
+  .prod-img-slider {
+    width: 100%;
+    position: relative;
+  }
+
+  .prod-img-slider .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .prod-img-slider img {
+    width: 100%;
+    max-width: 150px;
+    height: 150px;
+    object-fit: contain;
+  }
+  .prod-img-slider .swiper-pagination {
+    position: relative;
+    margin-top: 6px;
+  }
+
+  .prod-img-slider .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+  }
+
+  @media (min-width: 768px) {
+    /* .prod-img-slider .swiper-wrapper {
+      display: flex;
+      gap: 6px;
+    } */
+
+    .prod-img-slider .swiper-slide {
+      width: auto !important;
+    }
+    .prod-img-slider .swiper-slide:not(:first-child) {
+      display: none;
+    }
+    .prod-img-slider .swiper-pagination{
+      display: none;
+    }
+  }
+{% endstyle %}
+
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 12px;
+  border: 1px solid #000;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fffff;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 6px;
+  width: 9px;
+  left: 2px;
+  bottom: 2px;
+  background-color: black;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #fffff;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #fffff;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(7px);
+  -ms-transform: translateX(7px);
+  transform: translateX(7px);
+}
+</style>
+
+  {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+  {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
+  {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'variant-swatch-image-slider-v1.js' | asset_url }}" defer="defer"></script>
+
+<div class="product-list-slider-section" data-section="custom-product-list-slider" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="prod-list-heading">
+      {%- if section.settings.title != blank -%}
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      <div class="prod-list-slider-btns">
+        <button class="cstm-prev-btn cstm-slider-btn">Prev</button>
+        <button class="cstm-next-btn cstm-slider-btn">Next</button>
+      </div>
+    </div>
+    {% if section.settings.collection != blank %}
+      <div class="product-list-wrap">
+        {% if section.settings.collection.products_count > 0 %}
+          <div class="swiper prod-list-slider">
+            <div class="swiper-wrapper">
+              {% for product in section.settings.collection.products %}
+                {% liquid
+                  assign variant_img_available = false
+                  assign variant_images = ''
+                  for variant in product.variants
+                    if variant.metafields.custom.variant_images != blank
+                      assign variant_images = variant.metafields.custom.variant_images.value
+                      assign variant_img_available = true
+                      break
+                    endif
+                  endfor
+                %}
+
+                {% capture product_two_images %}
+                  <div class="swiper-slide">
+                    <img
+                      srcset="
+                        {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                        {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                        {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                        {%- if product.featured_media.width >= 940 -%}{{ product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                        {%- if product.featured_media.width >= 1066 -%}{{ product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
+                        {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+                      "
+                      src="{{ product.featured_media | image_url: width: 533 }}"
+                      sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                      alt="{{ product.featured_media.alt | escape }}"
+                      class="motion-reduce"
+                      loading="lazy"
+                      width="{{ product.featured_media.width }}"
+                      height="{{ product.featured_media.height }}"
+                    >
+                  </div>
+                  <div class="swiper-slide">
+                    {%- if product.media[1] != null -%}
+                      <img
+                        srcset="
+                          {%- if product.media[1].width >= 165 -%}{{ product.media[1] | image_url: width: 165 }} 165w,{%- endif -%}
+                          {%- if product.media[1].width >= 360 -%}{{ product.media[1] | image_url: width: 360 }} 360w,{%- endif -%}
+                          {%- if product.media[1].width >= 533 -%}{{ product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
+                          {%- if product.media[1].width >= 720 -%}{{ product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
+                          {%- if product.media[1].width >= 940 -%}{{ product.media[1] | image_url: width: 940 }} 940w,{%- endif -%}
+                          {%- if product.media[1].width >= 1066 -%}{{ product.media[1] | image_url: width: 1066 }} 1066w,{%- endif -%}
+                          {{ product.media[1] | image_url }} {{ product.media[1].width }}w
+                        "
+                        src="{{ product.media[1] | image_url: width: 533 }}"
+                        sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                        alt=""
+                        class="motion-reduce"
+                        loading="lazy"
+                        width="{{ product.media[1].width }}"
+                        height="{{ product.media[1].height }}"
+                      >
+                    {%- endif -%}
+                  </div>
+                {% endcapture %}
+                <div class="product-slide swiper-slide" data-product-id="{{ product.id }}">
+                  <product-images class="product-images prod-img-slider">
+                    <div class="swiper-wrapper">                      
+                      {% if variant_images != blank %}
+                          {% for variant_img in variant_images %}
+                            <div class="swiper-slide">
+                              <img src="{{ variant_img | image_url: width: 533 }}" class="variant_img">
+                            </div>
+                          {% endfor %}
+                          <script type="application/json" data-selected-variant>
+                            {% for variant in product.variants %}
+                              {                              
+                                  "id": {{ variant.id }},
+                                  "price": {{ variant.price | money }},
+                                  "cprice": {{ variant.compare_at_price | money }},
+                                  "images": {{ variant_images | default: '' | json }}                          
+                              }
+                              {% unless forloop.last %},{% endunless %}
+                            {% endfor %}
+                          </script>
+                      {% else %}                                                
+                        {% if product.featured_media != blank %}
+                          {{ product_two_images }}
+                        {% else %}
+                          <div class="swiper-slide">{{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+                        {% endif %} 
+                      {% endif %}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </product-images>
+                  <div class="prod-title-variant-warp">
+                    <div class="prod-title"><a href="{{ product.url }}">{{ product.title }}</a></div>
+                    {% if product.variants.size > 1 and variant_img_available %}
+                      <variant-swatchs class="prod-variants js product-form__input product-form__input--swatch">
+                        {%- for option in product.options_with_values -%}
+                          {% assign swatch_count = option.values | map: 'swatch' | compact | size %}
+                          {% if swatch_count == 0 %}
+                            {% continue %}
+                          {% endif %}
+                          {%- for value in option.values -%}
+                            <div class="variant-swatch">
+                              {%- liquid
+                                assign swatch = value.swatch
+                                assign swatch_value = null
+                                assign shape = 'circle'
+                                if swatch.image
+                                  assign image_url = swatch.image | image_url: width: 50
+                                  assign swatch_value = 'url(' | append: image_url | append: ')'
+                                elsif swatch.color
+                                  assign swatch_value = 'rgb(' | append: swatch.color.rgb | append: ')'
+                                endif
+                              %}
+                              <input
+                                type="radio"
+                                id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}"
+                                name="{{ option.name }}-{{ option.position }}"
+                                value="{{ value }}"
+                                class="swatch-input__input"
+                                {% if forloop.first %}
+                                  checked
+                                {% endif %}
+                                {% if disabled %}
+                                  disabled
+                                {% endif %}
+                                data-variant-id="{{ value.variant.id }}"
+                              >
+                              <label class="swatch-input__label" for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}">
+                                <span
+                                  {% if swatch_value %}
+                                    class="swatch{% if shape == 'square' %} swatch--square{% endif %}"
+                                    style="background: {{ swatch_value }};"
+                                  {% else %}
+                                    class="swatch swatch--unavailable{% if shape == 'square' %} swatch--square{% endif %}"
+                                  {% endif %}
+                                  style="display: block !important"
+                                ></span>
+                              </label>
+                            </div>
+                          {%- endfor -%}
+                        {%- endfor -%}
+                      </variant-swatchs>
+                    {% endif %}
+                  </div>
+                  <div class="prod-price">
+                    {% if product.variants.size > 1 %}
+                      {{ product.variants[0].price | money }}
+                    {% else %}
+                      {{ product.price | money }}
+                    {% endif %}
+                  </div>
+                  {% assign prod_cprice = '' %}
+                  {% if product.variants.size > 1 %}
+                    {% assign prod_cprice = product.variants[0].compare_at_price | money %}
+                  {% else %}
+                    {% assign prod_cprice = product.compare_at_price | money %}
+                  {% endif %}
+                  {% if prod_cprice != blank %}
+                    <div class="prod-cprice">With stone: {{ prod_cprice }}</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% comment %} <script>
+  const cstmPrevBtn = document.querySelector('.cstm-prev-btn');
+  const cstmNextBtn = document.querySelector('.cstm-next-btn');
+  
+  let prodListSlider = new Swiper('.prod-list-slider', {
+    slidesPerView: 3,
+    spaceBetween: 10,
+    allowTouchMove: false,
+    loop: false,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      320: {
+        slidesPerView: 2,
+        spaceBetween: 20
+      },
+      480: {
+        slidesPerView: 3,
+        spaceBetween: 30
+      },
+      640: {
+        slidesPerView: 3,
+        spaceBetween: 40
+      }
+    },
+    on: {
+      init: syncCustomButtons,
+      slideChange: syncCustomButtons,
+      reachBeginning: syncCustomButtons,
+      reachEnd: syncCustomButtons,
+      fromEdge: syncCustomButtons,
+    },
+  });
+
+   let prodImgSlider;
+  const mq = window.matchMedia('(max-width: 767px)');
+
+  function initProdImgSlider() {
+    const sliders = document.querySelectorAll('.prod-img-slider');
+    sliders.forEach((slider) => {
+      if (mq.matches) {
+        if (!slider.swiper) {
+          new Swiper(slider, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            pagination: {
+              el: slider.querySelector('.swiper-pagination'),
+              clickable: true,
+            },
+          });
+        }
+      } else {
+        if (slider.swiper) {
+          slider.swiper.destroy(true, true);
+        }
+      }
+    });
+  }
+  initProdImgSlider();
+  mq.addEventListener('change', initProdImgSlider); 
+
+  function syncCustomButtons(swiper) {
+    if (swiper.isBeginning) {
+      cstmPrevBtn.classList.add('swiper-button-disabled');
+    } else {
+      cstmPrevBtn.classList.remove('swiper-button-disabled');
+    }
+
+    if (swiper.isEnd) {
+      cstmNextBtn.classList.add('swiper-button-disabled');
+    } else {
+      cstmNextBtn.classList.remove('swiper-button-disabled');
+    }
+  }
+
+  document.querySelector('.cstm-prev-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!prodListSlider.isBeginning) {
+      prodListSlider.slidePrev();
+    }
+  });
+
+  document.querySelector('.cstm-next-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!prodListSlider.isEnd) {
+      prodListSlider.slideNext();
+    }
+  });
+</script> {% endcomment %}
+
+{% schema %}
+{
+  "name": "Product List Slider V1",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Our Best Seller",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product List Slider V1",
+      "category": "Custom Section"
+    }
+  ]
+}
+{% endschema %}

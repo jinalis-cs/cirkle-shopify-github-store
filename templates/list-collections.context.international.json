@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "list-collections.json",
+  "context": {
+    "market": "international"
+  },
+  "sections": {
+    "main": {
+      "disabled": true,
+      "settings": {},
+      "blocks": {}
+    },
+    "slideshow_JMjam": {
+      "type": "slideshow",
+      "disabled": false,
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "counter",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "header-c95a0bf555a2591e5aa1fd10d0e9a91b": null,
+        "image_behavior": "none",
+        "header-98510e5ae0af6fe60eb475b19fc45e3a": null,
+        "show_text_below": true,
+        "header-c04f3c6a2c62606662e72117be147b17": null,
+        "accessibility_info": "Slideshow about our brand"
+      },
+      "blocks": {
+        "slide_k46t3": {
+          "type": "slide",
+          "disabled": false,
+          "settings": {
+            "image": null,
+            "heading": "Image slide",
+            "heading_size": "h1",
+            "subheading": "Tell your brand's story through images",
+            "button_label": "Button label",
+            "link": "",
+            "button_style_secondary": false,
+            "box_align": "middle-center",
+            "show_text_box": true,
+            "text_alignment": "center",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "header-1074797dbf7936f8d8281862ae5ded40": null,
+            "text_alignment_mobile": "center"
+          }
+        },
+        "slide_ChTyq": {
+          "type": "slide",
+          "disabled": false,
+          "settings": {
+            "image": null,
+            "heading": "Image slide",
+            "heading_size": "h1",
+            "subheading": "Tell your brand's story through images",
+            "button_label": "Button label",
+            "link": "",
+            "button_style_secondary": false,
+            "box_align": "middle-center",
+            "show_text_box": true,
+            "text_alignment": "center",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "header-9e0024fd0b2df76abae5188a6a706529": null,
+            "text_alignment_mobile": "center"
+          }
+        }
+      },
+      "block_order": [
+        "slide_k46t3",
+        "slide_ChTyq"
+      ],
+      "name": "t:sections.slideshow.presets.name"
+    }
+  },
+  "order": [
+    "main",
+    "slideshow_JMjam"
+  ]
+}

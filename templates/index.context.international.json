@@ -1,0 +1,69 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "index.json",
+  "context": {
+    "market": "international"
+  },
+  "sections": {
+    "collection_list_DiAHY": {
+      "type": "collection-list",
+      "disabled": true,
+      "settings": {
+        "title": "Collections",
+        "heading_size": "h1",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "color_scheme": "",
+        "show_view_all": false,
+        "header-a985c0d244ac42de8549316f06043e92": null,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "header-948551dbc819d394c1d4d6a1a36e9d68": null,
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "featured_collection_yJeJN": {
+          "type": "featured_collection",
+          "disabled": false,
+          "settings": {
+            "collection": ""
+          }
+        },
+        "featured_collection_3bfiP": {
+          "type": "featured_collection",
+          "disabled": false,
+          "settings": {
+            "collection": ""
+          }
+        },
+        "featured_collection_LJXyT": {
+          "type": "featured_collection",
+          "disabled": false,
+          "settings": {
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_yJeJN",
+        "featured_collection_3bfiP",
+        "featured_collection_LJXyT"
+      ],
+      "name": "t:sections.collection-list.presets.name"
+    }
+  },
+  "order": [
+    "slideshow_WbYn3j",
+    "featured_collection",
+    "collection_list_DiAHY"
+  ]
+}

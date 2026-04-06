@@ -1,0 +1,36 @@
+{% liquid
+  assign discount_codes = cart.cart_level_discount_applications | where: 'type', 'discount_code' | map: 'title'
+  for item in cart.items
+    for allocation in item.line_level_discount_allocations
+      if allocation.discount_application.type == 'discount_code'
+        assign discount_codes = item.line_level_discount_allocations | slice: forloop.index0 | map: 'discount_application' | map: 'title' | concat: discount_codes
+      endif
+    endfor
+  endfor
+
+  assign discount_codes = discount_codes | uniq
+%}
+
+<div class="cart-discount-content" data-section-id="{{ section.id }}" data-source="{{ source }}">
+  <div class="field">
+    <input type="text" name="discount" id="discount" class="field__input discount input_discount" placeholder="Discount code">
+    <label for="discount" class="field__label">Discount code</label>
+    <button type="button" name="apply-discount" class="btn-apply button" data-source="{{ source }}">Apply</button>
+  </div>
+  <div class="discount-error-wrap hidden">
+    <span class="svg-wrapper">
+      {{- 'icon-error.svg' | inline_asset_content -}}
+    </span>
+    <p class="discount-error">Discount code cannot be applied to your cart </p>
+  </div>
+  <div class="cart-discounts">
+      <ul class="discount-lists">
+        {% for discount in discount_codes %}
+          <li class="discount-item" data-discount-code="{{ discount }}"> 
+            <span>{{ discount }}</span>
+            <a href="#" class="remove-discount" data-discount-code="{{ discount }}">{{- 'icon-close.svg' | inline_asset_content -}}</a>
+          </li>
+        {% endfor %}
+      </ul>
+  </div>
+</div>

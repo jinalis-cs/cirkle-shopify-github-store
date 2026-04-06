@@ -1,0 +1,437 @@
+{% if section.settings.desk_banner_image != blank or section.settings.mob_banner_image != blank %}
+  {% style %}
+    .doto_hero_inner{
+      {% if section.settings.desk_banner_image != blank %}
+        --desktop-bg: url({{ section.settings.desk_banner_image | image_url: width: section.settings.desk_banner_image.width }});
+      {% endif %}
+      {% if section.settings.mob_banner_image != blank %}
+        --mobile-bg: url({{ section.settings.mob_banner_image | image_url: width: section.settings.mob_banner_image.width }});
+      {% endif %}
+    }
+  {% endstyle %}
+{% endif %}
+{% if section.settings.text != blank
+  or section.settings.sub_text != blank
+  or section.settings.desk_banner_image != blank
+  or section.settings.mob_banner_image != blank
+%}
+  <div class="doto_hero_section">
+    <div class="doto_container">
+      <div class="doto_hero_inner">
+        {% if section.settings.text != blank or section.settings.sub_text != blank %}
+          <div class="doto_hero_info">
+            {% if section.settings.text != blank %}
+              <h1>{{ section.settings.text }}</h1>
+            {% endif %}
+            {% if section.settings.sub_text != blank %}
+              <p>{{ section.settings.sub_text }}</p>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if section.blocks.size > 0 %}
+  <div class="doto_category_section">
+    <div class="doto_container">
+      {% for block in section.blocks %}
+        {% if block.settings.heading != blank or block.settings.image != blank %}
+          <div class="doto_category_inner">
+            <div class="doto_category_col">
+              {% if block.settings.image != blank %}
+                <div class="doto_category_img">
+                  {%- assign widths = '120, 220, 320, 420, 520, 700' -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 320
+                    | image_tag: widths: widths, loading: 'lazy', alt: block.settings.image.alt
+                  }}
+                </div>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <div class="doto_category_info">
+                  <h5>{{ block.settings.heading | handleize }}</h5>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        {% if block.settings.heading != blank or block.settings.collection_list != blank %}
+          {% if block.settings.heading != blank %}
+            {{ block.settings.heading }}
+          {% endif %}
+          <div class="doto_range_hood_section">
+            <div class="doto_off_conatiner">
+              {% if block.settings.heading != blank %}
+                <div class="doto_section_title">
+                  <h2>{{ block.settings.heading }}</h2>
+                </div>
+              {% endif %}
+              {% if block.settings.collection_list != blank %}
+                <div class="doto_range_hood_tabs">
+                  <ul class="doto_tabs">
+                    {% for collection in block.settings.collection_list %}
+                      <li class="doto_tab_list{% if forloop.first %} current{% endif %}">{{ collection.title }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+              <div class="doto_range_hood_wpr">
+                {% if block.settings.collection_list != blank %}
+                <div class="doto_product_slider swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
+                  <div class="swiper-wrapper" id="swiper-wrapper-794d2a5f0831086fe" aria-live="polite">
+                    <div
+                      class="swiper-slide swiper-slide-active"
+                      role="group"
+                      aria-label="1 / 5"
+                      style="width: 407.818px; margin-right: 24px;"
+                    >
+                      <div class="doto_product_slide">
+                        <div class="doto_product_img">
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/3036-under-cabinet-wall-mount-venticore-series-jqg7515-jqg9015-6880096_e625a51b-af5c-4aa6-a83e-7406823b984e.png?v=1768421788"
+                          >
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/30-electric-range-318077_419eb4ea-eafc-45e1-b70a-3bade581043b.jpg?v=1768412105"
+                            class="hover_img"
+                          >
+                        </div>
+                        <div class="doto_product_info">
+                          <div class="doto_product_info_top">
+                            <p>Open Concept Living</p>
+                            <h3>30" Perimeter Vent Range Hood EMG7508</h3>
+                          </div>
+                          <div class="doto_product_review">
+                            <img
+                              src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Frame_25549.png?v=1770962013"
+                            >
+                            <span>4.5/5 (1990)</span>
+                          </div>
+                          <div class="doto_product_dec">
+                            <ul>
+                              <li>Mounts to the wall as a fixed focal point</li>
+                              <li>Encircles smoke from every edge</li>
+                              <li>Prevents grease &amp; odors from drifting</li>
+                              <li>Clears the air quietly, powerfully, &amp; efficiently</li>
+                            </ul>
+                          </div>
+                          <div class="doto_product_price">
+                            <span class="regular_price">$ 1,299.00</span>
+                            <span class="compere_price">$1,599.00</span>
+                          </div>
+                          <div class="doto_product_btn_wpr">
+                            <a href="#" class="doto_buy_btn">Buy Now</a>
+                            <a href="#" class="doto_learn_btn">Learn More</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="swiper-slide swiper-slide-next"
+                      role="group"
+                      aria-label="2 / 5"
+                      style="width: 407.818px; margin-right: 24px;"
+                    >
+                      <div class="doto_product_slide">
+                        <div class="doto_product_img">
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/3036-under-cabinet-wall-mount-venticore-series-jqg7515-jqg9015-6880096_e625a51b-af5c-4aa6-a83e-7406823b984e.png?v=1768421788"
+                          >
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/30-electric-range-318077_419eb4ea-eafc-45e1-b70a-3bade581043b.jpg?v=1768412105"
+                            class="hover_img"
+                          >
+                        </div>
+                        <div class="doto_product_info">
+                          <div class="doto_product_info_top">
+                            <p>Open Concept Living</p>
+                            <h3>30" Perimeter Vent Range Hood EMG7508</h3>
+                          </div>
+                          <div class="doto_product_review">
+                            <img
+                              src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Frame_25549.png?v=1770962013"
+                            >
+                            <span>4.5/5 (1990)</span>
+                          </div>
+                          <div class="doto_product_dec">
+                            <ul>
+                              <li>Mounts to the wall as a fixed focal point</li>
+                              <li>Encircles smoke from every edge</li>
+                              <li>Prevents grease &amp; odors from drifting</li>
+                              <li>Clears the air quietly, powerfully, &amp; efficiently</li>
+                            </ul>
+                          </div>
+                          <div class="doto_product_price">
+                            <span class="regular_price">$ 1,299.00</span>
+                            <span class="compere_price">$1,599.00</span>
+                          </div>
+                          <div class="doto_product_btn_wpr">
+                            <a href="#" class="doto_buy_btn">Buy Now</a>
+                            <a href="#" class="doto_learn_btn">Learn More</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="swiper-slide"
+                      role="group"
+                      aria-label="3 / 5"
+                      style="width: 407.818px; margin-right: 24px;"
+                    >
+                      <div class="doto_product_slide">
+                        <div class="doto_product_img">
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/3036-under-cabinet-wall-mount-venticore-series-jqg7515-jqg9015-6880096_e625a51b-af5c-4aa6-a83e-7406823b984e.png?v=1768421788"
+                          >
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/30-electric-range-318077_419eb4ea-eafc-45e1-b70a-3bade581043b.jpg?v=1768412105"
+                            class="hover_img"
+                          >
+                        </div>
+                        <div class="doto_product_info">
+                          <div class="doto_product_info_top">
+                            <p>Open Concept Living</p>
+                            <h3>30" Perimeter Vent Range Hood EMG7508</h3>
+                          </div>
+                          <div class="doto_product_review">
+                            <img
+                              src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Frame_25549.png?v=1770962013"
+                            >
+                            <span>4.5/5 (1990)</span>
+                          </div>
+                          <div class="doto_product_dec">
+                            <ul>
+                              <li>Mounts to the wall as a fixed focal point</li>
+                              <li>Encircles smoke from every edge</li>
+                              <li>Prevents grease &amp; odors from drifting</li>
+                              <li>Clears the air quietly, powerfully, &amp; efficiently</li>
+                            </ul>
+                          </div>
+                          <div class="doto_product_price">
+                            <span class="regular_price">$ 1,299.00</span>
+                            <span class="compere_price">$1,599.00</span>
+                          </div>
+                          <div class="doto_product_btn_wpr">
+                            <a href="#" class="doto_buy_btn">Buy Now</a>
+                            <a href="#" class="doto_learn_btn">Learn More</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="swiper-slide"
+                      role="group"
+                      aria-label="4 / 5"
+                      style="width: 407.818px; margin-right: 24px;"
+                    >
+                      <div class="doto_product_slide">
+                        <div class="doto_product_img">
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/3036-under-cabinet-wall-mount-venticore-series-jqg7515-jqg9015-6880096_e625a51b-af5c-4aa6-a83e-7406823b984e.png?v=1768421788"
+                          >
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/30-electric-range-318077_419eb4ea-eafc-45e1-b70a-3bade581043b.jpg?v=1768412105"
+                            class="hover_img"
+                          >
+                        </div>
+                        <div class="doto_product_info">
+                          <div class="doto_product_info_top">
+                            <p>Open Concept Living</p>
+                            <h3>30" Perimeter Vent Range Hood EMG7508</h3>
+                          </div>
+                          <div class="doto_product_review">
+                            <img
+                              src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Frame_25549.png?v=1770962013"
+                            >
+                            <span>4.5/5 (1990)</span>
+                          </div>
+                          <div class="doto_product_dec">
+                            <ul>
+                              <li>Mounts to the wall as a fixed focal point</li>
+                              <li>Encircles smoke from every edge</li>
+                              <li>Prevents grease &amp; odors from drifting</li>
+                              <li>Clears the air quietly, powerfully, &amp; efficiently</li>
+                            </ul>
+                          </div>
+                          <div class="doto_product_price">
+                            <span class="regular_price">$ 1,299.00</span>
+                            <span class="compere_price">$1,599.00</span>
+                          </div>
+                          <div class="doto_product_btn_wpr">
+                            <a href="#" class="doto_buy_btn">Buy Now</a>
+                            <a href="#" class="doto_learn_btn">Learn More</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="swiper-slide"
+                      role="group"
+                      aria-label="5 / 5"
+                      style="width: 407.818px; margin-right: 24px;"
+                    >
+                      <div class="doto_product_slide">
+                        <div class="doto_product_img">
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/3036-under-cabinet-wall-mount-venticore-series-jqg7515-jqg9015-6880096_e625a51b-af5c-4aa6-a83e-7406823b984e.png?v=1768421788"
+                          >
+                          <img
+                            src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/30-electric-range-318077_419eb4ea-eafc-45e1-b70a-3bade581043b.jpg?v=1768412105"
+                            class="hover_img"
+                          >
+                        </div>
+                        <div class="doto_product_info">
+                          <div class="doto_product_info_top">
+                            <p>Open Concept Living</p>
+                            <h3>30" Perimeter Vent Range Hood EMG7508</h3>
+                          </div>
+                          <div class="doto_product_review">
+                            <img
+                              src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Frame_25549.png?v=1770962013"
+                            >
+                            <span>4.5/5 (1990)</span>
+                          </div>
+                          <div class="doto_product_dec">
+                            <ul>
+                              <li>Mounts to the wall as a fixed focal point</li>
+                              <li>Encircles smoke from every edge</li>
+                              <li>Prevents grease &amp; odors from drifting</li>
+                              <li>Clears the air quietly, powerfully, &amp; efficiently</li>
+                            </ul>
+                          </div>
+                          <div class="doto_product_price">
+                            <span class="regular_price">$ 1,299.00</span>
+                            <span class="compere_price">$1,599.00</span>
+                          </div>
+                          <div class="doto_product_btn_wpr">
+                            <a href="#" class="doto_buy_btn">Buy Now</a>
+                            <a href="#" class="doto_learn_btn">Learn More</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                </div>
+                {% else %}
+                  <p class="no_produt_found">No products found</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% comment %}
+  <div class="doto_category_section">
+    <div class="doto_container">
+      <div class="doto_category_inner">
+        <div class="doto_category_col">
+          <div class="doto_category_block">
+            <div class="doto_category_img">
+              <img src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Range_hoods_b9c16775-acff-4069-8f23-ff6fefbe961d.png?v=1770959847">
+            </div>
+            <div class="doto_category_info">
+              <h5>Range hoods</h5>
+            </div>
+          </div>
+        </div>
+        <div class="doto_category_col">
+          <div class="doto_category_block">
+            <div class="doto_category_img">
+              <img src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Dishwashers.png?v=1770959871">
+            </div>
+            <div class="doto_category_info">
+              <h5>Dishwashers</h5>
+            </div>
+          </div>
+        </div>
+        <div class="doto_category_col">
+          <div class="doto_category_block">
+            <div class="doto_category_img">
+              <img src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Cooktops_c9e0d6e3-38a9-421a-814b-72eb70e13281.png?v=1770959896">
+            </div>
+            <div class="doto_category_info">
+              <h5>Cooktops</h5>
+            </div>
+          </div>
+        </div>
+        <div class="doto_category_col">
+          <div class="doto_category_block">
+            <div class="doto_category_img">
+              <img src="https://cdn.shopify.com/s/files/1/0549/2618/0530/files/Ovens.png?v=1770959921">
+            </div>
+            <div class="doto_category_info">
+              <h5>Ovens</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Dotd category section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "sub_text",
+      "label": "Sub Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_banner_image",
+      "label": "Desktop banner Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mob_banner_image",
+      "label": "Mobile banner Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "collection_list",
+          "id": "collection_list",
+          "label": "Collection list"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dotd category section"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+{% assign iso_code = localization.country.iso_code %}
+{% assign price_cents = product.price %}
+{% case iso_code %}
+  {% when 'AF' %}
+    {% assign round_cents = 10000 %}
+  {% when 'KHR' %}
+    {% assign round_cents = 1000 %}
+  {% when 'COP' %}
+    {% assign round_cents = 1000000 %}
+  {% when 'INR' %}
+    {% assign round_cents = 100 %}
+  {% when 'EUR' %}
+    {% assign round_cents = 95 %}
+  {% else %}
+    {% assign round_cents = 100 %}
+{% endcase %}
+
+{% assign remainder = price_cents | modulo: 100 %}
+{% if remainder > 0 %}
+  {% assign display_price = price_cents | plus: round_cents | minus: remainder %}
+{% else %}
+  {% assign display_price = price_cents %}
+{% endif %}
+
+<br>
+Original Price: {{ product.price }} <br>
+----Price:  {{ display_price | money }}

@@ -1,0 +1,33 @@
+{% assign cart_total = cart.total_price %}
+{% assign threshold = settings.shipping_threshold | times: 100 %}
+{% assign remaining = threshold | minus: cart_total %}
+{% assign percentage = cart_total | times: 100.0 | divided_by: threshold %}
+
+{% liquid 
+  if cart_total >= threshold
+    assign progress_bar_color = '#008669'
+    assign percentage = 100
+  else
+    assign progress_bar_color = '#b65a00'
+  endif
+%}
+
+<style>
+  .cart-shipping__progress{
+    display:block !important;
+    height: 5px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 10px;
+  }
+</style>
+
+<div class="free-shipping-bar">
+  {% if cart_total >= threshold %}
+    <p>Congratulations! You've got free shipping.</p>
+  {% else %}
+    <p>Spend {{ remaining | money }} more to reach free shipping</p>
+  {% endif %}
+  <div class="cart-shipping__bar">
+    <div class="cart-shipping__progress" style="width: {{ percentage }}%;background: {{ progress_bar_color }}"></div>
+  </div>
+</div>

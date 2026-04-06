@@ -1,0 +1,29 @@
+<div class="category-list-wrap">
+    <h5>{{ block.settings.heading }}</h5>
+    <ul class="category_list">{% content_for 'blocks' %}</ul>
+</div>
+
+{% schema %}
+{
+  "name": "Category group",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "category_text"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Category title"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category group",
+      "category": "Top header"
+    }
+  ]
+}
+{% endschema %}

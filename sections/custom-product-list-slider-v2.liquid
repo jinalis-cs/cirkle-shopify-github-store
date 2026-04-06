@@ -1,0 +1,286 @@
+<style>
+variant-swatchs{
+  width: 100%;
+  padding: 4px;
+}
+variant-swatchs .swatch{
+  width: 20px;
+}
+.mobile{
+    display: none;
+}
+.product-list-wrap {
+  display: flex;
+  scrollbar-width: none;
+}
+.prod-list-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.prod-card-slide {
+  flex: 0 0 auto;
+  width: 220px; /* desktop slide width */
+  scroll-snap-align: start;
+}
+.prod-img-container{
+  position: relative;
+  padding-top: 130%;
+}
+.product-images {
+    padding: 0 0 30px;
+    position: relative;
+}
+.product-images img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-position: center;
+}
+.prod-img-slider {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+.prod-img-slider-wrap img{
+  height: 100%;
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+.featured-products {
+    overflow: hidden;
+    position: relative;
+}
+.prod-list-slider-btn {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 10px;
+}
+.cstm-slider-btn {
+  padding: 6px 12px;
+  border: 1px solid #000;
+  background: #fff;
+  cursor: pointer;
+}
+.prod-list-heading .title{
+  margin: 3rem 0;
+}
+@media (max-width: 768px) {
+    .desktop{
+      display: none;
+    }
+    .mobile{
+      display: block;
+    }
+}
+    
+@media (max-width: 749px) {
+  .prod-list-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .prod-list-slider-btn {
+    margin-top: 8px;
+  }
+}
+
+</style>
+
+{{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatch.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'variant-swatch-image-slider-v2.js' | asset_url }}" defer="defer"></script>
+
+{% comment %} <div class="demo">
+  <img src="https://cdn.shopify.com/s/files/1/0679/4451/3735/files/Paulette_Purple_Maniac-Nails-Gelstickers.webp?v=1747282003" class="demo-img">
+</div> {% endcomment %}
+
+<div class="product-list-slider-section" data-section="custom-product-list-slider" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="prod-list-heading">
+      {%- if section.settings.title != blank -%}
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      <div class="prod-list-slider-btn">
+        <button class="cstm-prev-btn cstm-slider-btn">Prev</button>
+        <button class="cstm-next-btn cstm-slider-btn">Next</button>
+      </div>
+    </div>
+    {% if section.settings.collection != blank %}
+      <div class="cstm-featured-collection-detail">
+        {% if section.settings.collection.products_count > 0 %}
+          <div class="featured-products prod-list-slider">
+            <div class="product-list-wrap swiper-wrapper">
+              {% for product in section.settings.collection.products %}
+                {% render 'custom-prod-card', product: product, index: forloop.index %}
+              {% endfor %}
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% comment %} <script>
+  const cstmPrevBtn = document.querySelector('.cstm-prev-btn');
+  const cstmNextBtn = document.querySelector('.cstm-next-btn');
+  
+  let prodListSlider = new Swiper('.prod-list-slider', {
+    slidesPerView: 3,
+    spaceBetween: 10,
+    allowTouchMove: false,
+    loop: false,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      320: {
+        slidesPerView: 2,
+        spaceBetween: 20
+      },
+      480: {
+        slidesPerView: 3,
+        spaceBetween: 30
+      },
+      640: {
+        slidesPerView: 3,
+        spaceBetween: 40
+      }
+    },
+    on: {
+      init: syncCustomButtons,
+      slideChange: syncCustomButtons,
+      reachBeginning: syncCustomButtons,
+      reachEnd: syncCustomButtons,
+      fromEdge: syncCustomButtons,
+    },
+  });
+
+  let prodImgSlider;
+  const mq = window.matchMedia('(max-width: 767px)');
+
+  function initProdImgSlider() {
+    const sliders = document.querySelectorAll('.prod-img-slider');
+    sliders.forEach((slider) => {
+      if (mq.matches) {
+        if (!slider.swiper) {
+          new Swiper(slider, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            pagination: {
+              el: slider.querySelector('.swiper-pagination'),
+              clickable: true,
+            },
+          });
+        }
+      } else {
+        if (slider.swiper) {
+          slider.swiper.destroy(true, true);
+        }
+      }
+    });
+  }
+  initProdImgSlider();
+  mq.addEventListener('change', initProdImgSlider); 
+
+  function syncCustomButtons(swiper) {
+    if (swiper.isBeginning) {
+      cstmPrevBtn.classList.add('swiper-button-disabled');
+    } else {
+      cstmPrevBtn.classList.remove('swiper-button-disabled');
+    }
+
+    if (swiper.isEnd) {
+      cstmNextBtn.classList.add('swiper-button-disabled');
+    } else {
+      cstmNextBtn.classList.remove('swiper-button-disabled');
+    }
+  }
+
+  document.querySelector('.cstm-prev-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!prodListSlider.isBeginning) {
+      prodListSlider.slidePrev();
+    }
+  });
+
+  document.querySelector('.cstm-next-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!prodListSlider.isEnd) {
+      prodListSlider.slideNext();
+    }
+  });
+</script> {% endcomment %}
+
+{% schema %}
+{
+  "name": "Product List Slider V2",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Our Best Seller",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product List Slider V2",
+      "category": "Custom Section"
+    }
+  ]
+}
+{% endschema %}

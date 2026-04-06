@@ -1,0 +1,47 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "main_page_dotd_9NDRMV": {
+      "type": "main-page-dotd",
+      "blocks": {
+        "category_ymMmTA": {
+          "type": "category",
+          "settings": {
+            "heading": "Range hoods",
+            "image": "shopify://shop_images/Range_hoods_b9c16775-acff-4069-8f23-ff6fefbe961d.avif",
+            "collection_list": [
+              "best-sellers"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "category_ymMmTA"
+      ],
+      "name": "Dotd category section",
+      "settings": {
+        "text": "Design that Endears. Innovation that Endures.",
+        "sub_text": "FOTILE for Life."
+      }
+    }
+  },
+  "order": [
+    "main",
+    "main_page_dotd_9NDRMV"
+  ]
+}

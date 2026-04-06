@@ -1,0 +1,66 @@
+<div
+  class="group-block color-{{ block.settings.color_scheme }}"
+>
+
+  {% if page %}
+    {%- assign current_page = page -%}
+  {% endif %}
+  
+  {%- comment -%} Or access the selected page from settings {%- endcomment -%}
+  {% if block.settings.selected_page %}
+    {%- assign page_info = block.settings.selected_page -%}
+  {% endif %}
+
+  {% content_for 'blocks' %}
+  {% comment %} {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: product %} {% endcomment %}
+</div>
+
+{% schema %}
+{
+  "name": "Group",
+  "blocks": [{ "type": "@theme" }, { "type": "@app" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "page",
+      "id": "selected_page",
+      "label": "Page"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Group"
+    },
+    {
+      "name": "Column",
+      "settings": {
+        "color_scheme": "scheme-3", 
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "<h3>Hello, world!</h3>",
+            "product": "{{ closest.product }}"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>How's it going?<\/p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

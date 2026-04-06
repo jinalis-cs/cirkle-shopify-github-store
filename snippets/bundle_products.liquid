@@ -1,0 +1,54 @@
+{% if block.settings.bundle_product_title != blank or block.settings.bundle_products_list != blank %}
+    {% style %}
+        .bundle_prod_list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .prod_item {
+            width: calc(50% - 20px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .prod_img {
+            position: relative;
+            width: 100%;
+        }
+        .prod_img img{
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    {% endstyle %}  
+
+    <div class="bundle_products">
+        <h3>{{ block.settings.bundle_product_title }}</h3>
+        {% if block.settings.bundle_products_list != blank %}
+            <div class="bundle_prod_list">
+                {% for bundle_prod in block.settings.bundle_products_list %}
+                    <div class="prod_item">
+                        <div class="prod_img">
+                            {% if bundle_prod.featured_image != blank %}
+                                {%- assign widths = '165, 360, 535, 750' -%}
+                                {%- capture sizes -%}
+                                    (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px,(min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)
+                                {%- endcapture -%}
+                                {{
+                                    bundle_prod.featured_image
+                                    | image_url: width: 535
+                                    | image_tag: sizes: sizes, widths: widths, fetchpriority: 'auto'
+                                }}
+                            {% else %}                                    
+                                {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                            {% endif %}
+                            <input type="checkbox" name="chk_bundle_prod" value="{{ bundle_prod.selected_or_first_available_variant.id }}">
+                        </div>
+                        <h4>{{ product.title }}</h4>
+                        <span class="prod_price">{{ bundle_prod.price | money }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

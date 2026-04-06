@@ -1,0 +1,297 @@
+{% style %}
+  .featured-collection-swiper {
+   padding: 20px 0;
+  }
+
+  .collection-tabs {
+   display: flex;
+   gap: 20px;
+   margin-bottom: 20px; justify-content: center;
+  }
+
+  .collection-tab {
+   background: none;
+   border: none;
+   font-size: 16px;
+   cursor: pointer;
+   padding-bottom: 5px;
+   border-bottom: 2px solid transparent;
+   letter-spacing: 1.6px; text-transform: uppercase;
+  }
+
+  .collection-tab.active {
+   border-color: currentColor;
+  }
+
+  .collection-tab-content {
+   display: none;
+  }
+
+  .collection-tab-content.active {
+   display: block;
+  }
+
+  /* .product-grid {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 10px;
+  } */
+
+  .product-card img {
+   width: 100%;
+   display: block;
+   mix-blend-mode: darken;
+  }
+  .product-card .swiper-main-wrapper { padding: 7px; background:#f7f7f7; }
+  .product-card .product-title { display: flex; align-items:center;justify-content: space-between; gap: 5px; flex-wrap: no-wrap; }
+  .product-card .product-title a { font-size: 12px; font-weight: 400; letter-spacing: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; -webkit-line-clamp: 1; text-overflow: ellipsis; line-height: 1.2; }
+  .product-card .product-title .product-price { font-size: 12px; font-weight: 400; letter-spacing: 0; line-height: 1.2; }
+
+  .product-image-slider {
+    overflow: hidden;
+    width: 100%;
+    }
+
+    .swiper-wrapper {
+    display: flex;
+    }
+
+    .swiper-slide {
+    flex-shrink: 0;
+    }
+
+
+  @media (max-width: 989px) {
+   .product-grid {
+     grid-template-columns: repeat(2, 1fr);
+   }
+  }
+{% endstyle %}
+
+{%- capture productImageSliderOptions -%}
+{
+ "loop": true,
+ "speed": 1000,
+ "slidesPerView": 1,
+ "spaceBetween": 5,
+ "effect": "slide",
+ "keyboard": {
+   "enabled": true,
+   "onlyInViewport": true
+ },
+ "pagination": {
+   "el": ".swiper-pagination",
+   "clickable": true
+ },
+ "grabCursor": true,
+   "scrollbar": {
+     "el": ".swiper-scrollbar",
+     "draggable": true,
+     "hide":false
+   },
+ "navigation": {
+   "nextEl": ".swiper-button-next",
+   "prevEl": ".swiper-button-prev"
+ }
+}
+{%- endcapture -%}
+
+<script src="{{ 'tab-load-more.js' | asset_url }}" defer="defer"></script>
+
+<section
+  id="section-{{ section.id }}"
+  class="featured-collection-swiper color-{{ section.settings.color_scheme }}"
+  style="background: {{ section.settings.bg_color }};"
+>
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="section-heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <!-- TABS -->
+    {% if section.blocks.size > 0 %}
+      <div class="collection-tabs">
+        {% for block in section.blocks %}
+          <button
+            class="collection-tab {% if forloop.first %}active{% endif %}"
+            data-tab="tab-{{ block.id }}"
+          >
+            {{ block.settings.tab_label }}
+          </button>
+        {% endfor %}
+      </div>
+
+      <!-- TAB CONTENT -->
+      {% for block in section.blocks %}
+        <div
+          class="collection-tab-content {% if forloop.first %}active{% endif %}"
+          id="tab-{{ block.id }}"
+          data-collection="{{ block.settings.collection.handle }}"
+        >
+          <div class="product-grid">
+            {% assign collection = block.settings.collection %}
+            {% assign total_product = collection.all_products_count %}
+            {% for product in block.settings.collection.products limit: section.settings.products_limit %}
+              <div class="product-card">
+                <div class="product-image">
+                    {% if product.images.size > 0 %}
+                    <div class="swiper-main-wrapper">
+                    <div
+                        class="product-image-slider swiper"
+                        data-slider-options="{% comment %}{{ productImageSliderOptions | strip_newlines | escape }}{% endcomment %}"
+                    >
+                        <div class="swiper-wrapper">
+                        {% for image in product.images limit: 1 %}
+                            <div class="swiper-slide">
+                            <a href="{{ product.url }}">
+                            <img
+                                srcset="
+                                    {%- if image.width >= 165 -%}{{ image | image_url: width: 165 }} 165w,{%- endif -%}
+                                    {%- if image.width >= 360 -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}
+                                    {%- if image.width >= 533 -%}{{ image | image_url: width: 533 }} 533w,{%- endif -%}
+                                    {%- if image.width >= 720 -%}{{ image | image_url: width: 720 }} 720w,{%- endif -%}
+                                    {%- if image.width >= 940 -%}{{ image | image_url: width: 940 }} 940w,{%- endif -%}
+                                    {%- if image.width >= 1066 -%}{{ image | image_url: width: 1066 }} 1066w,{%- endif -%}
+                                    {{ image | image_url }} {{ image.width }}w
+                                "
+                                src="{{ image | image_url: width: 533 }}"
+                                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                                alt="{{ image.alt | escape }}"
+                                class="motion-reduce"
+                                loading="lazy"
+                                width="{{ image.width }}"
+                                height="{{ image.height }}"
+                                >
+                            </a>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        {% if product.images.size > 1 %}
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-scrollbar"></div>
+                        {% endif %}
+                    </div>
+                    </div>
+                    {% else %}
+                    {{ 'product-1' | placeholder_svg_tag }}
+                    {% endif %}
+                </div>
+                <div class="product-title">
+                  <a href="{{ product.url }}">{{ product.title }}</a>
+                  <div class="product-price">
+                    {{ product.price | money }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          {% if total_product > section.settings.products_limit %}
+            <div class="text-center load-more-wrap">
+                <button id="load-more-{{ section.id }}"
+                    class="button js-load-more"
+                    data-collection="{{ collection.handle }}"
+                    data-limit="{{ section.settings.products_limit }}"
+                    data-page="1"
+                    data-total="{{ total_product }}"
+                    data-current-show="{{ section.settings.products_limit }}"
+                >
+                    Load More
+                </button>
+            </div>
+           {% endif %}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+{% comment %} <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function initSwipers(scope) {
+      scope.querySelectorAll('.swiper[data-slider-options]').forEach((slider) => {
+        if (!slider.swiper) {
+          const options = JSON.parse(slider.dataset.sliderOptions);
+          new Swiper(slider, options);
+        }
+      });
+    }
+
+    // Init first tab swipers
+    initSwipers(document);
+
+    document.querySelectorAll('.collection-tab').forEach((tab) => {
+      tab.addEventListener('click', function () {
+        document
+          .querySelectorAll('.collection-tab, .collection-tab-content')
+          .forEach((el) => el.classList.remove('active'));
+
+        this.classList.add('active');
+        const target = document.getElementById(this.dataset.tab);
+        target.classList.add('active');
+
+        // Init swiper only for active tab
+        //initSwipers(target);
+      });
+    });
+  });
+</script> {% endcomment %}
+
+{% schema %}
+{
+  "name": "Custom Collection Tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "Collection Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_label",
+          "label": "Tab label",
+          "default": "Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Collection Tabs"
+    }
+  ]
+}
+{% endschema %}

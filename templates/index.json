@@ -1,0 +1,209 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_WbYn3j": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_YRVkK6": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/contact-banner.png",
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "Tell your brand's story through images",
+            "button_label": "Button label",
+            "link": "",
+            "button_style_secondary": false,
+            "box_align": "middle-center",
+            "show_text_box": true,
+            "text_alignment": "center",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "text_alignment_mobile": "center"
+          }
+        },
+        "slide_knBLXC": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/faq-banner.png",
+            "heading": "Image slide",
+            "heading_size": "h1",
+            "subheading": "Tell your brand's story through images",
+            "button_label": "Button label",
+            "link": "",
+            "button_style_secondary": false,
+            "box_align": "middle-center",
+            "show_text_box": true,
+            "text_alignment": "center",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "text_alignment_mobile": "center"
+          }
+        }
+      },
+      "block_order": [
+        "slide_YRVkK6",
+        "slide_knBLXC"
+      ],
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "dots",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "image_behavior": "ambient",
+        "show_text_below": true,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured products",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "bed-sheet",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "link",
+        "enable_desktop_slider": true,
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 44,
+        "padding_bottom": 36
+      }
+    },
+    "dynamic_product_showcase_xKR3Hc": {
+      "type": "dynamic-product-showcase",
+      "name": "Dynamic Product Showcase",
+      "settings": {
+        "title": "Universal Collection Filter",
+        "heading_size": "h1",
+        "collection_list": [
+          "summer-2025",
+          "new-arrivals"
+        ],
+        "exclude_ids": "8372748583111,8372740849863",
+        "products_per_page": 4,
+        "enable_sorting": true,
+        "enable_tags": true,
+        "enable_price": true,
+        "enable_availability": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "custom_product_list_slider_VKi43C": {
+      "type": "custom-product-list-slider",
+      "disabled": true,
+      "name": "Product List Slider",
+      "settings": {
+        "title": "Our Best Seller",
+        "heading_size": "h1",
+        "collection": "test",
+        "products_to_show": 16,
+        "columns_desktop": 4,
+        "show_view_all": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "custom_product_list_slider_v1_jpBRaN": {
+      "type": "custom-product-list-slider-v1",
+      "disabled": true,
+      "name": "Product List Slider V1",
+      "settings": {
+        "title": "Our Best Seller",
+        "heading_size": "h1",
+        "collection": "test"
+      }
+    },
+    "custom_product_list_slider_v2_aGnVbK": {
+      "type": "custom-product-list-slider-v2",
+      "name": "Product List Slider V2",
+      "settings": {
+        "title": "Product slider with meta images and swatch",
+        "heading_size": "h1",
+        "collection": "test"
+      }
+    },
+    "tab_load_more_BaFmDd": {
+      "type": "tab-load-more",
+      "blocks": {
+        "collection_tab_xdmGjg": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Tab 1",
+            "collection": "motif-collection"
+          }
+        },
+        "collection_tab_nmM43A": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Tab 2",
+            "collection": "bed-sheet"
+          }
+        }
+      },
+      "block_order": [
+        "collection_tab_xdmGjg",
+        "collection_tab_nmM43A"
+      ],
+      "disabled": true,
+      "name": "Custom Collection Tabs",
+      "settings": {
+        "heading": "Featured Products",
+        "products_limit": 4,
+        "bg_color": "#ffffff",
+        "color_scheme": ""
+      }
+    },
+    "177365996416b3c5e9": {
+      "type": "apps",
+      "blocks": {
+        "klaviyo_email_marketing_sms_form_embed_block_eWtaLN": {
+          "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/form-embed-block/2632fe16-c075-4321-a88b-50b567f42507",
+          "settings": {
+            "formId": "WYcNTm"
+          }
+        }
+      },
+      "block_order": [
+        "klaviyo_email_marketing_sms_form_embed_block_eWtaLN"
+      ],
+      "disabled": true,
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "slideshow_WbYn3j",
+    "featured_collection",
+    "dynamic_product_showcase_xKR3Hc",
+    "custom_product_list_slider_VKi43C",
+    "custom_product_list_slider_v1_jpBRaN",
+    "custom_product_list_slider_v2_aGnVbK",
+    "tab_load_more_BaFmDd",
+    "177365996416b3c5e9"
+  ]
+}

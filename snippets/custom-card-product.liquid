@@ -1,0 +1,73 @@
+<div class="cstm-card-product card-wrapper product-card-wrapper underline-links-hover">
+  <div class="product-img-wrap">
+        <a href="{{ card_product.url | within: collection }}" class="product-link">
+          {% assign is_varinat_img = false %}
+          {% if card_product.variants.size > 1 %}
+              {% if card_product.variants[0].metafields.custom.variant_images != blank %}
+                {% assign is_varinat_img = true %}
+                {% assign varinat_meta_img = card_product.variants[0].metafields.custom.variant_images.value %}
+              {% endif %}
+          {% endif %}
+          {% if is_varinat_img %}
+            <variant-images>
+              <div class="prod_card_variant_slider">
+                <div class="swiper-wrapper">
+                  {% for variant_img in varinat_meta_img %}
+                    <div class="swiper-slide variant_img">
+                      <img 
+                        src="{{ variant_img | image_url: width: 533 }}"
+                        sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                        alt="{{ variant_img.alt | escape }}"
+                        width="{{ card_product.featured_media.width }}"
+                        height="{{ card_product.featured_media.height }}"
+                      >
+                    </div>
+                  {% endfor %}
+                </div>
+                <div class="swiper-button-prev" data-swiper-prev></div>
+                <div class="swiper-button-next" data-swiper-next></div>
+                <div class="swiper-pagination custom-pagination" data-swiper-pagination></div>                  
+              </div>
+              <script type="application/json" data-variant-metafields="{{ card_product.id }}">
+                {
+                  "variants": [
+                    {%- for variant in card_product.variants -%}
+                      {
+                        "id": {{ variant.id | json }},
+                        "images": {{ variant.metafields.custom.variant_images.value | default: '[]' | json }}
+                      }
+                      {%- unless forloop.last -%},{%- endunless -%}
+                    {%- endfor -%}
+                  ]
+                }
+              </script>
+            </variant-images> 
+          {% else %}
+            {% if card_product.featured_media != blank %}
+            <img
+              srcset="
+                {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 940 -%}{{ card_product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 1066 -%}{{ card_product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
+              "
+              src="{{ card_product.featured_media | image_url: width: 533 }}"
+              sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ card_product.featured_media.alt | escape }}"
+              class="motion-reduce"
+              {% unless lazy_load == false %}
+                loading="lazy"
+              {% endunless %}
+              width="{{ card_product.featured_media.width }}"
+              height="{{ card_product.featured_media.height }}"
+            >
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag }}
+            {% endif %}
+          {% endif %}
+        </a>
+      </div>
+</div>

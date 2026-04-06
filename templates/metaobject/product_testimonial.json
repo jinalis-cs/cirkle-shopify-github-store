@@ -1,0 +1,85 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "featured_product_azieDm": {
+      "type": "featured-product",
+      "blocks": {
+        "text_hQjcUb": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_CWLqbp": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_RQTrB3": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_w9tTrP": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_NXk3a8": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_hRwqdz": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_8Dc4AK": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_hQjcUb",
+        "title_CWLqbp",
+        "price_RQTrB3",
+        "variant_picker_w9tTrP",
+        "quantity_selector_NXk3a8",
+        "buy_buttons_hRwqdz",
+        "share_8Dc4AK"
+      ],
+      "settings": {
+        "product": "gold-luxury-bed-sheet",
+        "color_scheme": "",
+        "secondary_background": true,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "featured_product_azieDm"
+  ]
+}

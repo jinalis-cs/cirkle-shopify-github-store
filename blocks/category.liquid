@@ -1,0 +1,29 @@
+<div class="category_group" style="display:flex;">
+    <strong>{{ block.settings.heading }}</strong>
+    {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Category",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "category_group"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Category title"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category",
+      "category": "Top header"
+    }
+  ]
+}
+{% endschema %}
