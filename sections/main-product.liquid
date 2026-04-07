@@ -118,9 +118,7 @@
                   </a>
                 </div>
               {%- when 'price' -%}
-
-                {% comment %} {% render 'price-currency-roundup',  product: product %} {% endcomment %}                  
-
+                {% comment %} {% render 'price-currency-roundup',  product: product %} {% endcomment %}
                 <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,

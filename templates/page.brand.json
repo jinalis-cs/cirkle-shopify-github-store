@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "brand",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
