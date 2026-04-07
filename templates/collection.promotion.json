@@ -23,7 +23,6 @@
         "one_image_RRARMF": {
           "type": "one_image",
           "settings": {
-            "position": "0",
             "collection": "motif-collection",
             "promotion_img": "shopify://shop_images/collection-2x2.jpg"
           }
