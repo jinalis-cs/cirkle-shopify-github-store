@@ -11,8 +11,22 @@
   "sections": {
     "main": {
       "type": "brand",
+      "blocks": {
+        "brand_AAkbdT": {
+          "type": "Brand",
+          "settings": {
+            "brand_name": "",
+            "brand_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_AAkbdT"
+      ],
       "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
