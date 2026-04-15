@@ -19,10 +19,28 @@
             "brand_name": "Asona",
             "brand_url": ""
           }
+        },
+        "brand_bKKXwf": {
+          "type": "Brand",
+          "settings": {
+            "brand_logo": "shopify://shop_images/critical_logo_160x120_c6a5536c-c650-474d-8706-ea4de1bb20fb.webp",
+            "brand_name": "Critical",
+            "brand_url": ""
+          }
+        },
+        "brand_xniRdf": {
+          "type": "Brand",
+          "settings": {
+            "brand_logo": "shopify://shop_images/Screenshot_2026-03-17_195518_168x65_d5e6b484-6627-45cc-9f35-eb3278d04b8d.avif",
+            "brand_name": "Natural paint co.",
+            "brand_url": ""
+          }
         }
       },
       "block_order": [
-        "brand_AAkbdT"
+        "brand_AAkbdT",
+        "brand_bKKXwf",
+        "brand_xniRdf"
       ],
       "settings": {}
     }
