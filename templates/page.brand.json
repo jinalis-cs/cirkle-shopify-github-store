@@ -15,7 +15,8 @@
         "brand_AAkbdT": {
           "type": "Brand",
           "settings": {
-            "brand_name": "",
+            "brand_logo": "shopify://shop_images/Asona_Logo_137x137_4583e255-856c-4fb2-9324-68fa27386f9c.avif",
+            "brand_name": "Asona",
             "brand_url": ""
           }
         }
