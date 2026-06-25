@@ -31,12 +31,21 @@
       {%- if settings.show_cart_note -%}
         <cart-note class="cart__note field">
           <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
-          <textarea
+          {% comment %} <textarea
             class="text-area field__input"
             name="note"
             form="cart"
             id="Cart-note"
             placeholder="{{ 'sections.cart.note' | t }}"
+          >{{ cart.note }}</textarea> {% endcomment %}
+
+          <textarea
+            class="text-area field__input"
+            name="attributes[Special instructions]"
+            form="cart"
+            id="Cart-note"
+            placeholder="{{ 'sections.cart.note' | t }}"
+            value="{{ cart.note }}"
           >{{ cart.note }}</textarea>
         </cart-note>
       {%- endif -%}

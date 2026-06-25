@@ -1,4 +1,4 @@
-<span class="field-currency">{{ cart.currency.symbol }}</span>
+{% comment %} <span class="field-currency">{{ cart.currency.symbol }}</span>
 
 <div class="field">
   <input
@@ -42,4 +42,85 @@
   <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-LTE">
     {{- 'products.facets.to' | t -}}
   </label>
+</div> {% endcomment %}
+
+
+<div class="price-range-filter">
+  <label>Price Range</label>
+
+  <div class="price-inputs">
+    <input
+      type="number"
+      id="min-price"
+      placeholder="Min"
+      value="{{ request.params.filter.v.price.gte | default: 0 }}"
+      min="0"
+    >
+    <input
+      type="number"
+      id="max-price"
+      placeholder="Max"
+      value="{{ request.params.filter.v.price.lte }}"
+      min="0"
+    >
+  </div>
+
+  <div class="range-slider">
+    <input type="range" id="range-min" min="0" max="10000" step="10">
+    <input type="range" id="range-max" min="0" max="10000" step="10">
+  </div>
+
+  <button class="price-filter-btn">Apply</button>
 </div>
+
+{% style %}
+  .price-range-filter {
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.price-inputs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.price-inputs input {
+  width: 100%;
+  padding: 8px;
+}
+
+.range-slider {
+  position: relative;
+  height: 40px;
+}
+
+.range-slider input[type="range"] {
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
+  -webkit-appearance: none;
+  background: none;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  background: #000;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.price-filter-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+{% endstyle %}

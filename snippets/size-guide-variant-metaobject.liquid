@@ -1,0 +1,384 @@
+{% comment %} On variant change code add in product-info.js {% endcomment %}
+
+{% style %}
+  .size-guide-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: none;
+}
+
+.size-guide-drawer.active {
+  display: block;
+}
+
+.drawer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+
+.drawer-content {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 420px;
+  height: 100%;
+  background: #fff;
+  padding: 20px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: 0.3s ease;
+}
+
+.size-guide-drawer.active .drawer-content {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.size-chart {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.size-chart th,
+.size-chart td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.size-chart tr.active {
+  background: #f5f5f5;
+}
+
+.size-toggle {
+  margin-bottom: 10px;
+}
+
+.size-toggle button.active {
+  font-weight: bold;
+}
+
+/* Tab Css */
+.tab-heading {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+}
+
+.tab-link {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-link.active {
+  font-weight: 600;
+}
+
+.tab-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+/* Content */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tab-content {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
+}
+{% endstyle %}
+
+{% if product.variants.size > 0 %}
+  {% capture cm_content %}{% endcapture %}
+  {% capture in_content %}{% endcapture %}
+  {% for variant in product.variants %}
+      {% assign size_guide = variant.metafields.custom.size_guide.value %}
+      {% if size_guide != blank %}
+        {% assign cm_list = size_guide.size_guide_cm.value %} 
+        {% assign inch_list = size_guide.size_guide_in.value %}
+        {% capture cm_content %}
+          {% if cm_list %}
+            {{ cm_content }}
+            <tr class="{% if variant == product.selected_or_first_available_variant %}active{% endif %}{% if variant.available == false %} disabled{% endif %}">
+              <td>
+                <input 
+                  type="radio"
+                  name="size-select-cm"
+                  class="size-radio"
+                  value="{{ variant.id }}"
+                  {% if variant == product.selected_or_first_available_variant %}checked{% endif %}
+                >
+                {{ variant.title }}
+              </td>
+              <td>{{ cm_list.bust }}</td>
+              <td>{{ cm_list.fit_in_bust }}</td>
+              <td>{{ cm_list.front_length }}</td>
+              <td>{{ cm_list.access_shoulder }}</td>
+              <td>{{ cm_list.fit_in_waist }}</td>
+              <td>{{ cm_list.waist }}</td>
+            </tr>
+          {% endif %}
+        {% endcapture %}
+        {% capture in_content %}
+          {% if inch_list %}
+            {{ in_content }}
+            <tr class="{% if variant == product.selected_or_first_available_variant %}active{% endif %}{% if variant.available == false %} disabled{% endif %}">
+              <td>
+                <input 
+                  type="radio"
+                  name="size-select-in"
+                  class="size-radio"
+                  data-vid="{{ variant.title }}"
+                  value="{{ variant.id }}"
+                  {% if variant == product.selected_or_first_available_variant %}checked{% endif %}
+                >
+                {{ variant.title }}
+              </td>
+              <td>{{ inch_list.bust }}</td>
+              <td>{{ inch_list.to_fit_bust }}</td>
+              <td>{{ inch_list.front_length }}</td>
+              <td>{{ inch_list.sleeve_length }}</td>
+              <td>{{ inch_list.to_fit_waist }}</td>
+              <td>{{ inch_list.waist }}</td>
+            </tr>
+          {% endif %}
+        {% endcapture %}
+      {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if cm_content != blank or in_content != blank %}
+  <div id="SizeGuideDrawer" class="size-guide-drawer">
+    <button class="drawer-close">
+      <span class="svg-wrapper">
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    </button>
+    <div class="drawer-overlay"></div>
+
+    
+    <div class="drawer-content" id="SizeGuideContent-{{ section.id }}">
+      <div class="size-guide-drawer-content">
+        <div class="prod-card-info">
+          {% assign current_product = product.selected_or_first_available_variant %}
+          {% if current_product.featured_image != blank %}
+          <div class="prod-img">
+            {{
+                current_product.featured_media
+                | image_url: width: 1500
+                | image_tag: width: product.featured_image.width, fetchpriority: 'high'
+            }}  
+          </div>
+          {% endif %}
+          <div class="prod-info">
+            <h4>{{ product.title }}</h4>
+            <div class="prod-price" id="prod-price-{{ section.id }}">
+              {%- render 'price',
+                product: product,
+                use_variant: true,
+                show_badges: true,
+                price_class: 'price--large'
+              -%}
+            </div>
+          </div>
+        </div>
+        <div class="size-guide-varaint-metaobj">
+          <div class="tab-heading">
+            <button class="tab-link active" data-target="SizeChart">Size Chart</button>
+            <button class="tab-link" data-target="HowToMeasure">How to Measure</button>
+          </div>
+          <div class="size-chart" id="SizeChart">
+            <div class="size-toggle">
+              {% if cm_content %}<button class="unit-btn active" data-unit="cm">cm</button>{% endif %}
+              {% if in_content %}<button class="unit-btn" data-unit="in">in</button>{% endif %}
+            </div>
+
+            {% if cm_content != blank %}
+              <table class="size-chart cm-table">
+                <thead>
+                  <tr>
+                    <th>Size</th>
+                    <th>Bust (cm)</th>
+                    <th>To Fit Bust (cm)</th>
+                    <th>Front Length (cm)</th>
+                    <th>Across Shoulder (cm)</th>
+                    <th>To Fit Waist (cm)</th>
+                    <th>Waist (cm)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{ cm_content }}
+                </tbody>
+              </table>
+            {% endif %}  
+
+            {% if in_content != blank %}
+              <table class="size-chart inch-table" style="display:none;">
+                <thead>
+                  <tr>
+                    <th>Size</th>
+                    <th>Bust (in)</th>
+                    <th>To Fit Bust (in)</th>
+                    <th>Front Length (in)</th>
+                    <th>Across Shoulder (in)</th>
+                    <th>To Fit Waist (in)</th>
+                    <th>Waist (in)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{ in_content }}
+                </tbody>
+              </table>
+            {% endif %}
+          </div>
+          <div class="addtocart-wrap" id="btn-addtocart-{{ section.id }}">
+            <button id="btnSubmit-{{ section.id }}" class="btn-addtocart button button--full-width" {% if product.selected_or_first_available_variant.available == false %} disabled{% endif %}>
+              <span>
+                {%- if product.selected_or_first_available_variant == null -%}
+                  {{ 'products.product.unavailable' | t }}
+                {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- else -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- endif -%}
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="how-to-measure" id="HowToMeasure">555555</div>
+      </div> 
+    </div>
+  </div>
+{% endif %}
+
+<script>
+  document.querySelectorAll('.unit-btn').forEach((btn) => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.unit-btn').forEach((b) => b.classList.remove('active'));
+      this.classList.add('active');
+
+      const unit = this.dataset.unit;
+
+      document.querySelector('.cm-table').style.display = unit === 'cm' ? 'table' : 'none';
+      document.querySelector('.inch-table').style.display = unit === 'in' ? 'table' : 'none';
+    });
+  });
+
+  document.querySelectorAll('.size-radio').forEach(radio => {
+    radio.addEventListener('change', function () {
+      const selectedSize = this.closest('tr').querySelector('td').innerText.trim();
+      const variantRadios = document.querySelector('variant-selects');
+
+      // CASE 1: Radio buttons (most common in Dawn)
+      if (variantRadios) {
+        const sizeInput = variantRadios.querySelector(`input[type="radio"][value="${selectedSize}"]`);        
+        if (sizeInput) {
+          sizeInput.checked = true;
+          sizeInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      // Highlight active row
+      document.querySelectorAll('.size-chart tr').forEach(tr => tr.classList.remove('active'));
+      this.closest('tr').classList.add('active');
+    });    
+  });
+
+  document.querySelector('.btn-addtocart').addEventListener('click', function (e) {
+    e.preventDefault();
+    const btnSubmit = document.querySelector('.product-form__submit');
+    btnSubmit.click();
+    document.querySelector('#SizeGuideDrawer .drawer-close').click();
+  });
+
+  function tabstructure(){
+    
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const drawer = document.getElementById('SizeGuideDrawer');
+    const openBtn = document.getElementById('open-size-guide');
+    const closeBtn = drawer.querySelector('.drawer-close');
+    const overlay = drawer.querySelector('.drawer-overlay');
+
+    // OPEN
+    openBtn.addEventListener('click', () => {
+      drawer.classList.add('active');
+      document.body.classList.add('drawer-open');
+    });
+
+    // CLOSE
+    function closeDrawer() {
+      drawer.classList.remove('active');
+      document.body.classList.remove('drawer-open');
+    }
+
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+
+    const drawerContent = document.querySelector('.drawer-content');
+    if (!drawerContent) return;
+
+    const links = document.querySelectorAll('.tab-link');
+
+    function scrollToSection(targetEl) {
+      if (!targetEl) return;
+
+      const containerTop = drawerContent.getBoundingClientRect().top;
+      const targetTop = targetEl.getBoundingClientRect().top;
+
+      const scrollPosition =
+        targetTop - containerTop + drawerContent.scrollTop;
+
+      console.log(targetEl);
+      targetEl.scrollTo({
+        //top: 0, // small offset
+        behavior: 'smooth'
+      });
+      
+    }
+
+    links.forEach(link => {
+      link.addEventListener('click', function () {
+        const targetId = this.dataset.target;
+        const targetEl = document.getElementById(targetId);
+        
+        // Active state
+        links.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+
+        scrollToSection(targetEl);
+      });
+    });
+  });
+  
+</script>
+ 

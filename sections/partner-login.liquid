@@ -1,0 +1,205 @@
+{% comment %} <section class="partner-login-section" aria-label="Partner Login section">
+  <div class="partner-login-hero">
+    <div class="partner-login-hero__content">
+      <span class="partner-login-eyebrow">Launching</span>
+      <h1 class="partner-login-heading">Myntra Rising Star Beauty Edit</h1>
+      <p class="partner-login-copy">55 million+ Monthly Active Users</p>
+      <a href="#partner-steps" class="partner-login-button">Explore</a>
+    </div>
+    <div class="partner-login-hero__visual">
+      <div class="partner-login-card partner-login-card--main">
+        <div class="partner-login-card__badge">New</div>
+        <p class="partner-login-card__title">Beauty Edit</p>
+        <p class="partner-login-card__text">A curated launch collection for beauty partners.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="partner-steps" class="partner-login-steps">
+    <div class="partner-login-step">
+      <div class="partner-login-step__icon">1</div>
+      <h2>Register</h2>
+      <p>Find all the onboarding information to start your seller journey with dedicated support.</p>
+      <a href="#" class="partner-login-step__link">Know more</a>
+    </div>
+    <div class="partner-login-step">
+      <div class="partner-login-step__icon">2</div>
+      <h2>Sell</h2>
+      <p>Learn all about fulfilment models, architecture, and partner support to run a successful business.</p>
+      <a href="#" class="partner-login-step__link">Know more</a>
+    </div>
+    <div class="partner-login-step">
+      <div class="partner-login-step__icon">3</div>
+      <h2>Earn</h2>
+      <p>Get access to timely payments, partner incentives and growth-driven selling plans.</p>
+      <a href="#" class="partner-login-step__link">Know more</a>
+    </div>
+    <div class="partner-login-step">
+      <div class="partner-login-step__icon">4</div>
+      <h2>Grow</h2>
+      <p>Get tailored support at every step to help your brand expand and perform better.</p>
+      <a href="#" class="partner-login-step__link">See more</a>
+    </div>
+  </div>
+</section>
+
+{% style %}
+.partner-login-section {
+  padding: 3rem 1rem;
+  background: #fff;
+}
+.partner-login-hero {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+  grid-template-columns: 1.4fr 1fr;
+  margin-bottom: 3rem;
+}
+.partner-login-eyebrow {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #7f56d9;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.partner-login-heading {
+  font-size: clamp(2rem, 2.6vw, 3.5rem);
+  line-height: 1.05;
+  margin: 0 0 1rem;
+  color: #111827;
+}
+.partner-login-copy {
+  font-size: 1.05rem;
+  color: #4b5563;
+  max-width: 36rem;
+  margin-bottom: 1.5rem;
+}
+.partner-login-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.75rem;
+  background: #ec4899;
+  color: white;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background 0.2s ease;
+}
+.partner-login-button:hover {
+  background: #db2777;
+}
+.partner-login-hero__visual {
+  display: flex;
+  justify-content: flex-end;
+}
+.partner-login-card {
+  width: min(420px, 100%);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(180deg, #fdf2f8 0%, #fff7f9 100%);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  position: relative;
+}
+.partner-login-card--main {
+  display: grid;
+  gap: 1rem;
+}
+.partner-login-card__badge {
+  width: fit-content;
+  padding: 0.4rem 0.85rem;
+  background: #f9d4ec;
+  color: #9d174d;
+  font-weight: 700;
+  border-radius: 9999px;
+}
+.partner-login-card__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827;
+}
+.partner-login-card__text {
+  margin: 0;
+  color: #475569;
+  line-height: 1.75;
+}
+.partner-login-steps {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.partner-login-step {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  display: grid;
+  gap: 1rem;
+}
+.partner-login-step__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ec4899;
+  color: white;
+  font-weight: 800;
+}
+.partner-login-step h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #111827;
+}
+.partner-login-step p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.7;
+  font-size: 0.98rem;
+}
+.partner-login-step__link {
+  color: #ec4899;
+  font-weight: 700;
+  text-decoration: none;
+}
+.partner-login-step__link:hover {
+  text-decoration: underline;
+}
+@media screen and (max-width: 980px) {
+  .partner-login-hero {
+    grid-template-columns: 1fr;
+  }
+  .partner-login-hero__visual {
+    justify-content: center;
+  }
+  .partner-login-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media screen and (max-width: 640px) {
+  .partner-login-section {
+    padding: 2rem 0.75rem;
+  }
+  .partner-login-steps {
+    grid-template-columns: 1fr;
+  }
+  .partner-login-card {
+    padding: 1.5rem;
+  }
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Partner login",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Partner login"
+    }
+  ]
+}
+{% endschema %} {% endcomment %}

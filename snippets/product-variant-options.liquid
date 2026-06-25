@@ -83,6 +83,7 @@
       name="{{ input_name | escape }}"
       value="{{ value | escape }}"
       form="{{ product_form_id }}"
+      data-vid="{{ value.variant.id }}"
       {% if value.selected %}
         checked
       {% endif %}

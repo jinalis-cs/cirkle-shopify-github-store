@@ -66,7 +66,7 @@
         {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
         {%- assign featured_media_alt = featured_media.alt | handleize -%}
         
-        {% if featured_media_alt != null %}
+        {% comment %} {% if featured_media_alt != null %}
           {% if current_variant_option1 == featured_media_alt %}
             <li
               id="Slide-{{ section.id }}-{{ featured_media.id }}"
@@ -90,7 +90,7 @@
               %}
             </li>
           {% endif %}
-        {% else %}
+        {% else %} {% endcomment %}
           <li
             id="Slide-{{ section.id }}-{{ featured_media.id }}"
             class="product__media-item grid__item slider__slide is-active{% if single_media_visible %} product__media-item--single{% endif %}{% if featured_media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
@@ -112,7 +112,7 @@
               lazy_load: false
             %}
           </li>
-        {% endif %}
+        {% comment %} {% endif %} {% endcomment %}
       {%- endif -%}
       {%- for media in product.media -%}
         {% if media_position >= limit

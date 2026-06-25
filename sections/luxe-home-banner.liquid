@@ -1,0 +1,342 @@
+
+{% style %}
+    .banner-image .aspect-ratio {
+    padding-top: min(832px, 72%);
+    height: 100%;
+  }
+
+  .banner-image .aspect-ratio img {
+    object-fit: cover;
+  }
+
+  .hero-banner-outer {
+    display: grid;
+  }
+
+  .hero-banner-outer .banner-image,
+  .hero-banner-outer .banner-content {
+    grid-area: 1/1;
+  }
+
+  .hero-banner-outer .banner-content {
+    padding-top: calc(var(--header-height) + clamp(2rem, 3.906vw - 1rem, 4rem));
+    padding-bottom: clamp(2rem, 3.906vw - 1rem, 4rem);
+    position: relative;
+    display: grid;
+    color: var(--white);
+  }
+
+  .hero-banner-outer .sub-heading {
+    font: var(--text-lg);
+    font-weight: 500;
+  }
+
+  .hero-banner-outer .sub-heading+.heading {
+    margin-top: 5px;
+  }
+
+  .hero-banner-outer .heading {
+    font-weight: 400;
+  }
+
+  .hero-banner-outer .banner-content .content-wpr {
+    /* max-width: clamp(44rem, 37.109vw + 15.5rem, 63rem); */
+    width: 100%;
+  }
+
+  .hero-banner-outer .banner-content .btn-wpr {
+    margin-top: clamp(2rem, 3.906vw - 1rem, 4rem);
+  }
+
+  @media screen and (max-width:767px) {
+    .banner-image .aspect-ratio {
+      padding-top: max(600px, 90%);
+      height: 100%;
+    }
+  }
+{% endstyle %}
+
+{% comment %} <section class="hero-banner-section" data-section="hero-banner" {{ section.shopify_attributes }}> 
+  <div class="hero-banner-outer">
+    {% for block in section.blocks %}
+      
+        <div class="banner-image" {{ block.shopify_attributes }}>
+          <div class="aspect-ratio">
+            {% if block.settings.desk_image != blank %}
+              {%- assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840' -%}
+              {%- assign image_height = block.settings.desk_image.width
+                | divided_by: block.settings.desk_image.aspect_ratio
+              -%}
+              {{
+                block.settings.desk_image
+                | image_url: width: 3840
+                | image_tag:
+                  width: block.settings.desk_image.width,
+                  height: image_height,
+                  widths: widths,
+                  class: 'desk-only',
+                  fetchpriority: 'high'
+              }}
+            {% else %}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+
+            {% if block.settings.mob_image != blank %}
+              {%- assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840' -%}
+              {%- assign image_height = block.settings.mob_image.width
+                | divided_by: block.settings.mob_image.aspect_ratio
+              -%}
+              {{
+                block.settings.mob_image
+                | image_url: width: 3840
+                | image_tag:
+                  width: block.settings.mob_image.width,
+                  height: image_height,
+                  widths: widths,
+                  class: 'mob-only',
+                  fetchpriority: 'high'
+              }}
+            {% else %}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+          </div>
+        </div>
+        {% if block.settings.sub_heading != blank
+          or block.settings.heading != blank
+          or block.settings.btn_label != blank
+        %}
+          <div class=" container  banner-content align--center align--middle mob:align--middle mob:align--center text-center md:text-center">
+            <div class="content-wpr">
+              {% if block.settings.sub_heading != blank %}
+                <h4 class="sub-heading">{{ block.settings.sub_heading }}</h4>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h1 class="heading">
+                  {{ block.settings.heading }}
+                </h1>
+              {% endif %}
+              {% if block.settings.btn_label != blank %}
+                <div class="btn-wpr">
+                  <a
+                    {% if block.settings.btn_link != blank %}
+                      href="{{ block.settings.btn_link }}"
+                    {% endif %}
+                    class="btn btn-secondary"
+                  >
+                    {{- block.settings.btn_label }}
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      
+    {% endfor %}    
+  </div>
+</section> {% endcomment %}
+
+<section class="hero-banner-section">
+  <div class="hero-banner-outer" data-section="hero-banner">
+    <div class="banner-image">
+      <div class="aspect-ratio">
+        {% if section.settings.desk_image != blank %}
+          {%- assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840' -%}
+          {%- assign image_height = section.settings.desk_image.width
+            | divided_by: section.settings.desk_image.aspect_ratio
+          -%}
+          {{
+            section.settings.desk_image
+            | image_url: width: 3840
+            | image_tag:
+              width: section.settings.desk_image.width,
+              height: image_height,
+              widths: widths,
+              class: 'desk-only',
+              fetchpriority: 'high'
+          }}
+        {% else %}
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+
+        {% if section.settings.mob_image != blank %}
+          {%- assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840' -%}
+          {%- assign image_height = section.settings.mob_image.width
+            | divided_by: section.settings.mob_image.aspect_ratio
+          -%}
+          {{
+            section.settings.mob_image
+            | image_url: width: 3840
+            | image_tag:
+              width: section.settings.mob_image.width,
+              height: image_height,
+              widths: widths,
+              class: 'mob-only',
+              fetchpriority: 'high'
+          }}
+        {% else %}
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+    </div>
+    {% if section.settings.sub_heading != blank
+      or section.settings.heading != blank
+      or section.settings.btn_label != blank
+    %}
+      <div class=" container  banner-content align--center align--middle mob:align--middle mob:align--center text-center md:text-center">
+        <div class="content-wpr">
+          {% if section.settings.sub_heading != blank %}
+            <h4 class="sub-heading">{{ section.settings.sub_heading }}</h4>
+          {% endif %}
+          {% if section.settings.heading != blank %}
+            <h1 class="heading">
+              {{ section.settings.heading }}
+            </h1>
+          {% endif %}
+          {% if section.settings.btn_label != blank %}
+            <div class="btn-wpr">
+              <a
+                {% if section.settings.btn_link != blank %}
+                  href="{{ section.settings.btn_link }}"
+                {% endif %}
+                class="btn btn-secondary"
+              >
+                {{- section.settings.btn_label }}
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Luxe Hero Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mob_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "text",
+      "id": "sub_heading",
+      "label": "Pre Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": " Sub Heading"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Label"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "sub_heading",
+          "label": "Pre Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": " Sub Heading"
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "desk_image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mob_image",
+          "label": "Mobile Image"
+        },    
+        {
+          "type": "header",
+          "content": "Video"
+        },    
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Desktop Video"
+        },
+        {
+          "type": "video",
+          "id": "mob_video",
+          "label": "Mobile Video"
+        },
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": "Cover image",
+          "info": "This cover image will only be used for MP4 videos. It does not apply to YouTube or Vimeo videos."
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+          "label": "Video url"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_video_looping",
+          "label": "Enable video looping",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],  
+  "presets": [
+    {
+      "name": "Luxe Hero Banner",
+      "category": "Luxe"
+    }
+  ]
+}
+{% endschema %}

@@ -102,26 +102,19 @@
         },
         "addon_product_gxjB97": {
           "type": "addon_product",
-          "disabled": true,
           "settings": {
             "addon_product_title": "Addon Product",
             "addon_product": "blue-birds-addon-product"
           }
         },
-        "aiod_all_in_1_discount_wholesale_offer_a9CmFV": {
-          "type": "shopify://apps/aiod-all-in-1-discount/blocks/wholesale-offer/9537caf0-36d5-4981-a648-8961a8e85652",
-          "settings": {}
+        "fad_auto_discounts_fad_upsell_items_xBgpTK": {
+          "type": "shopify://apps/fad-auto-discounts/blocks/FAD-upsell-items/4b6810b7-b33d-468c-9916-327aeb4c800b",
+          "settings": {
+            "upsell_item_id": 0
+          }
         },
-        "aiod_all_in_1_discount_volume_offer_T6F89n": {
-          "type": "shopify://apps/aiod-all-in-1-discount/blocks/volume-offer/9537caf0-36d5-4981-a648-8961a8e85652",
-          "settings": {}
-        },
-        "aiod_all_in_1_discount_bogo_offer_UD67bQ": {
-          "type": "shopify://apps/aiod-all-in-1-discount/blocks/bogo-offer/9537caf0-36d5-4981-a648-8961a8e85652",
-          "settings": {}
-        },
-        "aiod_all_in_1_discount_free_gift_topbar_FhGqNf": {
-          "type": "shopify://apps/aiod-all-in-1-discount/blocks/free-gift-topbar/9537caf0-36d5-4981-a648-8961a8e85652",
+        "fad_auto_discounts_fad_display_offers_VmpKQE": {
+          "type": "shopify://apps/fad-auto-discounts/blocks/FAD-display-offers/4b6810b7-b33d-468c-9916-327aeb4c800b",
           "settings": {}
         }
       },
@@ -139,18 +132,17 @@
         "complementary_gfW3XA",
         "bundle_products_cBgjpV",
         "addon_product_gxjB97",
-        "aiod_all_in_1_discount_wholesale_offer_a9CmFV",
-        "aiod_all_in_1_discount_volume_offer_T6F89n",
-        "aiod_all_in_1_discount_bogo_offer_UD67bQ",
-        "aiod_all_in_1_discount_free_gift_topbar_FhGqNf"
+        "fad_auto_discounts_fad_upsell_items_xBgpTK",
+        "fad_auto_discounts_fad_display_offers_VmpKQE"
       ],
       "settings": {
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
-        "media_size": "large",
-        "constrain_to_viewport": true,
+        "media_size": "medium",
+        "constrain_to_viewport": false,
         "media_fit": "contain",
-        "gallery_layout": "thumbnail",
+        "gallery_layout": "stacked",
+        "slider_thumbnail_position": "horizontal",
         "media_position": "left",
         "image_zoom": "lightbox",
         "mobile_thumbnails": "columns",
@@ -162,17 +154,6 @@
     },
     "1774342040023b5413": {
       "type": "apps",
-      "blocks": {
-        "aiod_all_in_1_discount_app_bundle_by_id_bqRt7w": {
-          "type": "shopify://apps/aiod-all-in-1-discount/blocks/app-bundle-by-id/9537caf0-36d5-4981-a648-8961a8e85652",
-          "settings": {
-            "aiod_bundle_id": 156420
-          }
-        }
-      },
-      "block_order": [
-        "aiod_all_in_1_discount_app_bundle_by_id_bqRt7w"
-      ],
       "settings": {
         "include_margins": true
       }

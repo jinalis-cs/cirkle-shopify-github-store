@@ -1,0 +1,172 @@
+<style>
+
+
+.section-custom-image-block{overflow:hidden;}
+.section-custom-image-block .image-blocks-wrapper {display: flex;gap: 100px;align-items: center;margin: auto;}
+.section-custom-image-block .image-blocks-wrapper.image-left{flex-direction: row;}
+.section-custom-image-block .image-blocks-wrapper.image-right{flex-direction: row-reverse;}
+.section-custom-image-block .image-wrapper {flex: 1; width: 100%;}
+.section-custom-image-block .blocks-wrapper {flex: 1;}
+.section-custom-image-block .blocks-wrapper .h2{font-size:50px;line-height:70px; text-transform:capitalize;}
+.section-custom-image-block .blocks-wrapper ul{list-style:none;padding:0; display:flex;flex-direction:column;gap:15px;}
+.section-custom-image-block .blocks-wrapper ul li{padding-left: 27px; position:relative;}
+.section-custom-image-block .blocks-wrapper ul li:before{ height: 15px;width: 15px;content:""; position:absolute; left:0; top:4px; background-size:15px; background: url(https://cdn.shopify.com/s/files/1/1038/4244/7692/files/list-icon.svg?v=1773143499);}
+
+.section-custom-image-block .content {margin: 20px 0 40px 0; color:#333333;}
+.section-custom-image-block .button-wrapper-main{display:flex; align-items:center; gap:10px;}
+.section-custom-image-block .media{overflow:visible;}
+.section-custom-image-block .caption {
+    color: #629550;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: capitalize;
+    line-height: 65px;
+    margin-bottom: 0px;
+}
+
+.section-custom-image-block .page-width{position:relative;}
+.section-custom-image-block .pop-video{position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);}
+
+
+/* parent handles rotation */
+.parallax-rotate {
+  transform: rotate(65deg) scale(0.85);
+  opacity: 0;
+  transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 1.2s ease;
+}
+
+/* final state */
+.parallax-rotate.wake-up {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+  transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 1.2s ease;
+}
+
+/* keep your parallax clean */
+.parallax-img {
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+
+@media(max-width : 1199px){
+    .section-custom-image-block .blocks-wrapper .h2{font-size:40px;line-height:50px;}
+}
+
+@media(max-width : 989px){
+    .section-custom-image-block .image-blocks-wrapper{gap:40px;}
+    .section-custom-image-block .image-blocks-wrapper.image-left {flex-direction:column;}
+    .section-custom-image-block .image-blocks-wrapper.image-right{flex-direction:column;}
+    .section-custom-image-block .image-blocks-wrapper.image-bottom{flex-direction:column-reverse; align-items:start;}
+    .section-custom-image-block .image-wrapper{max-width:500px;}
+
+}
+
+
+@media(max-width : 749px){
+    .section-custom-image-block .image-blocks-wrapper{gap:60px;}
+    .section-custom-image-block .content {margin: 10px 0 20px 0;}
+    .section-custom-image-block .blocks-wrapper{width:100%; text-align:center;}
+    .section-custom-image-block .blocks-wrapper .h2{font-size:30px;line-height:40px;}
+    .section-custom-image-block .caption { line-height: 25px; }
+    .section-custom-image-block .button-wrapper-main{justify-content:center;margin-top: 30px;}
+    .section-custom-image-block .image-wrapper {max-width: 287px;margin-left: auto;}
+
+
+    
+}
+</style>
+
+<div class="image-blocks-wrapper image-right image-bottom">
+  <div class="image-wrapper">
+    <div class="parallax-rotate wake-up">
+      <div class="media" style="padding-bottom: 99.18319719953325%;">
+        <img src="//gourmet-oil-jay.myshopify.com/cdn/shop/files/icon-slide2-1.png?v=1775990544&amp;width=3200" alt=""
+          srcset="//gourmet-oil-jay.myshopify.com/cdn/shop/files/icon-slide2-1.png?v=1775990544&amp;width=352 352w, //gourmet-oil-jay.myshopify.com/cdn/shop/files/icon-slide2-1.png?v=1775990544&amp;width=832 832w, //gourmet-oil-jay.myshopify.com/cdn/shop/files/icon-slide2-1.png?v=1775990544&amp;width=1200 1200w, //gourmet-oil-jay.myshopify.com/cdn/shop/files/icon-slide2-1.png?v=1775990544&amp;width=1920 1920w, //gourmet-oil-jay.myshopify.com/cdn/shop/files/icon-slide2-1.png?v=1775990544&amp;width=3200 3200w"
+          width="3200" height="3174" class="parallax-img" style="transform: translate(0px, 0px);">
+      </div>
+    </div>
+  </div>
+  <div class="blocks-wrapper">
+    <div class="caption">
+      Exclusive brand of cannara
+    </div>
+    <div class="h2">
+      <p>Best vape E-Liquid Products</p>
+    </div>
+    <div class="content">
+      <p>Harmony for Mind, Body, and Soul - Embrace the Transformative Power of Cannabis Oil for Holistic Well-being
+      </p>
+    </div>
+    <div class="button-wrapper-main">
+      <div class="button-wrapper">
+        <a class="button" href="#">
+          Order now
+        </a>
+      </div>
+      <div class="button-wrapper">
+        <a class="button video-popup-btn" href="javascript:void(0);"
+          data-video="//gourmet-oil-jay.myshopify.com/cdn/shop/videos/c/vp/144fb87d29f4429fb7c3385222d10572/144fb87d29f4429fb7c3385222d10572.HD-720p-4.5Mbps-83346258.mp4?v=0">
+          Watch video
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    
+document.addEventListener("DOMContentLoaded", function () {
+
+  document.querySelectorAll('.parallax-section').forEach((section) => {
+      const img = section.querySelector('.parallax-img');
+      const rotateWrap = section.querySelector('.parallax-rotate');
+
+      // trigger entrance animation
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          rotateWrap.classList.add('wake-up');
+        });
+      });
+
+    // parallax (ONLY translate, no rotation conflict now)
+    section.addEventListener('mousemove', function (e) {
+      const rect = section.getBoundingClientRect();
+
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const moveX = (x - rect.width / 2) * -0.015;
+      const moveY = (y - rect.height / 2) * -0.015;
+
+      img.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+
+    section.addEventListener('mouseleave', function () {
+      img.style.transform = `translate(0,0)`;
+    });
+  });
+});
+
+</script>
+
+
+{% schema %}
+{
+  "name": "Image rotate",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [],
+  "presets": [
+    {
+      "name": "Image rotate"
+    }
+  ]
+}
+{% endschema %}

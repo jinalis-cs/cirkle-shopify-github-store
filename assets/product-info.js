@@ -188,6 +188,9 @@ if (!customElements.get('product-info')) {
           };
 
           updateSourceFromDestination('price');
+          // updateSourceFromDestination('prod-price'); /* Size guide drawer - product */
+          // updateSourceFromDestination('btn-addtocart');
+          updateSourceFromDestination('SizeGuideContent'); /* Size guide drawer - product */
           updateSourceFromDestination('Sku', ({ classList }) => classList.contains('hidden'));
           updateSourceFromDestination('Inventory', ({ innerText }) => innerText === '');
           updateSourceFromDestination('Volume');
@@ -201,7 +204,7 @@ if (!customElements.get('product-info')) {
             html.getElementById(`ProductSubmitButton-${this.sectionId}`)?.hasAttribute('disabled') ?? true,
             window.variantStrings.soldOut
           );
-
+          
           publish(PUB_SUB_EVENTS.variantChange, {
             data: {
               sectionId: this.sectionId,
@@ -209,8 +212,28 @@ if (!customElements.get('product-info')) {
               variant,
             },
           });
+          
+          /* JS - Size guide metaobejct - Start */
+          const sizeGuideMetaobj = document.querySelector('.size-guide-varaint-metaobj');
+          if(sizeGuideMetaobj) this.updateVariantInSizeGuide(variant?.id);
+          /* JS - Size guide metaobejct - End */
         };
       }
+
+      /* JS - Size guide metaobejct - Start */
+      updateVariantInSizeGuide(variantId){
+        const sizeRadioList = document.querySelectorAll('.size-radio');
+        sizeRadioList.forEach((radio) => {
+          radio.checked = false;
+          radio.closest('tr').classList.remove('active');
+          if(radio.value == variantId){ 
+            radio.checked = true;
+            radio.closest('tr').classList.add('active');
+          }
+        });
+        
+      }
+      /* JS - Size guide metaobejct - End */
 
       updateVariantInputs(variantId) {
         this.querySelectorAll(
@@ -238,7 +261,7 @@ if (!customElements.get('product-info')) {
       setUnavailable() {
         this.productForm?.toggleSubmitButton(true, window.variantStrings.unavailable);
 
-        const selectors = ['price', 'Inventory', 'Sku', 'Price-Per-Item', 'Volume-Note', 'Volume', 'Quantity-Rules']
+        const selectors = ['price', 'prod-price', 'Inventory', 'Sku', 'Price-Per-Item', 'Volume-Note', 'Volume', 'Quantity-Rules']
           .map((id) => `#${id}-${this.dataset.section}`)
           .join(', ');
         document.querySelectorAll(selectors).forEach(({ classList }) => classList.add('hidden'));

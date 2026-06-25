@@ -27,8 +27,8 @@
 >
   <div class="product grid">
     <div class="grid__item product__media-wrapper">
-      {% assign variant_images = addon_product.images | where: 'attached_to_variant?', true | map: 'src' %}
-      {% render 'product-media-gallery', variant_images: variant_images %}
+      {% assign variant_images_1 = addon_product.images | where: 'attached_to_variant?', true | map: 'src' %}
+      {% render 'product-media-gallery', variant_images: variant_images_1, product: addon_product %}
     </div>
     <div class="product__info-wrapper grid__item">
       <section

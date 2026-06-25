@@ -87,7 +87,11 @@
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
-        {% render 'product-media-gallery', variant_images: variant_images %}
+        {% if section.settings.slider_thumbnail_position == 'verticle' %}
+          {% render 'product-media-gallery-swiper', variant_images: variant_images %}
+        {% else %}
+          {% render 'product-media-gallery', variant_images: variant_images %}
+        {% endif %}
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -114,10 +118,10 @@
                     <h2 class="h1">
                       {{ product.title | escape }}
                     </h2>
-                    ----- {{ product.title }}
                   </a>
                 </div>
               {%- when 'price' -%}
+
                 {% comment %} {% render 'price-currency-roundup',  product: product %} {% endcomment %}
                 <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
@@ -474,6 +478,13 @@
                     </volume-pricing>
                   {%- endif -%}
                 </div>
+                {% assign current_variant = product.selected_or_first_available_variant %}
+                {% if current_variant.metafields.custom.size_guide != blank %}
+                <button id="open-size-guide" class="size-guide-btn">
+                  Size Guide
+                </button>
+                {% endif %}
+                {% render 'size-guide-variant-metaobject' %}
               {%- when 'popup' -%}
                 <modal-opener
                   class="product-popup-modal__opener quick-add-hidden"
@@ -2264,6 +2275,23 @@
       ],
       "default": "stacked",
       "label": "t:sections.main-product.settings.gallery_layout.label"
+    },
+    {
+      "type": "select",
+      "id": "slider_thumbnail_position",      
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "verticle",
+          "label": "Verticle"
+        },
+      ],
+      "default": "horizontal",
+      "visible_if": "{{ section.settings.gallery_layout == 'thumbnail_slider' }}",
+      "label": "Slider thumbnail position",
     },
     {
       "type": "select",

@@ -123,7 +123,7 @@
     "currency_code_enabled": false,
     "cart_type": "drawer",
     "show_vendor": false,
-    "show_cart_note": false,
+    "show_cart_note": true,
     "cart_drawer_collection": "",
     "cart_color_scheme": "scheme-1",
     "enable_shipping_bar": false,
@@ -178,28 +178,55 @@
         "disabled": false,
         "settings": {}
       },
-      "13027630495364635475": {
-        "type": "shopify://apps/discount-ninja/blocks/la-dn-app-embed-core-v5-assetless/b9a933ba-e276-459f-a4bf-3571d5a1e81c",
-        "disabled": false,
-        "settings": {}
-      },
-      "11677485124176790688": {
-        "type": "shopify://apps/discount-ninja/blocks/la-dn-app-embed-core-v5-assetless-vnext/b9a933ba-e276-459f-a4bf-3571d5a1e81c",
-        "disabled": false,
-        "settings": {}
-      },
-      "127709043890318779": {
-        "type": "shopify://apps/aiod-all-in-1-discount/blocks/install-snippets/9537caf0-36d5-4981-a648-8961a8e85652",
-        "disabled": true,
-        "settings": {
-          "aiod_v2_call": "",
-          "aiod_dev_api_call": ""
-        }
-      },
       "6143736321357441667": {
         "type": "shopify://apps/tidio-live-chat-chatbots/blocks/app-embed/1002274d-fb18-4939-98f6-5f05a8deeadc",
         "disabled": true,
         "settings": {}
+      },
+      "3149989000263460623": {
+        "type": "shopify://apps/miniorange-otp-login-register/blocks/update-profile-app-embed/dba67ab6-2825-41e1-83fd-7500e426945d",
+        "disabled": true,
+        "settings": {
+          "button_color": "#f16c13",
+          "text_color": "#ffffff"
+        }
+      },
+      "3418223220453551085": {
+        "type": "shopify://apps/fad-auto-discounts/blocks/install-snippets/4b6810b7-b33d-468c-9916-327aeb4c800b",
+        "disabled": false,
+        "settings": {
+          "fad_v2_call": ""
+        }
+      },
+      "18378115731771045039": {
+        "type": "shopify://apps/miniorange-otp-login-register/blocks/otp-login-popup/dba67ab6-2825-41e1-83fd-7500e426945d",
+        "disabled": false,
+        "settings": {
+          "popup_vertical_padding": 0,
+          "popup_horizontal_padding": 0,
+          "elements_spacing": 24,
+          "heading_type": "text",
+          "heading_text": "Login with OTP",
+          "heading_text_color": "#000000",
+          "sender_toggle_active_bg": "#f4f4f4",
+          "sender_toggle_inactive_bg": "#f4f4f4",
+          "sender_toggle_active_text_color": "#000000",
+          "sender_toggle_inactive_text_color": "#9a9a9a",
+          "sender_phone_label": "Phone",
+          "sender_email_label": "Email",
+          "sender_whatsapp_label": "WhatsApp",
+          "input_bg_color": "#ffffff",
+          "input_text_color": "#000000",
+          "input_font_size": 15,
+          "phone_input_placeholder": "Mobile Number",
+          "email_input_placeholder": "Email Address",
+          "button_label": "Send OTP",
+          "button_bg_color": "#000000",
+          "button_text_color": "#ffffff",
+          "footer_note_text": "",
+          "footer_note_color": "#666666",
+          "allow_country_selection": true
+        }
       }
     },
     "color_schemes": {

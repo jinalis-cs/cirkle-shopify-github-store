@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "partner_login": {
+      "type": "partner-login",
+      "settings": {}
+    },
+    "login_form": {
+      "type": "login-form",
+      "settings": {}
+    },
+    "login_page2": {
+      "type": "login-page2",
+      "settings": {}
+    }
+  },
+  "order": [
+    "partner_login",
+    "login_form",
+    "login_page2"
+  ]
+}

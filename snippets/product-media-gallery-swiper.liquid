@@ -1,0 +1,307 @@
+{% comment %}
+  Renders a product media gallery. Should be used with 'media-gallery.js'
+  Also see 'product-media-modal'
+
+  Accepts:
+  - product: {Object} Product liquid object
+  - variant_images: {Array} Product images associated with a variant
+  - is_duplicate: {Boolean} Prevents rendering uneeded elements and duplicate ids for subsequent instances
+
+  Usage:
+  {% render 'product-media-gallery', is_duplicate: true %}
+{% endcomment %}
+{%- liquid
+  assign initial_media_id = product.selected_or_first_available_variant.featured_media.id
+  assign initialSlide = 0
+  assign initialSlide_alt_base = false
+  for media in product.media
+    if media.id == initial_media_id
+      assign initialSlide = forloop.index0
+    endif
+    if media.alt == product.selected_or_first_available_variant.option1
+      assign initialSlide_alt_base = true
+    endif
+    if initialSlide != blank and initialSlide_alt_base
+      break
+    endif
+  endfor
+-%}
+{% comment %} {% assign direction = '' %}
+{% if section.settings.thumb_slider_placement == 'left' or section.settings.thumb_slider_placement == 'right' %}
+  {% assign thumb_slider = section.settings.thumb_slider_placement | prepend: ' thumb-' -%}
+  {% assign direction = 'vertical' %}
+{% else %}
+  {% assign thumb_slider = section.settings.thumb_slider_placement | prepend: ' thumb-' -%}
+  {% assign direction = 'horizontal' %}
+{% endif %} {% endcomment %}
+{% assign thumb_slider = section.settings.thumb_slider_placement | prepend: ' thumb-' -%}
+{% assign direction = 'vertical' %}
+{% if section.settings.show_thumb and product.media.size > 1 %}
+  {% capture sliderOptions %}  
+    "slidesPerView":"auto",
+     "initialSlide":{{ initialSlide }},
+       "autoHeight":true,
+      "spaceBetween":0,
+      "watchOverflow":true,
+            "navigation":{
+                "nextEl":"#shopify-section-{{ section.id }} .product-pdp-main .swiper-button-next",
+                "prevEl":"#shopify-section-{{ section.id }} .product-pdp-main .swiper-button-prev"
+            },
+            {%- if section.settings.pagination == true -%}
+            "pagination":{
+                "el":"#shopify-section-{{ section.id }} .swiper-pagination",
+                "clickable":true
+            },
+            {%- endif -%}
+            "keyboard":{
+                "enabled":true,
+                "onlyInViewport":true
+            },
+            "effect":"slide", 
+            "allowTouchMove": true,
+            "speed": {%- if section.settings.transition_speed != blank -%}{{ section.settings.transition_speed }}{%- else -%}500{%- endif -%},
+            "thumbs":{
+              "swiper":{
+                "el":".swiprt_thumbnail_slider",
+                "slidesPerView":"3",
+                "direction":"{{ direction }}",
+                "spaceBetween":10,
+                "slideThumbActiveClass": "swiper-slide-thumb-active",
+                      "navigation":{
+                        "nextEl":".swiper-button-next.thumb",
+                        "prevEl":".swiper-button-prev.thumb"
+                      },
+                "breakpoints":{
+                  "0":{"slidesPerView":"auto","spaceBetween": 10,"direction":"horizontal"},
+                  "480":{"slidesPerView":"auto","spaceBetween": 10,"direction":"horizontal"},
+                  "750":{"slidesPerView":"auto","spaceBetween": 15,"direction":"horizontal"},
+                  "990":{"slidesPerView":"auto","spaceBetween": 15}
+                }
+              }
+      }
+    {% endcapture %}
+{% else %}
+  {% capture sliderOptions %}    
+           "initialSlide":{{ initialSlide }},
+            "autoHeight":true,
+             "slidesPerView":"auto",
+            "spaceBetween":10,
+            "watchOverflow":true,
+            {%- if section.settings.show_parallax == true -%} 
+              "parallax": true,
+            {%- endif -%}
+            "navigation":{
+                "nextEl":"#shopify-section-{{ section.id }} .product-pdp-main .swiper-button-next",
+                "prevEl":"#shopify-section-{{ section.id }} .product-pdp-main .swiper-button-prev"
+            },
+              {%- if section.settings.pagination == true -%}
+            "pagination":{
+                "el":"#shopify-section-{{ section.id }} .product-pdp-main .swiper-pagination",
+                "clickable":true
+            },
+            {%- endif -%}
+            "keyboard":{
+                "enabled":true,
+                "onlyInViewport":true
+            },
+            "effect":"slide", 
+            {%- if section.settings.touch_move == false -%}
+            "allowTouchMove": false,
+            {%- endif -%}
+            "speed": {%- if section.settings.transition_speed != blank -%}{{ section.settings.transition_speed }}{%- else -%}500{%- endif -%},
+          "breakpoints": { 
+            "0":{"slidesPerView":"1"}
+          }
+    {% endcapture %}
+{% endif %}
+{%- liquid
+  if section.settings.hide_variants and variant_images.size == product.media.size
+    assign single_media_visible = true
+  endif
+
+  assign media_count = product.media.size
+  if section.settings.hide_variants and media_count > 1 and variant_images.size > 0
+    assign media_count = media_count | minus: variant_images.size | plus: 1
+  endif
+
+  if media_count == 1 or single_media_visible
+    assign single_media_visible_mobile = true
+  endif
+
+  if media_count == 0 or single_media_visible_mobile or section.settings.mobile_thumbnails == 'show' or section.settings.mobile_thumbnails == 'columns' and media_count < 3
+    assign hide_mobile_slider = true
+  endif
+
+  if section.settings.media_size == 'large'
+    assign media_width = 0.65
+  elsif section.settings.media_size == 'medium'
+    assign media_width = 0.55
+  elsif section.settings.media_size == 'small'
+    assign media_width = 0.45
+  endif
+-%}
+
+<media-gallery
+  id="MediaGallery-{{ section.id }}{{ id_append }}"
+  class="{% if section.settings.enable_sticky_info %} product__column-sticky {% endif %} product-pdp-main"
+  data-pdp-main-slider
+>
+  <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
+  <div class="pdp_slider_cover thumb_slider__{{ section.settings.thumb_slider_placement }}">
+    <div class="product-image-main">
+      <div class="swiper-main-wrapper ">
+        <div class="swiper slider-mobile-gutter" data-main-pdp-swiper data-slider-options="{ {{ sliderOptions }} }">
+          <ul class="swiper-wrapper product__media-list" role="list">
+            {%- for media in product.media -%}
+              <li
+                class="swiper-slide {% if initialSlide_alt_base %}{% unless media.alt == product.selected_or_first_available_variant.option1 %} hidden non-swiper-slide{% else %} swiper-slide {% endunless %}  {% else %} swiper-slide {% endif %}"
+                data-media-id="{{- media.id -}}"
+                data-swiper-slide-id="{{- forloop.index0 -}}"
+                data-swiper-pdp-slide
+                data-mane-test="{{ product.selected_or_first_available_variant.option1 }}-{{ media.alt }}"
+              >
+                {%- liquid
+                  assign media_position = media_position | default: 0 | plus: 1
+                  assign lazy_load = false
+                  if media_position > 1
+                    assign lazy_load = true
+                  endif
+                -%}
+                {% render 'product-thumbnail',
+                  media: media,
+                  media_count: media_count,
+                  position: media_position,
+                  desktop_layout: section.settings.gallery_layout,
+                  mobile_layout: section.settings.mobile_thumbnails,
+                  loop: section.settings.enable_video_looping,
+                  modal_id: section.id,
+                  xr_button: true,
+                  media_width: media_width,
+                  media_fit: section.settings.media_fit,
+                  constrain_to_viewport: section.settings.constrain_to_viewport,
+                  lazy_load: lazy_load
+                %}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          {% if section.settings.pagination == true %}
+            <div class="swiper-pagination {{ section.settings.pagination_style }}"></div>
+          {% endif %}
+        </div>
+        {%- if section.settings.navigation == true -%}
+          <div class="swiper-button-prev">
+            {{ 'left-arrow.svg' | inline_asset_content }}
+            <!--
+              <svg xmlns="http://www.w3.org/2000/svg" width="8.641" height="16" viewBox="0 0 8.641 16" class="icon icon-arrow icon-arrow-left">
+                <path id="Path_36573" data-name="Path 36573" d="M8.459,8.439l-7.4,7.38a.62.62,0,0,1-.876-.878L7.142,8,.182,1.059A.62.62,0,0,1,1.058.181l7.4,7.38a.62.62,0,0,1,0,.878Z" transform="translate(8.641 16) rotate(180)"/>
+              </svg>
+            -->
+          </div>
+          <div class="swiper-button-next">
+            {{ 'right-arrow.svg' | inline_asset_content }}
+            <!--
+              <svg xmlns="http://www.w3.org/2000/svg" width="8.641" height="16" viewBox="0 0 8.641 16" class="icon icon-arrow">
+                <path id="Path_111215" data-name="Path 111215" d="M8.458,7.561,1.058.181a.62.62,0,0,0-.876.878L7.142,8,.182,14.941a.62.62,0,0,0,.876.878l7.4-7.38a.62.62,0,0,0,0-.878Z"/>
+              </svg>
+            -->
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    {%- if first_3d_model -%}
+      <button
+        class="button button--full-width product__xr-button"
+        type="button"
+        aria-label="{{ 'products.product.xr_button_label' | t }}"
+        data-shopify-xr
+        data-shopify-model3d-id="{{ first_3d_model.id }}"
+        data-shopify-title="{{ product.title | escape }}"
+        data-shopify-xr-hidden
+      >
+        {% render 'icon-3d-model' %}
+        {{ 'products.product.xr_button' | t }}
+      </button>
+    {%- endif -%}
+    {%- if product.media.size > 1 -%}
+      <div class="swiper-thumbnail">
+        <div class="swiprt_thumbnail_slider swiper product_thumbnail {% unless section.settings.show_thumb_mobile %}small-hide{% endunless %}">
+          <ul class="swiper-wrapper">
+            {%- capture sizes -%}
+         (min-width: {{ settings.page_width }}px) calc(({{ settings.page_width | minus: 100 | times: media_width | round }} - 4rem) / 4),
+         (min-width: 990px) calc(({{ media_width | times: 100 }}vw - 4rem) / 4),
+         (min-width: 750px) calc((100vw - 15rem) / 8),
+         calc((100vw - 8rem) / 3)
+         {%- endcapture -%}
+            {%- for media in product.media -%}
+              {%- liquid
+                capture media_index
+                  if media.media_type == 'model'
+                    increment model_index
+                  elsif media.media_type == 'video' or media.media_type == 'external_video'
+                    increment video_index
+                  elsif media.media_type == 'image'
+                    increment image_index
+                  endif
+                endcapture
+                assign media_index = media_index | plus: 1
+              -%}
+              <li
+                data-thumb
+                class="
+                  {% if initialSlide_alt_base %} {% unless media.alt == product.selected_or_first_available_variant.option1 %} hidden non-swiper-slide
+                  {% else %} swiper-slide {% endunless %} {% else %} swiper-slide {% endif %}
+                "
+                data-swiper-pdp-slide
+              >
+                {%- if media.media_type == 'model' -%}
+                  <span class="thumbnail__badge" aria-hidden="true">
+                    {%- render 'icon-3d-model' -%}
+                  </span>
+                {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                  <span class="thumbnail__badge" aria-hidden="true">
+                    {%- render 'icon-play' -%}
+                  </span>
+                {%- endif -%}
+                <div class="thumbnail global-media-settings global-media-settings--no-shadow">
+                  {{
+                    media.preview_image
+                    | image_url: width: 416
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: sizes,
+                      widths: '54, 74, 104, 162, 208, 324, 416',
+                      alt: media.alt
+                    | escape
+                  }}
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+        {%- if section.settings.thumb_navigation == true -%}
+          <div class="swiper-button-prev thumb {% unless section.settings.thumb_navigation_mobile %}small-hide{% endunless %}">
+            {{ 'left-arrow.svg' | inline_asset_content }}
+            <!--
+              <svg xmlns="http://www.w3.org/2000/svg" width="23.885" height="12.192" viewBox="0 0 23.885 12.192">
+                <g id="Group_70777" data-name="Group 70777" transform="translate(-375.646 -850.339)">
+                  <path id="Icon_akar-arrow-left" data-name="Icon akar-arrow-left" d="M17.589,7.5,6,19.089,17.589,30.678M6,19.089" transform="translate(406.678 844.589) rotate(90)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"/>
+                </g>
+              </svg>
+            -->
+          </div>
+          <div class="swiper-button-next thumb {% unless section.settings.thumb_navigation_mobile %}small-hide{% endunless %}">
+            {{ 'right-arrow.svg' | inline_asset_content }}
+            <!--
+              <svg xmlns="http://www.w3.org/2000/svg" width="23.885" height="12.192" viewBox="0 0 23.885 12.192">
+                <g id="Group_70776" data-name="Group 70776" transform="translate(-375.646 -1401.824)">
+                  <path id="Icon_akar-arrow-left" data-name="Icon akar-arrow-left" d="M6,7.5,17.589,19.089,6,30.678M17.589,19.089" transform="translate(406.678 1396.178) rotate(90)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"/>
+                </g>
+              </svg>
+            -->
+          </div>
+        {% endif %}
+      </div>
+    {%- endif -%}
+  </div>
+</media-gallery>

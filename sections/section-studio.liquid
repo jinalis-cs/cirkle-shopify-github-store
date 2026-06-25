@@ -1,0 +1,873 @@
+{% comment %}
+  Studio Feed Section - Instagram-style scrollable feed
+  Supports both image and video posts with product tags
+{% endcomment %}
+
+<section class="studio-feed-section" id="studio-feed-{{ section.id }}">
+  <div class="studio-feed-wrapper">
+
+    {% for block in section.blocks %}
+      {% assign block_type = block.type %}
+
+      <article class="studio-post" {{ block.shopify_attributes }}>
+
+        {%- comment %} Post Header {%- endcomment %}
+        <div class="studio-post__header">
+          <div class="studio-post__brand-info">
+            <div class="studio-post__avatar">
+              {% if block.settings.brand_avatar != blank %}
+                <img
+                  src="{{ block.settings.brand_avatar | image_url: width: 80 }}"
+                  alt="{{ block.settings.brand_name }}"
+                  width="40"
+                  height="40"
+                  loading="lazy"
+                >
+              {% else %}
+                <span class="studio-post__avatar-placeholder">{{ block.settings.brand_name | slice: 0, 1 | upcase }}</span>
+              {% endif %}
+            </div>
+            <div class="studio-post__meta">
+              <div class="studio-post__brand-row">
+                <span class="studio-post__brand-name">{{ block.settings.brand_name | default: 'Brand' }}</span>
+                {% if block.settings.show_follow %}
+                  <span class="studio-post__dot">•</span>
+                  <button class="studio-post__follow-btn" aria-label="Follow {{ block.settings.brand_name }}">Follow</button>
+                {% endif %}
+              </div>
+              <span class="studio-post__time">{{ block.settings.post_time | default: 'Just now' }}</span>
+            </div>
+          </div>
+          <div class="studio-post__header-actions">
+            <button class="studio-post__icon-btn" aria-label="Save post">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="studio-post__icon-btn" aria-label="Share post">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+        </div>
+
+        {%- comment %} Post Media {%- endcomment %}
+        <div class="studio-post__media-wrapper">
+          {% if block.settings.post_video != blank %}
+            <div class="studio-post__media studio-post__media--video">
+              <video
+                class="studio-post__video"
+                src="{{ block.settings.post_video }}"
+                autoplay
+                muted
+                loop
+                playsinline
+                poster="{{ block.settings.video_poster | image_url: width: 800 }}"
+              ></video>
+              <div class="studio-post__video-overlay">
+                <button class="studio-post__play-btn" aria-label="Play/Pause video">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+              </div>
+              {% if block.settings.video_label != blank %}
+                <div class="studio-post__video-label">
+                  <span>{{ block.settings.video_label }}</span>
+                </div>
+              {% endif %}
+            </div>
+          {% elsif block.settings.post_image != blank %}
+            <div class="studio-post__media studio-post__media--image">
+              <img
+                src="{{ block.settings.post_image | image_url: width: 800 }}"
+                alt="{{ block.settings.brand_name }} post"
+                class="studio-post__image"
+                loading="lazy"
+                width="800"
+                height="auto"
+              >
+            </div>
+          {% else %}
+            <div class="studio-post__media studio-post__media--placeholder">
+              <div class="studio-post__placeholder-inner">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Add image or video</span>
+              </div>
+            </div>
+          {% endif %}
+
+          {%- comment %} Carousel dots (static, logic via JS) {%- endcomment %}
+          <div class="studio-post__dots">
+            <span class="studio-post__dot-item studio-post__dot-item--active"></span>
+            <span class="studio-post__dot-item"></span>
+          </div>
+        </div>
+
+        {%- comment %} Product Tags Strip {%- endcomment %}
+        {% assign has_products = false %}
+        {% if block.settings.product_1 != blank or block.settings.product_2 != blank or block.settings.product_3 != blank %}
+          {% assign has_products = true %}
+        {% endif %}
+
+        {% if has_products %}
+          <div class="studio-post__products">
+            <div class="studio-post__shop-all">
+              <div class="studio-post__shop-all-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              </div>
+              <span>SHOP ALL</span>
+            </div>
+
+            <div class="studio-post__products-scroll">
+              {% if block.settings.product_1 != blank %}
+                {% assign product_1 = all_products[block.settings.product_1] %}
+                <a href="{{ product_1.url }}" class="studio-post__product-card">
+                  <div class="studio-post__product-img-wrap">
+                    <img
+                      src="{{ product_1.featured_image | image_url: width: 120 }}"
+                      alt="{{ product_1.title }}"
+                      width="56"
+                      height="56"
+                      loading="lazy"
+                    >
+                  </div>
+                  <div class="studio-post__product-info">
+                    <span class="studio-post__product-brand">{{ product_1.vendor | upcase }}</span>
+                    <div class="studio-post__product-pricing">
+                      <span class="studio-post__product-price">{{ product_1.price | money_without_trailing_zeros }}</span>
+                      {% if product_1.compare_at_price > product_1.price %}
+                        <span class="studio-post__product-mrp">{{ product_1.compare_at_price | money_without_trailing_zeros }}</span>
+                      {% endif %}
+                    </div>
+                    {% if product_1.compare_at_price > product_1.price %}
+                      {% assign discount = product_1.compare_at_price | minus: product_1.price | times: 100 | divided_by: product_1.compare_at_price %}
+                      <span class="studio-post__product-discount">{{ discount }}% OFF</span>
+                    {% endif %}
+                  </div>
+                </a>
+              {% endif %}
+
+              {% if block.settings.product_2 != blank %}
+                {% assign product_2 = all_products[block.settings.product_2] %}
+                <a href="{{ product_2.url }}" class="studio-post__product-card">
+                  <div class="studio-post__product-img-wrap">
+                    <img
+                      src="{{ product_2.featured_image | image_url: width: 120 }}"
+                      alt="{{ product_2.title }}"
+                      width="56"
+                      height="56"
+                      loading="lazy"
+                    >
+                  </div>
+                  <div class="studio-post__product-info">
+                    <span class="studio-post__product-brand">{{ product_2.vendor | upcase }}</span>
+                    <div class="studio-post__product-pricing">
+                      <span class="studio-post__product-price">{{ product_2.price | money_without_trailing_zeros }}</span>
+                      {% if product_2.compare_at_price > product_2.price %}
+                        <span class="studio-post__product-mrp">{{ product_2.compare_at_price | money_without_trailing_zeros }}</span>
+                      {% endif %}
+                    </div>
+                    {% if product_2.compare_at_price > product_2.price %}
+                      {% assign discount = product_2.compare_at_price | minus: product_2.price | times: 100 | divided_by: product_2.compare_at_price %}
+                      <span class="studio-post__product-discount">{{ discount }}% OFF</span>
+                    {% endif %}
+                  </div>
+                </a>
+              {% endif %}
+
+              {% if block.settings.product_3 != blank %}
+                {% assign product_3 = all_products[block.settings.product_3] %}
+                <a href="{{ product_3.url }}" class="studio-post__product-card">
+                  <div class="studio-post__product-img-wrap">
+                    <img
+                      src="{{ product_3.featured_image | image_url: width: 120 }}"
+                      alt="{{ product_3.title }}"
+                      width="56"
+                      height="56"
+                      loading="lazy"
+                    >
+                  </div>
+                  <div class="studio-post__product-info">
+                    <span class="studio-post__product-brand">{{ product_3.vendor | upcase }}</span>
+                    <div class="studio-post__product-pricing">
+                      <span class="studio-post__product-price">{{ product_3.price | money_without_trailing_zeros }}</span>
+                      {% if product_3.compare_at_price > product_3.price %}
+                        <span class="studio-post__product-mrp">{{ product_3.compare_at_price | money_without_trailing_zeros }}</span>
+                      {% endif %}
+                    </div>
+                    {% if product_3.compare_at_price > product_3.price %}
+                      {% assign discount = product_3.compare_at_price | minus: product_3.price | times: 100 | divided_by: product_3.compare_at_price %}
+                      <span class="studio-post__product-discount">{{ discount }}% OFF</span>
+                    {% endif %}
+                  </div>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {%- comment %} Post Caption {%- endcomment %}
+        {% if block.settings.caption != blank %}
+          <div class="studio-post__caption">
+            <p class="studio-post__caption-text">
+              {{ block.settings.caption | truncate: 120, '' }}
+              {% if block.settings.caption.size > 120 %}
+                <button class="studio-post__see-more">... See more</button>
+              {% endif %}
+            </p>
+          </div>
+        {% endif %}
+
+        {%- comment %} Hashtags {%- endcomment %}
+        {% if block.settings.hashtags != blank %}
+          <div class="studio-post__hashtags">
+            {{ block.settings.hashtags }}
+          </div>
+        {% endif %}
+
+      </article>
+    {% endfor %}
+
+  </div>
+</section>
+
+<style>
+/* ============================================================
+   STUDIO FEED — Root Variables
+   ============================================================ */
+:root {
+  --studio-bg: #fff;
+  --studio-border: #f0f0f0;
+  --studio-text-primary: #282c3f;
+  --studio-text-secondary: #94969f;
+  --studio-text-muted: #b0b3bf;
+  --studio-accent: #ff3f6c;
+  --studio-follow: #ff3f6c;
+  --studio-product-bg: #f5f5f6;
+  --studio-product-radius: 4px;
+  --studio-post-max-width: 400px;
+  --studio-font: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ============================================================
+   SECTION WRAPPER
+   ============================================================ */
+.studio-feed-section {
+  background: linear-gradient(135deg, #fce4ec 0%, #fff8f0 50%, #fce4ec 100%);
+  min-height: 100vh;
+  padding: 0;
+  font-family: var(--studio-font);
+}
+
+.studio-feed-wrapper {
+  max-width: var(--studio-post-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ============================================================
+   POST CARD
+   ============================================================ */
+.studio-post {
+  background: var(--studio-bg);
+  border-bottom: 8px solid var(--studio-border);
+  position: relative;
+}
+
+/* ============================================================
+   POST HEADER
+   ============================================================ */
+.studio-post__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+}
+
+.studio-post__brand-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.studio-post__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid var(--studio-border);
+}
+
+.studio-post__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.studio-post__avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ff3f6c, #ff8f6c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.studio-post__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.studio-post__brand-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.studio-post__brand-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--studio-text-primary);
+  letter-spacing: 0.01em;
+}
+
+.studio-post__dot {
+  color: var(--studio-text-muted);
+  font-size: 13px;
+}
+
+.studio-post__follow-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--studio-follow);
+  cursor: pointer;
+  font-family: var(--studio-font);
+}
+
+.studio-post__follow-btn:hover {
+  opacity: 0.8;
+}
+
+.studio-post__time {
+  font-size: 11px;
+  color: var(--studio-text-secondary);
+}
+
+.studio-post__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.studio-post__icon-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--studio-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+
+.studio-post__icon-btn:hover {
+  background: var(--studio-border);
+}
+
+/* ============================================================
+   MEDIA
+   ============================================================ */
+.studio-post__media-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.studio-post__media {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #f5f5f6;
+}
+
+.studio-post__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Video */
+.studio-post__media--video {
+  position: relative;
+}
+
+.studio-post__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.studio-post__video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 14px;
+  pointer-events: none;
+}
+
+.studio-post__play-btn {
+  background: rgba(0,0,0,0.45);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: all;
+  transition: background 0.2s;
+}
+
+.studio-post__play-btn:hover {
+  background: rgba(0,0,0,0.65);
+}
+
+.studio-post__video-label {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+.studio-post__video-label span {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+
+/* Placeholder */
+.studio-post__media--placeholder {
+  background: #f5f5f6;
+}
+
+.studio-post__placeholder-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: #c0c4ce;
+}
+
+.studio-post__placeholder-inner span {
+  font-size: 13px;
+}
+
+/* Dots */
+.studio-post__dots {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.studio-post__dot-item {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.studio-post__dot-item--active {
+  background: #fff;
+  transform: scale(1.25);
+}
+
+/* ============================================================
+   PRODUCTS STRIP
+   ============================================================ */
+.studio-post__products {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid var(--studio-border);
+  border-bottom: 1px solid var(--studio-border);
+  min-height: 74px;
+  overflow: hidden;
+}
+
+.studio-post__shop-all {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  gap: 5px;
+  border-right: 1px solid var(--studio-border);
+  flex-shrink: 0;
+  min-width: 60px;
+}
+
+.studio-post__shop-all-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--studio-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--studio-accent);
+}
+
+.studio-post__shop-all span {
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--studio-text-primary);
+  letter-spacing: 0.06em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.studio-post__products-scroll {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  gap: 0;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.studio-post__products-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.studio-post__product-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 8px 10px;
+  border-right: 1px solid var(--studio-border);
+  text-decoration: none;
+  flex-shrink: 0;
+  min-width: 140px;
+  max-width: 160px;
+  transition: background 0.15s;
+}
+
+.studio-post__product-card:last-child {
+  border-right: none;
+}
+
+.studio-post__product-card:hover {
+  background: #fafafa;
+}
+
+.studio-post__product-img-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--studio-product-radius);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--studio-product-bg);
+}
+
+.studio-post__product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.studio-post__product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.studio-post__product-brand {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--studio-text-primary);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studio-post__product-pricing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.studio-post__product-price {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--studio-text-primary);
+}
+
+.studio-post__product-mrp {
+  font-size: 10px;
+  color: var(--studio-text-muted);
+  text-decoration: line-through;
+}
+
+.studio-post__product-discount {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--studio-accent);
+}
+
+/* ============================================================
+   CAPTION & HASHTAGS
+   ============================================================ */
+.studio-post__caption {
+  padding: 10px 12px 4px;
+}
+
+.studio-post__caption-text {
+  font-size: 12.5px;
+  color: var(--studio-text-primary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.studio-post__see-more {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12.5px;
+  color: var(--studio-text-secondary);
+  cursor: pointer;
+  font-family: var(--studio-font);
+}
+
+.studio-post__hashtags {
+  padding: 2px 12px 14px;
+  font-size: 12px;
+  color: var(--studio-accent);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  .studio-feed-wrapper {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .studio-feed-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 0;
+  }
+
+  .studio-feed-wrapper {
+    box-shadow: 0 2px 24px rgba(0,0,0,0.10);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .studio-post {
+    border-bottom: 8px solid var(--studio-border);
+  }
+
+  .studio-post:last-child {
+    border-bottom: none;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Play/Pause toggle for videos
+  document.querySelectorAll('.studio-post__play-btn').forEach(function (btn) {
+    var wrapper = btn.closest('.studio-post__media--video');
+    var video = wrapper ? wrapper.querySelector('.studio-post__video') : null;
+    if (!video) return;
+
+    btn.addEventListener('click', function () {
+      if (video.paused) {
+        video.play();
+        btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+      } else {
+        video.pause();
+        btn.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+      }
+    });
+  });
+
+  // See more toggle
+  document.querySelectorAll('.studio-post__see-more').forEach(function (btn) {
+    var p = btn.closest('.studio-post__caption-text');
+    var fullText = p ? p.dataset.full : '';
+    btn.addEventListener('click', function () {
+      if (p) {
+        p.textContent = fullText;
+      }
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Studio Feed",
+  "tag": "section",
+  "class": "studio-feed-section-wrapper",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "post",
+      "name": "Studio Post",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Brand Info"
+        },
+        {
+          "type": "image_picker",
+          "id": "brand_avatar",
+          "label": "Brand Avatar"
+        },
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name",
+          "default": "LOCOMOTIVE"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_follow",
+          "label": "Show Follow Button",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "post_time",
+          "label": "Post Time",
+          "default": "May 21, 2025 at 9:57 AM"
+        },
+        {
+          "type": "header",
+          "content": "Post Media"
+        },
+        {
+          "type": "image_picker",
+          "id": "post_image",
+          "label": "Post Image (used if no video)"
+        },
+        {
+          "type": "text",
+          "id": "post_video",
+          "label": "Post Video URL (.mp4)",
+          "info": "If a video URL is set, it will override the image."
+        },
+        {
+          "type": "image_picker",
+          "id": "video_poster",
+          "label": "Video Poster / Thumbnail"
+        },
+        {
+          "type": "text",
+          "id": "video_label",
+          "label": "Video Overlay Text (e.g. VISIBLE LINES RUIN THE LOOK)"
+        },
+        {
+          "type": "header",
+          "content": "Tagged Products"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Product 3"
+        },
+        {
+          "type": "header",
+          "content": "Caption"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Caption",
+          "default": "Designed for all-day comfort, styled for maximum impact."
+        },
+        {
+          "type": "textarea",
+          "id": "hashtags",
+          "label": "Hashtags",
+          "default": "#LOCOMOTIVE #Premium #MensCasualWear #MensFashion #SlimFitShirts"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Studio Feed",
+      "blocks": [
+        {
+          "type": "post",
+          "settings": {
+            "brand_name": "LOCOMOTIVE",
+            "show_follow": true,
+            "post_time": "May 21, 2025 at 9:57 AM",
+            "caption": "Designed for all-day comfort, styled for maximum impact.",
+            "hashtags": "#LOCOMOTIVE #Premium #MensCasualWear #MensFashion #SlimFitShirts"
+          }
+        },
+        {
+          "type": "post",
+          "settings": {
+            "brand_name": "XYXX",
+            "show_follow": true,
+            "post_time": "May 21, 2025 at 9:57 AM",
+            "video_label": "VISIBLE LINES RUIN THE LOOK",
+            "caption": "Say goodbye to visible lines. Our seamless collection redefines comfort.",
+            "hashtags": "#XYXX #SeamlessWear #ComfortFirst"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

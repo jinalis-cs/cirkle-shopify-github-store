@@ -10,14 +10,18 @@
 {
   "sections": {
     "main": {
-      "type": "main-page",
-      "settings": {
-        "padding_top": 28,
-        "padding_bottom": 28
-      }
+      "type": "custom-form",
+      "disabled": true,
+      "settings": {}
+    },
+    "partners_form_hK8Bb6": {
+      "type": "partners-form",
+      "name": "Partners Form",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "partners_form_hK8Bb6"
   ]
 }

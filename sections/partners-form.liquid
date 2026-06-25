@@ -1,0 +1,523 @@
+
+
+{{- 'partners-form-section.css' | asset_url | stylesheet_tag: preload: true -}}
+{% style %}
+  svg{
+    width: 15px;
+    height: 15px;
+  }
+{% endstyle %}
+
+<!-- BANNER -->
+<div class="banner" style="display:none;">
+  <strong>🔔 Disclaimer:</strong> This store does not charge any onboarding fee or refundable deposit from sellers.
+  <a href="#">Details &rsaquo;</a><br/>
+  Click here to know complete step-by-step onboarding details and begin your seller journey with dedicated support.
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-brand">
+    <div class="logo-box">S</div>
+    PARTNER PORTAL
+  </div>
+  <div class="navbar-links">
+    <a href="#" class="active">Sell With Us</a>
+    <a href="#">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      View Tutorial
+    </a>
+  </div>
+  <div class="navbar-profile">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </div>
+</nav>
+
+<!-- PAGE WRAPPER -->
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="progress-block">
+      <div class="progress-label">
+        <span>Completion Progress</span>
+        <span>15% Complete</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+    </div>
+    <nav class="nav-items">
+
+      <a href="#" class="nav-item active" data-tab="gst">
+        <div class="nav-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4"/></svg></div>
+        g Check
+        <span class="check-badge"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
+      </a>
+
+      <a href="#" class="nav-item" data-tab="basic">
+        <div class="nav-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        Basic Information
+      </a>
+
+      <a href="#" class="nav-item" data-tab="business">
+        <div class="nav-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        Business Details
+      </a>
+
+      <a href="#" class="nav-item" data-tab="warehouse">
+        <div class="nav-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+        Warehouse Details
+      </a>
+
+      <a href="#" class="nav-item" data-tab="bank">
+        <div class="nav-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        Bank Details
+      </a>
+
+      <a href="#" class="nav-item" data-tab="brand">
+        <div class="nav-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+        Brand Details
+      </a>
+
+      <a href="#" class="nav-item" data-tab="declaration">
+        <div class="nav-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        Declaration
+      </a>
+
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- ══ TAB 1: GSTIN CHECK ══ -->
+    <div class="tab-section active" id="tab-gstin">
+      <h1 class="section-title"> Check</h1>
+      <hr class="section-divider"/>
+      <p class="info-text">Please enter your GST Identification Number.</p>
+      <p class="info-text note">Note - Based on this entry, some of the details in the form will be automatically filled.</p>
+      <div class="field-label">G Details <span class="info-icon">i</span></div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <input class="gst-input" type="text" placeholder="Enter your gst Number" maxlength="15"/>
+        </div>
+        <button class="btn-verify">VERIFY</button>
+      </div>
+      <div class="business-section">
+        <p class="business-heading">Your business details are shown below:</p>
+        <div class="details-grid">
+          <div class="cell"><div class="cell-label">Registered Company Name</div><div class="cell-value">KP's BUSINESS CHAIN</div></div>
+          <div class="cell"><div class="cell-label">PAN Number</div><div class="cell-value">CQGPP8601L</div></div>
+          <div class="cell"><div class="cell-label">City</div><div class="cell-value">Surat</div></div>
+          <div class="cell"><div class="cell-label">Pincode</div><div class="cell-value">395002</div></div>
+          <div class="cell no-bottom"><div class="cell-label">Registered Address</div><div class="cell-value">SHOP NO-8, UPPER GROUND FLOOR, Bamroli Road, Surat</div></div>
+          <div class="cell no-bottom"><div class="cell-label">State</div><div class="cell-value">GUJARAT</div></div>
+          <div class="cell no-bottom"><div class="cell-label">Country</div><div class="cell-value">India</div></div>
+          <div class="cell no-bottom"><div class="cell-label">gst</div><div class="cell-value">24CQGPP8601L2ZI</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB 2: BASIC INFORMATION ══ -->
+    <div class="tab-section" id="tab-basic">
+      <h1 class="section-title">Basic Information</h1>
+      <hr class="section-divider"/>
+      <p class="sub-section-title">Contact Information</p>
+      <div class="form-row cols-4">
+        <div class="form-group">
+          <label class="form-label">Organization Email ID <i class="info-icon">i</i></label>
+          <input class="form-input" type="email" value="webofied@gmail.com" disabled/>
+          <p class="form-hint">Common Email ID for login</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Contact's Name <i class="info-icon">i</i></label>
+          <input class="form-input" type="text" value="Karan Pathak" disabled/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Contact's Phone Number <i class="info-icon">i</i></label>
+          <input class="form-input" type="tel" value="7984075400" disabled/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Contact's Email ID <span class="req">*</span> <i class="info-icon">i</i></label>
+          <input class="form-input" type="email" placeholder="Enter Karan's Email"/>
+          <p class="form-hint error">Please provide your Email ID</p>
+        </div>
+      </div>
+      <div class="form-row cols-3">
+        <div class="form-group">
+          <label class="form-label">Business Owner's Name <i class="info-icon">i</i></label>
+          <input class="form-input" type="text" placeholder="Enter Owner's Full Name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Owner's Contact Number <span class="req">*</span> <i class="info-icon">i</i></label>
+          <input class="form-input" type="tel" placeholder="Enter Owner's Contact No"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Owner's Email ID <span class="req">*</span> <i class="info-icon">i</i></label>
+          <input class="form-input" type="email" placeholder="Enter Owner's Email ID"/>
+        </div>
+      </div>
+      <hr class="section-separator"/>
+      <p class="sub-section-title">Company Information</p>
+      <div class="form-row cols-4">
+        <div class="form-group">
+          <label class="form-label">Are you an existing Partner?</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select Yes / No</option>
+            <option>Yes</option><option>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Entity Type</label>
+          <input class="form-input" type="text" value="PROPRIETORSHIP" disabled/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Generated Invoice <i class="info-icon">i</i></label>
+          <select class="form-select">
+            <option value="" disabled selected>Select Yes / No</option>
+            <option>Yes</option><option>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">SIGNATURE</label>
+          <div class="file-upload-wrap">
+            <input type="file" accept="image/*,.pdf"/>
+            <div class="file-upload-label">
+              <span>Select File</span>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="section-separator"/>
+      <p class="sub-section-title">TAN Details (Optional)</p>
+      <div class="form-row cols-2">
+        <div class="form-group">
+          <label class="form-label">Do you need TDS benefits?</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select Answer</option>
+            <option>Yes</option><option>No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB 3: BUSINESS DETAILS ══ -->
+    <div class="tab-section" id="tab-business">
+      <h1 class="section-title">Business Details</h1>
+      <hr class="section-divider"/>
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px;">
+        <div class="form-row cols-3" style="flex:1; margin-bottom:0;">
+          <div class="form-group">
+            <label class="form-label">Business Model</label>
+            <div class="custom-select-wrap" id="bm-wrap">
+              <div class="custom-select-trigger" id="bm-trigger">Select...</div>
+              <div class="custom-select-dropdown" id="bm-dropdown">
+                <label class="custom-select-option"><input type="radio" name="bm" value="SJIT - B2C C+L"/> SJIT - B2C C+L</label>
+                <label class="custom-select-option"><input type="radio" name="bm" value="PPMP C+L"/> PPMP C+L</label>
+                <label class="custom-select-option"><input type="radio" name="bm" value="PPMP CC"/> PPMP CC</label>
+                <label class="custom-select-option"><input type="radio" name="bm" value="PPMP C+L (MDIRECT)"/> PPMP C+L (MDIRECT)</label>
+                <label class="custom-select-option"><input type="radio" name="bm" value="PPMP CC (MDIRECT)"/> PPMP CC (MDIRECT)</label>
+                <label class="custom-select-option"><input type="radio" name="bm" value="OMNI"/> OMNI</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">OMS Type</label>
+            <div class="custom-select-wrap" id="oms-wrap">
+              <div class="custom-select-trigger" id="oms-trigger">Select...</div>
+              <div class="custom-select-dropdown" id="oms-dropdown">
+                <label class="custom-select-option"><input type="radio" name="oms" value="ACETURTLE"/> ACETURTLE</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="ADIDAS"/> ADIDAS</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="AIL"/> AIL</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="ALYA"/> ALYA</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="APROSTORE"/> APROSTORE</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="AWL"/> AWL</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="BASECOM"/> BASECOM</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="BRANDFORTUNES"/> BRANDFORTUNES</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="BROWNTAPE"/> BROWNTAPE</label>
+                <label class="custom-select-option"><input type="radio" name="oms" value="CAPILLARY"/> CAPILLARY</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">API version</label>
+            <select class="form-select">
+              <option value="" disabled selected>Select...</option>
+              <option>v1</option><option>v2</option><option>v3</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-left:24px; padding-top:28px; flex-shrink:0;">
+          <a href="#" class="oms-guide-link">OMS and Business Model Guide</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB 4: WAREHOUSE DETAILS ══ -->
+    <div class="tab-section" id="tab-warehouse">
+      <div class="wh-tabs-bar">
+        <button class="wh-tab active">Warehouse 1</button>
+        <button class="wh-tab-add">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          ADD Warehouse
+        </button>
+      </div>
+
+      <!-- Top row: Pincode + GSTIN + VERIFY + Delete -->
+      <div style="display:flex; align-items:flex-end; gap:12px; margin-bottom:20px;">
+        <div class="form-group" style="width:180px;">
+          <label class="form-label">Warehouse Pincode</label>
+          <input class="form-input" type="text" placeholder="Enter Pincode"/>
+        </div>
+        <div class="form-group" style="flex:1; max-width:220px;">
+          <label class="form-label">gst Details</label>
+          <input class="form-input" type="text" placeholder="Enter warehouse's gst"/>
+        </div>
+        <button class="btn-verify">VERIFY</button>
+        <button class="wh-delete-btn" style="margin-left:auto;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          Delete
+        </button>
+      </div>
+
+      <!-- City / State / Country -->
+      <div class="form-row cols-3" style="max-width:560px; margin-bottom:24px;">
+        <div class="form-group">
+          <label class="form-label">CITY</label>
+          <input class="form-input" type="text" placeholder="Type City Name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">STATE</label>
+          <input class="form-input" type="text" placeholder="Select State"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <input class="form-input" type="text" placeholder=""/>
+        </div>
+      </div>
+
+      <!-- Floor + Full Address -->
+      <div class="form-row cols-2" style="margin-bottom:20px;">
+        <div class="form-group">
+          <label class="form-label">Floor Details <span class="req">*</span></label>
+          <select class="form-select"><option value="" disabled selected>Select W/H floor</option>
+            <option>Ground Floor</option><option>1st Floor</option><option>2nd Floor</option><option>Basement</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Address <span class="req">*</span></label>
+          <input class="form-input" type="text" placeholder="Input Text"/>
+        </div>
+      </div>
+
+      <!-- Operating Times + Email -->
+      <div class="form-row cols-3" style="margin-bottom:20px;">
+        <div class="form-group">
+          <label class="form-label">W/H Operating Start Time <span class="req">*</span></label>
+          <select class="form-select">
+            <option value="" disabled selected>Select Start Timings</option>
+            <option>6:00 AM</option><option>7:00 AM</option><option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">W/H Operating End Time <span class="req">*</span></label>
+          <select class="form-select">
+            <option value="" disabled selected>Select End Timings</option>
+            <option>5:00 PM</option><option>6:00 PM</option><option>7:00 PM</option><option>8:00 PM</option><option>9:00 PM</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Warehouse Email Address <span class="req">*</span></label>
+          <input class="form-input" type="email" placeholder="Enter Email ID"/>
+        </div>
+      </div>
+
+      <!-- Contact + Capacity -->
+      <div class="form-row cols-2">
+        <div class="form-group">
+          <label class="form-label">Warehouse Contact Number <span class="req">*</span></label>
+          <input class="form-input" type="tel" placeholder="Enter contact number"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Storage Capacity</label>
+          <input class="form-input" type="text" placeholder="Enter Value (Eg. 10 Units)"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB 5: BANK DETAILS ══ -->
+    <div class="tab-section" id="tab-bank">
+      <h1 class="section-title">Bank Details</h1>
+      <hr class="section-divider"/>
+      <!-- Row 1 -->
+      <div class="form-row cols-3" style="margin-bottom:20px;">
+        <div class="form-group">
+          <label class="form-label">Account Holder's Name <span class="req">*</span> <i class="info-icon">i</i></label>
+          <input class="form-input" type="text" placeholder=""/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Account No <span class="req">*</span> <i class="info-icon">i</i></label>
+          <input class="form-input" type="text" placeholder=""/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">IFSC <span class="req">*</span> <i class="info-icon">i</i></label>
+          <input class="form-input" type="text" placeholder=""/>
+        </div>
+      </div>
+      <!-- Row 2 -->
+      <div class="form-row cols-3" style="margin-bottom:28px;">
+        <div class="form-group">
+          <label class="form-label">Bank Name <span class="req">*</span> <i class="info-icon">i</i></label>
+          <input class="form-input" type="text" placeholder="Enter Your Bank's Name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Account Type <i class="info-icon">i</i></label>
+          <input class="form-input" type="text" value="CURRENT" disabled/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">CANCELLED CHEQUE <span class="req">*</span></label>
+          <div class="file-upload-row">
+            <div class="file-field">Choose a file...</div>
+            <input type="file" id="cheque-file" accept="image/*,.pdf"/>
+            <label for="cheque-file" class="btn-upload">Upload</label>
+          </div>
+        </div>
+      </div>
+      <button class="btn-verify">VERIFY</button>
+    </div>
+
+    <!-- ══ TAB 6: BRAND DETAILS ══ -->
+    <div class="tab-section" id="tab-brand">
+      <h1 class="section-title">Brand Details</h1>
+      <hr class="section-divider"/>
+      <p class="brand-question">How many brands do you wish to list?</p>
+      <div class="form-row cols-1" style="max-width:320px;">
+        <div class="form-group">
+          <label class="form-label">Number of Brands to be listed</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select Quantity</option>
+            <option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6+</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:8px;">
+        <button class="btn-proceed">Proceed</button>
+      </div>
+    </div>
+
+    <!-- ══ TAB 7: DECLARATION ══ -->
+    <div class="tab-section" id="tab-declaration">
+      <h1 class="section-title">Declaration</h1>
+      <hr class="section-divider"/>
+      <div class="declaration-box">
+        <input type="checkbox" id="decl1"/>
+        <label class="declaration-text" for="decl1">
+          I hereby declare that the details furnished are true and correct. I undertake to inform you of any changes therein: immediately &amp; to furnish all pending documents within 30 days of onboarding for verification. I understand that failure to do so may lead to suspension/permanent deactivation.
+        </label>
+      </div>
+      <div class="declaration-box">
+        <input type="checkbox" id="decl2"/>
+        <label class="declaration-text" for="decl2">
+          I hereby declare that I will comply with all policies on ethics and compliance.
+          <a href="#">Read More &gt;</a>
+        </label>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER BARS (one per tab, shown/hidden by JS) -->
+<div class="footer-bar" id="footer-gstin">
+  <button class="btn-confirm">Confirm &amp; Next</button>
+</div>
+<div class="footer-bar" id="footer-basic" style="display:none;">
+  <button class="btn-save">Save Progress</button>
+  <button class="btn-next-disabled" disabled>Next</button>
+</div>
+<div class="footer-bar" id="footer-business" style="display:none;">
+  <button class="btn-save">Save Progress</button>
+  <button class="btn-next-disabled" disabled>Next</button>
+</div>
+<div class="footer-bar" id="footer-warehouse" style="display:none;">
+  <button class="btn-save">Save Progress</button>
+  <button class="btn-next-disabled" disabled>Next</button>
+</div>
+<div class="footer-bar" id="footer-bank" style="display:none;">
+  <button class="btn-save">Save Progress</button>
+  <button class="btn-next-disabled" disabled>Next</button>
+</div>
+<div class="footer-bar" id="footer-brand" style="display:none;">
+  <!-- no footer buttons for brand tab per screenshot -->
+</div>
+<div class="footer-bar" id="footer-declaration" style="display:none;">
+  <button class="btn-submit" disabled>SUBMIT</button>
+</div>
+
+<script>
+  // ── TAB SWITCHING ──
+  document.querySelectorAll('.nav-item[data-tab]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var tab = this.dataset.tab;
+      document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('active'); });
+      this.classList.add('active');
+      document.querySelectorAll('.tab-section').forEach(function(el) { el.classList.remove('active'); });
+      var target = document.getElementById('tab-' + tab);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.footer-bar').forEach(function(el) { el.style.display = 'none'; });
+      var footer = document.getElementById('footer-' + tab);
+      if (footer) footer.style.display = 'flex';
+    });
+  });
+
+  // ── CUSTOM RADIO DROPDOWNS (Business Details) ──
+  function initCustomSelect(triggerId, dropdownId) {
+    var trigger = document.getElementById(triggerId);
+    var dropdown = document.getElementById(dropdownId);
+    if (!trigger || !dropdown) return;
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      trigger.classList.toggle('open');
+      dropdown.classList.toggle('open');
+    });
+    dropdown.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        trigger.textContent = this.value;
+        trigger.classList.remove('open');
+        dropdown.classList.remove('open');
+      });
+    });
+  }
+  initCustomSelect('bm-trigger', 'bm-dropdown');
+  initCustomSelect('oms-trigger', 'oms-dropdown');
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.custom-select-trigger').forEach(function(t) { t.classList.remove('open'); });
+    document.querySelectorAll('.custom-select-dropdown').forEach(function(d) { d.classList.remove('open'); });
+  });
+
+  // ── FILE UPLOAD LABELS ──
+  document.querySelectorAll('.file-upload-wrap input[type="file"]').forEach(function(input) {
+    input.addEventListener('change', function() {
+      var label = this.parentElement.querySelector('.file-upload-label span');
+      if (label) label.textContent = this.files[0] ? this.files[0].name : 'Select File';
+    });
+  });
+  document.getElementById('cheque-file') && document.getElementById('cheque-file').addEventListener('change', function() {
+    var field = this.closest('.file-upload-row').querySelector('.file-field');
+    if (field) field.textContent = this.files[0] ? this.files[0].name : 'Choose a file...';
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Partners Form",
+  "class": "custom-partner-form",
+  "presets": [
+    {
+      "name": "Partners Form",
+    }
+  ]
+}
+{% endschema %}

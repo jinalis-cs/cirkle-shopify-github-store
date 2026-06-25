@@ -1,0 +1,483 @@
+<section class="seller-hero">
+  <div class="seller-hero__container">
+
+    <!-- LEFT CARD -->
+    <div class="seller-card">
+
+      {% if section.settings.left_image %}
+        <div class="seller-card__image">
+          {{
+            section.settings.left_image
+            | image_url: width: 700
+            | image_tag
+          }}
+        </div>
+      {% endif %}
+
+      <div class="steps">
+        <span>✔ Phone number</span>
+        <span>✔ Email ID</span>
+        <span>✔ Set Password</span>
+      </div>
+
+      <h2>{{ section.settings.form_heading }}</h2>
+
+      <p>{{ section.settings.form_subheading }}</p>
+
+      <form class="seller-form">
+        <input
+          type="tel"
+          placeholder="Enter phone Number"
+        >
+
+        <button type="submit">
+          {{ section.settings.button_text }}
+        </button>
+      </form>
+
+      <div class="terms">
+        By continuing, you agree to the
+        <a href="#">terms of use</a>
+        and
+        <a href="#">privacy policy</a>.
+      </div>
+
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="seller-content">
+
+      {% if section.settings.logo %}
+        <div class="logo">
+          {{
+            section.settings.logo
+            | image_url: width: 220
+            | image_tag
+          }}
+        </div>
+      {% endif %}
+
+      <h1>{{ section.settings.heading }}</h1>
+
+      <p class="description">
+        {{ section.settings.description }}
+      </p>
+
+      <div class="features">
+
+        <div class="feature">
+          <span class="icon orange">♛</span>
+          <span>Access to a large fashion audience</span>
+        </div>
+
+        <div class="feature">
+          <span class="icon pink">👕</span>
+          <span>Seamless onboarding & cataloging</span>
+        </div>
+
+        <div class="feature">
+          <span class="icon purple">🚚</span>
+          <span>Logistics & fulfilment solutions</span>
+        </div>
+
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong>1000's</strong>
+          <span>of Brands Growing With Us</span>
+        </div>
+
+        <div class="stat">
+          <strong>Millions</strong>
+          <span>of Active Customers</span>
+        </div>
+
+        <div class="stat">
+          <strong>India's Premier</strong>
+          <span>Fashion Destination</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Floating Images -->
+
+    {% if section.settings.top_bag %}
+      <div class="floating top">
+        {{
+          section.settings.top_bag
+          | image_url: width: 350
+          | image_tag
+        }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.bottom_bag %}
+      <div class="floating bottom">
+        {{
+          section.settings.bottom_bag
+          | image_url: width: 350
+          | image_tag
+        }}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+
+.seller-hero{
+  background:#eef7ff;
+  padding:20px;
+  overflow:hidden;
+}
+
+.seller-hero__container{
+  max-width:1600px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:700px 1fr;
+  gap:80px;
+  position:relative;
+}
+
+/* LEFT CARD */
+
+.seller-card{
+  background:#fff;
+  border-radius:35px;
+  padding:40px;
+  min-height:800px;
+  display:flex;
+  flex-direction:column;
+}
+
+.seller-card__image{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.seller-card__image img{
+  max-width:320px;
+  width:100%;
+}
+
+.steps{
+  display:flex;
+  gap:35px;
+  justify-content:center;
+  margin-bottom:35px;
+  font-size:16px;
+}
+
+.steps span{
+  color:#444;
+}
+
+.seller-card h2{
+  font-size:52px;
+  margin:0 0 15px;
+  color:#202020;
+}
+
+.seller-card p{
+  color:#555;
+  margin-bottom:35px;
+}
+
+.seller-form{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.seller-form input{
+  height:60px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:0 18px;
+  font-size:16px;
+}
+
+.seller-form button{
+  height:60px;
+  border:none;
+  border-radius:14px;
+  background:#5443d8;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.terms{
+  margin-top:auto;
+  text-align:center;
+  font-size:13px;
+  color:#666;
+}
+
+.terms a{
+  color:#5443d8;
+}
+
+/* RIGHT */
+
+.seller-content{
+  max-width:700px;
+  padding-top:40px;
+}
+
+.logo{
+  margin-bottom:70px;
+}
+
+.logo img{
+  width:100px;
+}
+
+.seller-content h1{
+  font-size:64px;
+  line-height:1.2;
+  color:#1f1f1f;
+  margin-bottom:30px;
+}
+
+.description{
+  font-size:24px;
+  line-height:1.8;
+  color:#333;
+  max-width:620px;
+  margin-bottom:60px;
+}
+
+.features{
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+  margin-bottom:120px;
+}
+
+.feature{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  font-size:20px;
+}
+
+.icon{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid;
+}
+
+.orange{
+  color:#ff9f1c;
+  border-color:#ff9f1c;
+}
+
+.pink{
+  color:#ff6b9a;
+  border-color:#ff6b9a;
+}
+
+.purple{
+  color:#8f6cff;
+  border-color:#8f6cff;
+}
+
+.stats{
+  display:flex;
+  justify-content:space-between;
+  gap:40px;
+}
+
+.stat strong{
+  display:block;
+  font-size:22px;
+  margin-bottom:8px;
+}
+
+.stat span{
+  font-size:18px;
+  color:#333;
+}
+
+/* FLOATING IMAGES */
+
+.floating{
+  position:absolute;
+  z-index:2;
+}
+
+.floating img{
+  width:100%;
+  display:block;
+}
+
+.floating.top{
+  top:10px;
+  right:20px;
+  width:180px;
+  transform:rotate(12deg);
+}
+
+.floating.bottom{
+  right:0;
+  bottom:120px;
+  width:220px;
+  transform:rotate(10deg);
+}
+
+/* TABLET */
+
+@media(max-width:1200px){
+
+  .seller-hero__container{
+    grid-template-columns:1fr;
+    gap:60px;
+  }
+
+  .seller-content{
+    max-width:100%;
+  }
+
+  .seller-content h1{
+    font-size:48px;
+  }
+
+  .description{
+    font-size:20px;
+  }
+
+  .stats{
+    flex-wrap:wrap;
+  }
+}
+
+/* MOBILE */
+
+@media(max-width:767px){
+
+  .seller-hero{
+    padding:15px;
+  }
+
+  .seller-card{
+    padding:25px;
+    min-height:auto;
+  }
+
+  .steps{
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+  }
+
+  .seller-card h2{
+    font-size:34px;
+  }
+
+  .seller-content{
+    padding-top:0;
+  }
+
+  .logo{
+    margin-bottom:35px;
+  }
+
+  .seller-content h1{
+    font-size:36px;
+  }
+
+  .description{
+    font-size:17px;
+    line-height:1.7;
+    margin-bottom:35px;
+  }
+
+  .feature{
+    font-size:16px;
+  }
+
+  .stats{
+    flex-direction:column;
+    gap:25px;
+  }
+
+  .floating{
+    display:none;
+  }
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Seller Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Left Illustration"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_bag",
+      "label": "Top Right Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_bag",
+      "label": "Bottom Right Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Give Your Brand the Audience It Deserves!"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Grow your business on a platform trusted by millions, with powerful tools, reliable logistics, and clear insights."
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form Heading",
+      "default": "Sell With Myntra!"
+    },
+    {
+      "type": "text",
+      "id": "form_subheading",
+      "label": "Form Subheading",
+      "default": "Enter phone number to start selling with us"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Continue"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seller Hero"
+    }
+  ]
+}
+{% endschema %}
