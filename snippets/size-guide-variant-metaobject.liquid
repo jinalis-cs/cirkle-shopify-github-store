@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% comment %} On variant change code add in product-info.js {% endcomment %}
 
 {% style %}
@@ -382,3 +383,156 @@
   
 </script>
  
+=======
+{% if product.variants.size > 0 %}
+  {% capture cm_content %}{% endcapture %}
+  {% capture in_content %}{% endcapture %}
+  {% for variant in product.variants %}
+      {% assign size_guide = variant.metafields.custom.size_guide.value %}
+      {% if size_guide != blank %}
+        {% assign cm_list = size_guide.size_guide_cm.value %} 
+        {% assign inch_list = size_guide.size_guide_in.value %}
+        {% capture cm_content %}
+          {% if cm_list %}
+            {{ cm_content }}
+            <tr class="{% if variant == product.selected_or_first_available_variant %}active{% endif %}">
+              <td>
+                <input 
+                  type="radio"
+                  name="size-select-cm"
+                  class="size-select"
+                  value="{{ variant.id }}"
+                  {% if variant == product.selected_or_first_available_variant %}checked{% endif %}
+                >
+                {{ variant.title }}
+              </td>
+              <td>{{ cm_list.size }}</td>
+              <td>{{ cm_list.bust }}</td>
+              <td>{{ cm_list.fit_in_bust }}</td>
+              <td>{{ cm_list.front_length }}</td>
+              <td>{{ cm_list.access_shoulder }}</td>
+              <td>{{ cm_list.fit_in_waist }}</td>
+              <td>{{ cm_list.waist }}</td>
+            </tr>
+          {% endif %}
+        {% endcapture %}
+        {% capture in_content %}
+          {% if inch_list %}
+            {{ in_content }}
+            <tr class="{% if variant == product.selected_or_first_available_variant %}active{% endif %}">
+              <td>
+                <input 
+                  type="radio"
+                  name="size-select-in"
+                  class="size-select"
+                  data-vid="{{ variant.title }}"
+                  value="{{ variant.id }}"
+                  {% if variant == product.selected_or_first_available_variant %}checked{% endif %}
+                >
+                {{ variant.title }}
+              </td>
+              <td>{{ inch_list.size }}</td>
+              <td>{{ inch_list.bust }}</td>
+              <td>{{ inch_list.to_fit_bust }}</td>
+              <td>{{ inch_list.front_length }}</td>
+              <td>{{ inch_list.sleeve_length }}</td>
+              <td>{{ inch_list.to_fit_waist }}</td>
+              <td>{{ inch_list.waist }}</td>
+            </tr>
+          {% endif %}
+        {% endcapture %}
+      {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if cm_content != blank or in_content != blank %}
+  <div class="size-guide-varaint-metaobj">
+    <h3><strong>Size Guide</strong></h3>
+    <div class="size-toggle">
+      {% if cm_content %}<button class="unit-btn active" data-unit="cm">cm</button>{% endif %}
+      {% if in_content %}<button class="unit-btn" data-unit="in">in</button>{% endif %}
+    </div>
+
+    {% if cm_content != blank %}
+      <table class="size-chart cm-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Bust (cm)</th>
+            <th>To Fit Bust (cm)</th>
+            <th>Front Length (cm)</th>
+            <th>Across Shoulder (cm)</th>
+            <th>To Fit Waist (cm)</th>
+            <th>Waist (cm)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ cm_content }}
+        </tbody>
+      </table>
+    {% endif %}  
+
+    {% if in_content != blank %}
+      <table class="size-chart inch-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Bust (in)</th>
+            <th>To Fit Bust (in)</th>
+            <th>Front Length (in)</th>
+            <th>Across Shoulder (in)</th>
+            <th>To Fit Waist (in)</th>
+            <th>Waist (in)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ in_content }}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endif %}
+
+<script>
+  document.querySelectorAll('.unit-btn').forEach((btn) => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.unit-btn').forEach((b) => b.classList.remove('active'));
+      this.classList.add('active');
+
+      const unit = this.dataset.unit;
+
+      document.querySelector('.cm-table').style.display = unit === 'cm' ? 'table' : 'none';
+      document.querySelector('.inch-table').style.display = unit === 'in' ? 'table' : 'none';
+    });
+  });
+
+  document.querySelectorAll('.size-select').forEach(radio => {
+    radio.addEventListener('change', function () {
+      const selectedSize = this.closest('tr').querySelector('td').innerText.trim();
+      console.log(selectedSize);
+
+      // Find Dawn variant selectors
+      const variantRadios = document.querySelector('variant-selects');
+      //const variantSelects = document.querySelector('variant-selects');
+
+      // CASE 1: Radio buttons (most common in Dawn)
+      if (variantRadios) {
+        const sizeInput = variantRadios.querySelector(`input[type="radio"][value="${selectedSize}"]`);
+        
+        console.log('sizeInput', sizeInput);
+        if (sizeInput) {
+          sizeInput.checked = true;
+
+          // 🔥 IMPORTANT: trigger change on option, not ID
+          sizeInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      // Highlight active row
+      document.querySelectorAll('.size-chart tr').forEach(tr => tr.classList.remove('active'));
+      this.closest('tr').classList.add('active');
+    });    
+  });
+  
+</script>
+>>>>>>> a53dc07418b754586dea6b0842192bde5a5d1f55
