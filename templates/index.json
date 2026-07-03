@@ -194,6 +194,76 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "featured_product_JF4J7n": {
+      "type": "featured-product",
+      "blocks": {
+        "text_qnbYLe": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_TWAi9A": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_3H7B8i": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_cMi49X": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_YQH9Hg": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_EnmCMT": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_xYJai4": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_qnbYLe",
+        "title_TWAi9A",
+        "price_3H7B8i",
+        "variant_picker_cMi49X",
+        "quantity_selector_YQH9Hg",
+        "buy_buttons_EnmCMT",
+        "share_xYJai4"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "",
+        "color_scheme": "",
+        "secondary_background": false,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -204,6 +274,7 @@
     "custom_product_list_slider_v1_jpBRaN",
     "custom_product_list_slider_v2_aGnVbK",
     "tab_load_more_BaFmDd",
-    "177365996416b3c5e9"
+    "177365996416b3c5e9",
+    "featured_product_JF4J7n"
   ]
 }
