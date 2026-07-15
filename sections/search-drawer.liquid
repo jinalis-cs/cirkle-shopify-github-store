@@ -1,0 +1,488 @@
+<style>
+  .search-drawer{
+    position:fixed;
+    inset:0;
+    z-index:999;
+    visibility:hidden;
+  }
+
+  .search-drawer.active{
+    visibility:visible;
+  }
+
+  .search-drawer__overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    opacity:0;
+    transition:.3s;
+  }
+
+  .search-drawer.active .search-drawer__overlay{
+    opacity:1;
+  }
+
+  .search-drawer__panel{
+    position:absolute;
+    top:0;
+    right:-100%;
+    width:560px;
+    max-width:100%;
+    height:100%;
+    background:#f8f4ef;
+    transition:.35s;
+    overflow:auto;
+    padding:40px;
+  }
+
+  .search-drawer.active .search-drawer__panel{
+    right:0;
+  }
+
+  .search-drawer__close{
+    position:absolute;
+    top:42px;
+    right:25px;
+    border:0;
+    background:none;
+    font-size:30px;
+    cursor:pointer;
+  }
+
+  .search-form{
+    {% comment %} margin-top:30px; {% endcomment %}
+    margin-bottom:35px;
+  }
+
+  .search-form input{
+    width:100%;
+    border:none;
+    border-bottom:1px solid #d8d8d8;
+    padding:15px 0;
+    background:none;
+    font-size:20px;
+    outline:none;
+  }
+
+  .search-form input::placeholder{
+    color:#999;
+  }
+
+  .drawer-links h4{
+    font-size:15px;
+    margin-bottom:25px;
+    letter-spacing:2px;
+  }
+
+  .drawer-links{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .drawer-links a{
+    color:#444;
+    text-decoration:none;
+    font-size:34px;
+    transition:.2s;
+  }
+
+  .drawer-links a:hover{
+    padding-left:8px;
+  }
+
+  .predictive-results{
+    margin-top:40px;
+  }
+
+  .predictive-results ul{
+    list-style:none;
+    padding:0;
+  }
+
+  .predictive-results li{
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+  }
+
+  .predictive-results a{
+    display:flex;
+    gap:15px;
+    color:#333;
+    text-decoration:none;
+  }
+
+  .predictive-results img{
+    width:70px;
+    height:90px;
+    object-fit:cover;
+  }
+
+  @media(max-width:749px){
+    .search-drawer__panel{
+      width:100%;
+      padding:25px;
+    }
+
+    .search-form input{
+      font-size:28px;
+    }
+
+    .drawer-links a{
+      font-size:26px;
+    }
+  }
+
+  /* After search drawer */
+  .search-drawer{
+    position:fixed;
+    inset:0;
+    visibility:hidden;
+    z-index:999;
+  }
+  .search-drawer.active{
+    visibility:visible;
+  }
+
+  .drawer-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.45);
+  }
+
+  .drawer{
+    position:absolute;
+    right:0;
+    top:0;
+    width:650px;
+    max-width:100%;
+    height:100%;
+    background:#F8F5F0;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .drawer-header{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:40px;
+    border-bottom:1px solid #bbb;
+  }
+
+  .drawer-header form{
+    flex:1;
+  }
+
+  .drawer-header input{
+    width:100%;
+    border:none;
+    background:none;
+    font-size:28px;
+    outline:none;
+  }
+
+  .drawer-clear,
+  .drawer-close{
+    border:0;
+    background:none;
+    cursor:pointer;
+    font-size:22px;
+  }
+
+  .drawer-tabs{
+    display:flex;
+    gap:35px;
+    padding:25px 40px;
+    border-bottom:1px solid #eee;
+  }
+
+  .drawer-tabs button{
+    background:none;
+    border:0;
+    font-size:18px;
+    cursor:pointer;
+    color:#999;
+  }
+
+  .drawer-tabs button.active{
+    color:#333;
+    font-weight:600;
+  }
+
+  .drawer-results{
+    flex:1;
+    overflow:auto;
+    padding:20px 40px;
+  }
+
+  .search-item{
+    display:flex;
+    gap:24px;
+    margin-bottom:30px;
+  }
+
+  .search-item-image{
+    width:95px;
+    flex-shrink:0;
+  }
+
+  .search-item-image img{
+    width:100%;
+    display:block;
+  }
+
+  .search-item-info{
+    flex:1;
+  }
+
+  .search-item-title{
+    font-size:20px;
+    color:#D68B15;
+    text-decoration:none;
+    font-weight:600;
+    line-height:1.4;
+  }
+
+  .search-item-sku{
+    margin:8px 0;
+    color:#D68B15;
+    font-weight:600;
+  }
+
+  .search-item-price{
+    font-size:20px;
+    font-weight:600;
+  }
+
+  .predictive-search-tabs{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    margin:24px 0 32px;
+  }
+
+  .predictive-tab{
+      padding:0;
+      margin:0;
+      border:none;
+      background:transparent;
+      cursor:pointer;
+
+      font-size:22px;
+      font-weight:400;
+      line-height:1.2;
+
+      color:#c8c3bd;
+
+      transition:color .25s ease;
+  }
+
+  .predictive-tab.active{
+      color:#4d4d4d;
+      font-weight:500;
+  }
+
+  .predictive-tab:hover{
+      color:#4d4d4d;
+  }
+
+  @media(max-width:749px){
+    .drawer{
+        width:100%;
+    }
+    .drawer-header{
+        padding:20px;
+    }
+    .drawer-tabs{
+        padding:20px;
+    }
+    .drawer-results{
+        padding:20px;
+    }
+    .search-item{
+        gap:15px;
+    }
+    .search-item-image{
+        width:80px;
+    }
+    .search-item-title{
+        font-size:16px;
+    }
+  }
+</style>
+
+<div class="search-drawer" id="SearchDrawer">
+  <div class="menu-drawer-container submenu-drawer-wrap">
+    <div class="overlay"></div>
+    <div class="search-drawer__panel">
+      <div class="search-drawer__close" aria-label="Close">
+        <svg
+          role="presentation"
+          stroke-width="2"
+          focusable="false"
+          width="19"
+          height="19"
+          class="icon icon-close"
+          viewBox="0 0 24 24"
+        >
+          <path d="M17.658 6.343 6.344 17.657M17.658 17.657 6.344 6.343" stroke="currentColor"></path>
+        </svg>
+      </div>
+      <div class="search-drawer__inner-container">
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          class="search-form"
+        >
+          <input
+            id="DrawerSearchInput"
+            type="search"
+            name="q"
+            placeholder="Search for..."
+            autocomplete="off"
+          >
+          {% comment %} <input type="hidden" name="type" value="product"> {% endcomment %}
+          <input type="hidden" name="options[prefix]" value="last">
+        </form>
+        <div class="drawer-links">
+          <h4>SHOP</h4>
+          <a href="/collections/new-arrivals">New Arrivals</a>
+          <a href="/collections/best-sellers">Best Sellers</a>
+          <a href="/collections/all">Products</a>
+        </div>
+
+        <div id="DrawerPredictiveSearch" class="predictive-results"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="drawer-cursor">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+  >
+    <path d="M18 6L6 18M6 6l12 12"/>
+  </svg>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const drawer = document.querySelector('#SearchDrawer');
+    const panel = drawer.querySelector('.search-drawer__panel');
+    const overlay = drawer.querySelector('.overlay');
+    const closeBtn = drawer.querySelector('.search-drawer__close');
+    const input = document.querySelector('#DrawerSearchInput');
+    const resultBox = document.querySelector('#DrawerPredictiveSearch');
+    const quickLinks = document.querySelector('.drawer-links');
+
+    function openDrawer() {
+      drawer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      input.focus();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('active');
+      //document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    // Header search icon
+    document.querySelectorAll('a[href="/search"], summary.header__icon--search,.header__icon--search').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openDrawer();
+      });
+    });
+
+    let timer;
+
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+
+      const term = this.value.trim();
+
+      if (term === '') {
+        resultBox.innerHTML = '';
+        quickLinks.style.display = 'flex';
+        return;
+      }
+
+      timer = setTimeout(() => {
+        fetch(`${routes.predictive_search_url}?q=${encodeURIComponent(term)}&section_id=drawer-predictive-search`)
+          .then((r) => r.text())
+          .then((html) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const results = doc.querySelector('#shopify-section-drawer-predictive-search');
+
+            if (results) {
+              resultBox.innerHTML = results.innerHTML;
+              quickLinks.style.display = 'none';
+            }
+          });
+      }, 250);
+    });
+
+    function renderProducts(products){
+      let html='';
+      products.forEach(product=>{
+        html+=`
+          <div class="search-item">
+              <div class="search-item-image">
+                  <a href="${product.url}">
+                      <img src="${product.featured_image.url}" alt="">
+                  </a>
+              </div>
+              <div class="search-item-info">
+                  <a class="search-item-title" href="${product.url}">
+                      ${product.title}
+                  </a>
+                  ${
+                      product.sku
+                      ? `<div class="search-item-sku">
+                          SKU : ${product.sku}
+                        </div>`
+                      : ''
+                  }
+                  <div class="search-item-price">
+                      ${product.price}
+                  </div>
+              </div>
+          </div>
+        `;
+      });
+      document.querySelector('#SearchResults').innerHTML=html;
+    }
+  });
+
+  const tabs = document.querySelectorAll('.predictive-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(item => item.classList.remove('active'));
+      tab.classList.add('active');
+
+      // Load Products or Blog results here
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Search Drawer",
+  "settings": []
+}
+{% endschema %}
