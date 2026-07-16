@@ -497,7 +497,7 @@
         {% comment %} <div class="form-group field">
           <input type="text" class="custom_note field__input" name="attributes[custom-note]" form="CartDrawer-Form" value="{{ cart.attributes.custom-note }}" placeholder="Custom notes">
         </div> {% endcomment %}
-        {% comment %} {% render 'cart-discount', cart: cart, source: 'cart-drawer' %} {% endcomment %}
+        {% render 'cart-discount', cart: cart, source: 'cart-drawer' %}
         
         {%- if settings.show_cart_note -%}
           <details id="Details-CartDrawer">
