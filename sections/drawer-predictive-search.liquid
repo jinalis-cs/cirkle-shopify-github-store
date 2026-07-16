@@ -1,0 +1,110 @@
+{% if predictive_search.performed %}
+  <div class="drawer-results">
+    {{ predictive_search.resources.articles.size }}
+    {% if predictive_search.resources.products.size > 0 or predictive_search.resources.articles.size > 0 %}
+      <div class="predictive-search-tabs">
+        <button
+            type="button"
+            class="predictive-tab active"
+            data-type="products"
+        >
+            Products
+        </button>
+
+        <button
+            type="button"
+            class="predictive-tab"
+            data-type="articles"
+        >
+            Blog posts
+        </button>
+      </div>
+    {% if predictive_search.resources.products.size > 0 %}
+      <ul class="predictive-search-list">
+
+      {% for product in predictive_search.resources.products %}
+
+          <li>
+
+          <article class="predictive-search-card">
+
+              <a href="{{ product.url }}" class="predictive-search-card__image">
+              {{
+                  product.featured_media
+                  | image_url: width: 150
+                  | image_tag
+              }}
+              </a>
+
+              <div class="predictive-search-card__content">
+
+              <h3>
+                  <a href="{{ product.url }}">
+                  {{ product.title }}
+                  </a>
+              </h3>
+
+              {% if product.selected_or_first_available_variant.sku != blank %}
+                  <p>
+                  SKU :
+                  {{ product.selected_or_first_available_variant.sku }}
+                  </p>
+              {% endif %}
+
+              <p>{{ product.price | money }}</p>
+
+              </div>
+
+          </article>
+
+          </li>
+
+      {% endfor %}
+
+      </ul>
+    {% elsif predictive_search.resources.articles.size > 0 %}
+      <ul class="predictive-search-list predictive-search-list--articles">
+      {% for article in predictive_search.resources.articles %}
+
+          <li>
+
+          <article class="predictive-search-card">
+
+              {% if article.image %}
+              <a href="{{ article.url }}" class="predictive-search-card__image">
+                  {{
+                  article.image
+                  | image_url: width: 150
+                  | image_tag
+                  }}
+              </a>
+              {% endif %}
+
+              <div class="predictive-search-card__content">
+
+              <h3>
+                  <a href="{{ article.url }}">
+                  {{ article.title }}
+                  </a>
+              </h3>
+
+              <p>
+                  {{ article.excerpt | strip_html | truncate: 100 }}
+              </p>
+
+              </div>
+
+          </article>
+
+          </li>
+
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>No results found.</p>
+    {% endif %}
+  {% endif %}
+  </div>
+{% endif %}
+
+
