@@ -787,7 +787,7 @@
       if (!cfg.endpoint) { console.log('Payload (no endpoint set):', payload); toast('Google Sheet link is not set. Add the Apps Script URL in the section settings.'); return; }
       const old = btn.innerHTML; btn.disabled = true; btn.textContent = 'Submitting…';
       try {
-        const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+        const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload, (k, v) => (k === 'data' && typeof v === 'string' && v.startsWith('data:')) ? undefined : v) });
         const j = await res.json();
         if (!j.ok) throw new Error(j.error || 'Server error');
         $$('.panel').forEach(p => p.hidden = true); $('.msp-tabs').hidden = true;
@@ -813,7 +813,7 @@
   "class": "msp-section",
   "settings": [
     { "type": "header", "content": "Google Sheet" },
-    { "type": "text", "id": "endpoint", "label": "Google Apps Script Web App URL", "info": "Paste the /exec URL after deploying google-apps-script.gs" },
+    { "type": "text", "id": "endpoint", "label": "Google Apps Script Web App URL", "info": "Paste the /exec URL after deploying google-apps-script.gs (no Drive folder needed)" },
     { "type": "range", "id": "max_file_mb", "label": "Max upload size per file (MB)", "min": 1, "max": 5, "step": 1, "default": 2 },
     { "type": "header", "content": "Look" },
     { "type": "color", "id": "accent", "label": "Accent colour", "default": "#5333d6" },
