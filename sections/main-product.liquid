@@ -185,7 +185,7 @@
                           {{- 'icon-inventory-status.svg' | inline_asset_content -}}
                         </span>
                         {%- if block.settings.show_inventory_quantity -%}
-                          {{-
+                          {{-                            
                             'products.product.inventory_in_stock_show_count'
                             | t: quantity: product.selected_or_first_available_variant.inventory_quantity
                           -}}
