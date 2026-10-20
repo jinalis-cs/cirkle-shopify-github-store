@@ -1,0 +1,828 @@
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+
+<div
+  class="msp"
+  id="msp-{{ section.id }}"
+  style="--ac: {{ section.settings.accent }};"
+  data-endpoint="{{ section.settings.endpoint | escape }}"
+  data-maxmb="{{ section.settings.max_file_mb }}"
+  data-cats="{{ section.settings.categories | escape }}"
+  data-success-title="{{ section.settings.success_title | escape }}"
+  data-success-text="{{ section.settings.success_text | escape }}"
+>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 12.5l3.2 3.2 5.8-6.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 17V7m0 0l-4 4m4-4l4 4M6 20h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v9M7.5 12h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-wh" viewBox="0 0 24 24"><path d="M3 20V9l9-5 9 5v11M7 20v-6h10v6M7 17h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+      <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8zM7.5 8.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  {%- if section.settings.notice != blank -%}
+    <div class="msp-notice">{{ section.settings.notice }}</div>
+  {%- endif -%}
+
+  <div class="msp-wrap">
+
+    <!-- ============ TABS ============ -->
+    <div class="msp-tabs card" role="tablist">
+      <button type="button" class="tab on" data-tab="0" role="tab"><svg><use href="#i-doc"/></svg>Seller Information</button>
+      <button type="button" class="tab" data-tab="1" role="tab"><svg><use href="#i-wh"/></svg>Warehouse Details</button>
+      <button type="button" class="tab" data-tab="2" role="tab"><svg><use href="#i-bag"/></svg>Brand Details</button>
+    </div>
+
+    <!-- ============ PANEL 1 : SELLER INFORMATION ============ -->
+    <div class="panel" data-panel="0">
+      <div class="card">
+        <div class="sec" data-sec="gst">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>GSTIN Number</h3><p>The GSTIN number you will be using for your business with Myntra.</p></div></div>
+          <div class="sec-r">
+            <div><button type="button" class="btn" data-act="open-gst">+ Add</button></div>
+            <div id="gst-list" class="chips"></div>
+            <div class="msg-err" id="gst-err" hidden>Add at least one GSTIN to continue.</div>
+          </div>
+        </div>
+
+        <div class="sec" data-sec="primary" id="sec-primary">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Primary Contact</h3><p>Primary contact for all seller registration related communications.</p></div></div>
+          <div class="sec-r">
+            <div class="grid1">
+              <div class="f"><label class="req">Primary contact's name</label><input type="text" name="pname" data-rule="name" placeholder="Enter full name" autocomplete="name"><div class="err"></div></div>
+            </div>
+            <div class="grid2">
+              <div class="f"><label class="req">Primary contact's phone number</label><input type="text" name="pphone" data-rule="phone" inputmode="numeric" maxlength="10" placeholder="Enter 10 digit phone number" autocomplete="tel-national"><div class="err"></div></div>
+              <div class="f"><label class="req">Primary contact's email ID</label><input type="text" name="pemail" data-rule="email" placeholder="Enter email ID" autocomplete="email"><div class="err"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec" data-sec="owner" id="sec-owner">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Business Owner Details</h3><p>Name and information of the business owner.</p></div></div>
+          <div class="sec-r">
+            <label class="chk"><input type="checkbox" id="same-owner"> Business owner's contact is same as primary contact.</label>
+            <div class="grid1">
+              <div class="f"><label class="req">Owner's name</label><input type="text" name="oname" data-rule="name" placeholder="Enter full name"><div class="err"></div></div>
+            </div>
+            <div class="grid2">
+              <div class="f"><label class="req">Owner's phone number</label><input type="text" name="ophone" data-rule="phone" inputmode="numeric" maxlength="10" placeholder="Enter 10 digit phone number"><div class="err"></div></div>
+              <div class="f"><label class="req">Owner's email ID</label><input type="text" name="oemail" data-rule="email" placeholder="Enter email ID"><div class="err"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec" data-sec="tds">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>TDS Benefit Details</h3><p>Select if you want to avail TDS benefits. If yes, provide your TAN number.</p></div></div>
+          <div class="sec-r">
+            <div class="grid2 opts">
+              <label class="opt"><input type="radio" name="tds" value="yes"> Yes, I want to claim TDS benefits</label>
+              <label class="opt"><input type="radio" name="tds" value="no"> No, I do not want to claim TDS benefits</label>
+            </div>
+            <div class="msg-err" id="tds-err" hidden>Select an option.</div>
+            <div class="grid1" id="tan-wrap" hidden>
+              <div class="f"><label class="req">TAN number</label><input type="text" name="tan" data-rule="tan" data-upper="1" maxlength="10" placeholder="Enter TAN number (e.g. ABCD12345E)"><div class="err"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec" data-sec="sign">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Owner's Signature</h3><p>Upload an Image / PDF of owner's signature.</p></div></div>
+          <div class="sec-r">
+            <div class="drop" data-key="signature" tabindex="0">
+              <input type="file" hidden accept="image/png,image/jpeg,application/pdf">
+              <div class="drop-empty"><span class="up"><svg><use href="#i-up"/></svg></span><p>Drag &amp; Drop / Click To Upload Signature PDF <b>*</b></p></div>
+              <div class="drop-file"><svg class="fi"><use href="#i-doc"/></svg><span class="drop-name"></span><button type="button" class="link" data-remove>Remove</button></div>
+              <div class="drop-err"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec" data-sec="bank" id="sec-bank">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Bank Account Details</h3><p>Upload a current account's cheque Image and check the details fetched from it.</p><p class="note">Add only current account not savings account. Please verify bank details carefully.</p></div></div>
+          <div class="sec-r">
+            <div class="drop" data-key="cheque" tabindex="0">
+              <input type="file" hidden accept="image/png,image/jpeg,application/pdf">
+              <div class="drop-empty"><span class="up"><svg><use href="#i-up"/></svg></span><p>Drag &amp; Drop / Click To Upload Cheque PDF <b>*</b></p></div>
+              <div class="drop-file"><svg class="fi"><use href="#i-doc"/></svg><span class="drop-name"></span><button type="button" class="link" data-remove>Remove</button></div>
+              <div class="drop-err"></div>
+            </div>
+            <div class="grid1">
+              <div class="f"><label class="req">Bank Name</label><input type="text" name="bank" data-rule="text" placeholder="Enter bank name"><div class="err"></div></div>
+            </div>
+            <div class="grid2">
+              <div class="f"><label class="req">Account Type</label><input type="text" name="acctype" value="Current Account" readonly class="ro"></div>
+              <div class="f"><label class="req">IFSC Code</label><input type="text" name="ifsc" data-rule="ifsc" data-upper="1" maxlength="11" placeholder="Enter IFSC code"><div class="err"></div></div>
+            </div>
+            <div class="grid2">
+              <div class="f"><label class="req">Account Number</label><input type="text" name="acc" data-rule="acc" inputmode="numeric" maxlength="18" placeholder="Enter account number"><div class="err"></div></div>
+              <div class="f"><label class="req">Account Holder's Name</label><input type="text" name="holder" data-rule="name" placeholder="Enter full name"><div class="err"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec" data-sec="bverify">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Bank Account Verification</h3><p>A small amount will be credited to your account. Enter the exact amount.</p></div></div>
+          <div class="sec-r">
+            <div><button type="button" class="btn" id="bank-verify" disabled>Send Amount To Verify Account</button></div>
+            <div class="ok-note" id="bank-note" hidden>Verification request sent. We will credit a small amount to this account and confirm it.</div>
+            <div class="msg-err" id="bank-err" hidden>Click "Send Amount To Verify Account" to continue.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card nav"><span></span><button type="button" class="btn" data-act="next">Next <svg class="ar"><use href="#i-chev"/></svg></button></div>
+    </div>
+
+    <!-- ============ PANEL 2 : WAREHOUSE DETAILS ============ -->
+    <div class="panel" data-panel="1" hidden>
+      <div id="wh-list" class="items"></div>
+      <button type="button" class="card addcard" data-act="open-wh"><svg><use href="#i-plus"/></svg><span>Click to Add New Warehouse</span></button>
+      <div class="msg-err pad" id="wh-err" hidden>Add at least one warehouse to continue.</div>
+      <div class="card nav"><button type="button" class="btn ghost" data-act="prev"><svg class="ar l"><use href="#i-chev"/></svg> Previous</button><button type="button" class="btn" data-act="next">Next <svg class="ar"><use href="#i-chev"/></svg></button></div>
+    </div>
+
+    <!-- ============ PANEL 3 : BRAND DETAILS ============ -->
+    <div class="panel" data-panel="2" hidden>
+      <div id="br-list" class="items"></div>
+      <button type="button" class="card addcard" data-act="open-br"><svg><use href="#i-plus"/></svg><span>Click to Add New Brand</span></button>
+      <div class="msg-err pad" id="br-err" hidden>Add at least one brand to submit.</div>
+      <div class="card nav"><button type="button" class="btn ghost" data-act="prev"><svg class="ar l"><use href="#i-chev"/></svg> Previous</button><button type="button" class="btn" id="submit-btn" data-act="submit" disabled>Submit <svg class="ar"><use href="#i-chev"/></svg></button></div>
+    </div>
+
+    <!-- ============ SUCCESS ============ -->
+    <div class="card done" id="done" hidden>
+      <svg class="big"><use href="#i-check"/></svg>
+      <h2 id="done-title"></h2>
+      <p id="done-text"></p>
+      <p class="sid">Reference ID: <b id="done-id"></b></p>
+    </div>
+  </div>
+
+  <!-- ============ MODAL : ADD GSTIN ============ -->
+  <div class="modal" data-modal="gst" hidden>
+    <div class="m-card small" role="dialog" aria-modal="true">
+      <div class="m-h"><svg><use href="#i-doc"/></svg><h2>Add GSTIN</h2><button type="button" class="m-x" data-close aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+      <div class="m-b">
+        <div class="f"><label class="req">GSTIN Number</label>
+          <div class="inline"><input type="text" name="g_gstin" data-rule="gstin" data-upper="1" maxlength="15" placeholder="Enter GSTIN number"><button type="button" class="btn" data-act="verify-gst" disabled>Verify</button></div>
+          <div class="err"></div></div>
+        <div class="gbox" id="g-box"><p>Enter GST number to view details</p></div>
+      </div>
+      <div class="m-f"><button type="button" class="btn ghost" data-close>Cancel</button><button type="button" class="btn" data-act="save-gst" disabled>Add GSTIN</button></div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL : WAREHOUSE ============ -->
+  <div class="modal" data-modal="wh" hidden>
+    <div class="m-card" role="dialog" aria-modal="true">
+      <div class="m-h"><svg><use href="#i-wh"/></svg><h2 id="wh-title">Warehouse 1 Details :</h2><button type="button" class="m-x" data-close aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+      <div class="m-b">
+        <div class="sec">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Warehouse Address</h3><p>Please enter accurate GSTIN number and check the address details.</p></div></div>
+          <div class="sec-r">
+            <div class="f"><label class="req">GSTIN Number</label>
+              <div class="inline"><input type="text" name="w_gstin" data-rule="gstin" data-upper="1" maxlength="15" list="wh-gst-list" placeholder="Enter GSTIN number"><button type="button" class="btn" data-act="verify-wh" disabled>Verify</button></div>
+              <datalist id="wh-gst-list"></datalist><div class="err"></div></div>
+            <div class="gbox" id="w-box">
+              <svg class="illu" viewBox="0 0 160 110"><ellipse cx="80" cy="96" rx="58" ry="9" fill="#eef0f5"/><rect x="30" y="14" width="46" height="62" rx="3" fill="#cfd3de"/><path d="M38 28h30M38 38h30M38 48h30M38 58h22" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="104" cy="30" r="9" fill="#2a2150"/><path d="M92 44h24l6 22-8 22h-8l-2-14-2 14h-8z" fill="#5333d6"/></svg>
+              <p>Enter GST number to view address details</p>
+            </div>
+            <div id="w-addr" hidden>
+              <div class="grid2">
+                <div class="f"><label>GSTIN</label><input type="text" id="w-v-gstin" class="ro" readonly></div>
+                <div class="f"><label>PAN</label><input type="text" id="w-v-pan" class="ro" readonly></div>
+              </div>
+              <div class="grid1"><div class="f"><label class="req">Address line 1</label><input type="text" name="w_a1" data-rule="text" placeholder="Building, street"><div class="err"></div></div></div>
+              <div class="grid1"><div class="f"><label>Address line 2</label><input type="text" name="w_a2" data-rule="any" data-opt placeholder="Area, landmark"></div></div>
+              <div class="grid3">
+                <div class="f"><label class="req">City</label><input type="text" name="w_city" data-rule="text" placeholder="Enter city"><div class="err"></div></div>
+                <div class="f"><label>State</label><input type="text" id="w-v-state" class="ro" readonly></div>
+                <div class="f"><label class="req">Pincode</label><input type="text" name="w_pin" data-rule="pin" inputmode="numeric" maxlength="6" placeholder="6 digit pincode"><div class="err"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Warehouse Details</h3><p>Enter warehouse contact details, processing capacity and timings.</p></div></div>
+          <div class="sec-r">
+            <div class="grid2">
+              <div class="f"><label class="req">Warehouse contact number</label><input type="text" name="w_phone" data-rule="phone" inputmode="numeric" maxlength="10" placeholder="Enter 10 digit contact number"><div class="err"></div></div>
+              <div class="f"><label class="req">Warehouse email ID</label><input type="text" name="w_email" data-rule="email" placeholder="Enter email ID"><div class="err"></div></div>
+            </div>
+            <div class="grid2">
+              <div class="f"><label class="req">Per day processing capacity</label><input type="text" name="w_cap" data-rule="int" inputmode="numeric" placeholder="Enter number of units"><div class="err"></div></div>
+            </div>
+            <div class="grid2">
+              <div class="f"><label class="req">Warehouse start time</label><select name="w_start" data-rule="any"><option value="">Select start time</option></select><div class="err"></div></div>
+              <div class="f"><label class="req">Warehouse end time</label><select name="w_end" data-rule="any"><option value="">Select end time</option></select><div class="err"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-f"><button type="button" class="btn ghost" data-close>Cancel</button><button type="button" class="btn" data-act="save-wh" disabled>Add Warehouse</button></div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL : BRAND ============ -->
+  <div class="modal" data-modal="br" hidden>
+    <div class="m-card" role="dialog" aria-modal="true">
+      <div class="m-h"><svg><use href="#i-tag"/></svg><h2 id="br-title">Brand 1 Details :</h2><button type="button" class="m-x" data-close aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+      <div class="m-b">
+        <div class="sec">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Brand Name and Documents</h3><p>Please enter brand name and select a seller type and upload documents.</p><p class="info">Uploading <b>documents is not mandatory</b>, you can submit it till <b>30 days</b> after onboarding.</p></div></div>
+          <div class="sec-r">
+            <div class="f"><label class="req">Brand Name</label><input type="text" name="b_name" data-rule="text" maxlength="60" placeholder="Enter brand name"><div class="err"></div></div>
+            <div class="f"><label class="req">Seller type</label>
+              <div class="grid2 opts">
+                <label class="opt"><input type="radio" name="b_type" value="Brand owner"> Brand owner</label>
+                <label class="opt"><input type="radio" name="b_type" value="Authorised distributor / reseller"> Authorised distributor / reseller</label>
+              </div></div>
+            <div class="grid2">
+              <div class="drop sm" data-key="brandLogo" tabindex="0">
+                <input type="file" hidden accept="image/png,image/jpeg,image/webp">
+                <div class="drop-empty"><span class="up"><svg><use href="#i-up"/></svg></span><p>+ Add Brand Logo</p></div>
+                <div class="drop-file"><svg class="fi"><use href="#i-doc"/></svg><span class="drop-name"></span><button type="button" class="link" data-remove>Remove</button></div>
+                <div class="drop-err"></div>
+              </div>
+              <div class="drop sm" data-key="brandDoc" tabindex="0">
+                <input type="file" hidden accept="image/png,image/jpeg,application/pdf">
+                <div class="drop-empty"><span class="up"><svg><use href="#i-up"/></svg></span><p>+ Add Brand document (trademark / authorisation)</p></div>
+                <div class="drop-file"><svg class="fi"><use href="#i-doc"/></svg><span class="drop-name"></span><button type="button" class="link" data-remove>Remove</button></div>
+                <div class="drop-err"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Categories You Sell</h3><p>Enter primary categories you sell and select corresponding secondary categories.</p></div></div>
+          <div class="sec-r">
+            <div class="f"><label class="req">Select Primary Category You Sell</label><select name="b_cat" data-rule="any"><option value="">Select Category</option></select><div class="err"></div></div>
+            <div class="f" id="b-sec-wrap" hidden><label class="req">Select Secondary Categories</label><div class="tags" id="b-sec"></div><div class="msg-err" id="b-sec-err" hidden>Select at least one secondary category.</div></div>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-l"><svg class="ck"><use href="#i-check"/></svg><div><h3>Business and E-Commerce Details</h3><p>Enter number of SKUs sold, average selling price and other platforms you sell on.</p></div></div>
+          <div class="sec-r">
+            <div class="grid2">
+              <div class="f"><label class="req">Total SKUs You Sell Under This Brand</label><input type="text" name="b_sku" data-rule="int" inputmode="numeric" placeholder="Enter no. of SKUs"><div class="err"></div></div>
+              <div class="f"><label class="req">Average Selling Price (₹)</label><input type="text" name="b_asp" data-rule="num" inputmode="decimal" placeholder="Enter average selling price"><div class="err"></div></div>
+            </div>
+            <div class="f"><label class="req">Do you sell this brand on other e-commerce platforms?</label>
+              <div class="grid2 opts">
+                <label class="opt"><input type="radio" name="b_other" value="Yes"> Yes</label>
+                <label class="opt"><input type="radio" name="b_other" value="No"> No</label>
+              </div></div>
+            <div class="f" id="b-plat-wrap" hidden><label class="req">Select platforms</label><div class="tags" id="b-plat"></div></div>
+            <div class="f"><label>Brand website / store link</label><input type="text" name="b_web" data-rule="url" data-opt placeholder="https://"><div class="err"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="m-f"><button type="button" class="btn ghost" data-close>Cancel</button><button type="button" class="btn" data-act="save-br" disabled>Add Brand</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<style>
+.msp{--tx:#282c3f;--mu:#696e79;--bd:#d4d5d9;--er:#d0021b;--ok:#03a685;--acl:color-mix(in srgb,var(--ac) 9%,#fff);font-family:Roboto,"Segoe UI",Arial,sans-serif;color:var(--tx);font-size:14px;line-height:1.45;background:linear-gradient(160deg,#fff6ef 0%,#f1ecfa 45%,#e4dbfc 100%);padding:0 0 64px}
+.msp *{box-sizing:border-box}
+.msp svg{width:20px;height:20px;flex:none}
+.msp button{font-family:inherit;cursor:pointer}
+.msp-notice{background:#0b57c1;color:#fff;text-align:center;padding:10px 16px;font-size:13px;font-weight:500}
+.msp-wrap{max-width:970px;margin:0 auto;padding:24px 14px 0}
+.msp .card{background:#fff;border-radius:16px;box-shadow:0 2px 14px rgba(40,44,63,.08);margin-bottom:18px;padding:8px 32px}
+/* tabs */
+.msp .msp-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:8px 10px}
+.msp .tab{display:flex;align-items:center;justify-content:center;gap:8px;height:46px;border:1px solid #ececf1;background:#f8f8fa;border-radius:8px;font-size:14px;font-weight:500;color:var(--tx)}
+.msp .tab svg{width:18px;height:18px}
+.msp .tab.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.msp .tab.ok:not(.on){border-color:var(--ok);color:var(--ok)}
+/* section rows */
+.msp .sec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.75fr);gap:32px;padding:26px 0;border-top:1px solid #e9e9ee}
+.msp .card>.sec:first-child,.msp .m-b>.sec:first-child{border-top:0}
+.msp .sec-l{display:flex;gap:14px}
+.msp .sec-l .ck{width:24px;height:24px;margin-top:1px;color:var(--tx)}
+.msp .sec.done .sec-l .ck{color:var(--ok)}
+.msp .sec-l h3{margin:0 0 8px;font-size:16px;font-weight:500}
+.msp .sec-l p{margin:0;color:#494d5b;font-size:14px}
+.msp .sec-l p.note{color:#0b57c1;font-size:12px;margin-top:12px}
+.msp .sec-l p.info{background:#e5f0ff;color:#0b57c1;font-size:12px;padding:8px 12px;border-radius:6px;margin-top:14px}
+.msp .sec-r{display:flex;flex-direction:column;gap:18px;min-width:0}
+.msp .grid1,.msp .grid2,.msp .grid3{display:grid;gap:14px 12px}
+.msp .grid1{grid-template-columns:minmax(0,.6fr)}
+.msp .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.msp .grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* fields */
+.msp .f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.msp .f>label{font-size:12px;font-weight:500;color:#3b3f51}
+.msp .req::after{content:" *";color:#d0021b}
+.msp input[type=text],.msp select{width:100%;height:38px;padding:0 10px;font:400 13px/1 inherit;font-family:inherit;color:var(--tx);background:#fff;border:1px solid var(--bd);border-radius:4px;outline:0}
+.msp input::placeholder{color:#a9abb3}
+.msp select{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23282c3f' stroke-width='2.5'/%3E%3C/svg%3E") no-repeat right 10px center/16px;padding-right:32px}
+.msp input:focus,.msp select:focus{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
+.msp .ro,.msp input:disabled{background:#f2f2f5;color:#494d5b}
+.msp .err{display:none;color:var(--er);font-size:11px}
+.msp .f.bad .err{display:block}
+.msp .f.bad input,.msp .f.bad select{border-color:var(--er)}
+.msp .msg-err{color:var(--er);font-size:12px}
+.msp .msg-err.pad{padding:0 4px 14px}
+.msp .ok-note{color:#0a7a62;background:#e6f7f3;border-radius:6px;padding:8px 12px;font-size:12px}
+.msp .inline{display:flex;gap:12px}
+.msp .inline .btn{height:38px;flex:none}
+.msp .chk{display:flex;align-items:center;gap:10px;background:#f3f3f6;border-radius:4px;padding:8px 12px;font-size:12px;width:fit-content;cursor:pointer}
+.msp .chk input,.msp .opt input{accent-color:var(--ac);width:16px;height:16px;margin:0}
+.msp .opts{gap:12px}
+.msp .opt{display:flex;align-items:center;gap:10px;background:#f3f3f6;border:1px solid transparent;border-radius:6px;padding:12px 14px;font-size:12px;cursor:pointer}
+.msp .opt:has(input:checked){border-color:var(--ac);background:var(--acl)}
+/* buttons */
+.msp .btn{display:inline-flex;align-items:center;gap:6px;justify-content:center;height:40px;padding:0 22px;border:1px solid var(--ac);background:var(--ac);color:#fff;font-size:14px;font-weight:500;border-radius:4px}
+.msp .btn:hover:not(:disabled){filter:brightness(.92)}
+.msp .btn.ghost{background:#fff;color:var(--ac)}
+.msp .btn:disabled{background:#d4d5d9;border-color:#d4d5d9;color:#8a8d99;cursor:not-allowed}
+.msp .btn .ar{width:14px;height:14px}.msp .btn .ar.l{transform:rotate(180deg)}
+.msp .link{background:none;border:0;color:var(--ac);font-size:12px;text-decoration:underline;padding:0}
+.msp .nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px}
+/* dropzone */
+.msp .drop{border:1px dashed var(--ac);background:var(--acl);border-radius:6px;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px;cursor:pointer;text-align:center}
+.msp .drop.sm{min-height:84px;padding:10px}
+.msp .drop.over{background:color-mix(in srgb,var(--ac) 18%,#fff)}
+.msp .drop.bad{border-color:var(--er)}
+.msp .drop-empty{display:flex;flex-direction:column;align-items:center;gap:10px}
+.msp .drop-empty p{margin:0;color:var(--ac);font-size:12px}
+.msp .drop-empty b{color:var(--er)}
+.msp .up{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--ac);color:#fff}
+.msp .up svg{width:18px;height:18px}
+.msp .drop.sm .up{width:28px;height:28px}
+.msp .drop-file{display:none;align-items:center;gap:10px;font-size:13px;word-break:break-all}
+.msp .drop.has .drop-empty{display:none}.msp .drop.has .drop-file{display:flex}
+.msp .drop .fi{color:var(--ac)}
+.msp .drop-err{color:var(--er);font-size:11px}
+/* chips + items */
+.msp .chips{display:flex;flex-direction:column;gap:8px}
+.msp .chip{display:flex;align-items:center;gap:12px;background:#f6f4fe;border:1px solid #e1daf9;border-radius:6px;padding:10px 12px;font-size:13px}
+.msp .chip b{font-weight:500;letter-spacing:.3px}
+.msp .chip span{color:var(--mu);font-size:12px;flex:1}
+.msp .item{background:#fff;border-radius:16px;box-shadow:0 2px 14px rgba(40,44,63,.08);padding:18px 28px;margin-bottom:18px}
+.msp .item-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.msp .item-h b{font-size:16px;font-weight:500;flex:1}
+.msp .item-h .acts{display:flex;gap:14px}
+.msp .item dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 20px;margin:0}
+.msp .item dt{font-size:11px;color:var(--mu)}.msp .item dd{margin:2px 0 0;font-size:13px;word-break:break-word}
+.msp .addcard{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;border:1px solid #b9a8f2;color:var(--ac);font-size:15px;font-weight:400;padding:28px}
+.msp .addcard svg{width:36px;height:36px}
+.msp .addcard:hover{background:var(--acl)}
+.msp .tags{display:flex;flex-wrap:wrap;gap:8px}
+.msp .tags label{display:flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:16px;padding:6px 12px;font-size:12px;cursor:pointer}
+.msp .tags label:has(input:checked){border-color:var(--ac);background:var(--acl);color:var(--ac)}
+.msp .tags input{accent-color:var(--ac);margin:0}
+.msp .gbox{background:#f8f8fa;border-radius:8px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:12px;color:#494d5b}
+.msp .gbox p{margin:0}.msp .illu{width:140px;height:96px}
+.msp .gbox.found{align-items:stretch;text-align:left}
+.msp .gbox dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0}
+.msp .gbox dt{font-size:11px;color:var(--mu)}.msp .gbox dd{margin:2px 0 0;font-size:13px;color:var(--tx);font-weight:500}
+/* modal */
+.msp .modal{position:fixed;inset:0;z-index:9999;background:rgba(40,44,63,.62);display:flex;align-items:center;justify-content:center;padding:16px}
+.msp .modal[hidden]{display:none}
+.msp .m-card{background:#fff;border-radius:14px;width:min(1000px,100%);max-height:90vh;display:flex;flex-direction:column;box-shadow:0 18px 60px rgba(0,0,0,.3)}
+.msp .m-card.small{width:min(560px,100%)}
+.msp .m-h{display:flex;align-items:center;gap:10px;padding:20px 24px 12px}
+.msp .m-h h2{margin:0;font-size:22px;font-weight:700;flex:1}
+.msp .m-x{border:0;background:none;color:var(--tx);padding:4px}
+.msp .m-b{padding:0 24px;overflow:auto;flex:1}
+.msp .m-b>.sec{padding:22px 0}
+.msp .m-card.small .m-b{padding-bottom:16px}
+.msp .m-f{display:flex;justify-content:flex-end;gap:14px;padding:16px 24px;border-top:1px solid #e9e9ee}
+/* done + toast */
+.msp .done{text-align:center;padding:48px 24px}
+.msp .done .big{width:64px;height:64px;color:var(--ok)}
+.msp .done h2{margin:12px 0 6px;font-size:22px}
+.msp .done p{margin:0 auto 6px;max-width:520px;color:#494d5b}
+.msp .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#282c3f;color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:10000;max-width:92vw}
+.msp .toast.show{opacity:1;transform:translate(-50%,0)}
+.msp [hidden]{display:none!important}
+@media (max-width:760px){
+  .msp .card{padding:6px 16px}
+  .msp .msp-tabs{gap:6px;padding:6px}
+  .msp .tab{font-size:11px;height:48px;flex-direction:column;gap:2px;padding:0 4px}
+  .msp .sec{grid-template-columns:1fr;gap:16px;padding:20px 0}
+  .msp .grid1,.msp .grid2,.msp .grid3{grid-template-columns:1fr}
+  .msp .item dl{grid-template-columns:1fr 1fr}
+  .msp .gbox dl{grid-template-columns:1fr}
+  .msp .m-card{max-height:96vh}
+  .msp .m-h h2{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){.msp .toast{transition:none}}
+</style>
+
+<script>
+{% raw %}
+(function () {
+  document.querySelectorAll('.msp').forEach(init);
+
+  function init(root) {
+    const $ = (s, r) => (r || root).querySelector(s);
+    const $$ = (s, r) => [...(r || root).querySelectorAll(s)];
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const cfg = { endpoint: (root.dataset.endpoint || '').trim(), maxMb: +root.dataset.maxmb || 2 };
+
+    /* ---------- reference data ---------- */
+    const STATES = { '01': 'Jammu & Kashmir', '02': 'Himachal Pradesh', '03': 'Punjab', '04': 'Chandigarh', '05': 'Uttarakhand', '06': 'Haryana', '07': 'Delhi', '08': 'Rajasthan', '09': 'Uttar Pradesh', '10': 'Bihar', '11': 'Sikkim', '12': 'Arunachal Pradesh', '13': 'Nagaland', '14': 'Manipur', '15': 'Mizoram', '16': 'Tripura', '17': 'Meghalaya', '18': 'Assam', '19': 'West Bengal', '20': 'Jharkhand', '21': 'Odisha', '22': 'Chhattisgarh', '23': 'Madhya Pradesh', '24': 'Gujarat', '26': 'Dadra & Nagar Haveli and Daman & Diu', '27': 'Maharashtra', '29': 'Karnataka', '30': 'Goa', '31': 'Lakshadweep', '32': 'Kerala', '33': 'Tamil Nadu', '34': 'Puducherry', '35': 'Andaman & Nicobar Islands', '36': 'Telangana', '37': 'Andhra Pradesh', '38': 'Ladakh', '97': 'Other Territory' };
+    const BANKS = { SBIN: 'State Bank of India', HDFC: 'HDFC Bank', ICIC: 'ICICI Bank', UTIB: 'Axis Bank', PUNB: 'Punjab National Bank', BARB: 'Bank of Baroda', KKBK: 'Kotak Mahindra Bank', IDIB: 'Indian Bank', CNRB: 'Canara Bank', YESB: 'Yes Bank', UBIN: 'Union Bank of India', INDB: 'IndusInd Bank', BKID: 'Bank of India', IOBA: 'Indian Overseas Bank', FDRL: 'Federal Bank' };
+    const PLATFORMS = ['Amazon', 'Flipkart', 'Meesho', 'Ajio', 'Nykaa', 'Own website', 'Other'];
+    const CATS = {};
+    (root.dataset.cats || '').split(/\r?\n|<br\s*\/?>/).forEach(l => {
+      const i = l.indexOf(':'); if (i < 1) return;
+      const k = l.slice(0, i).trim(), v = l.slice(i + 1).split(',').map(s => s.trim()).filter(Boolean);
+      if (k && v.length) CATS[k] = v;
+    });
+
+    /* ---------- validation ---------- */
+    function gstOk(g) {
+      if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g)) return false;
+      const cs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; let sum = 0;
+      for (let i = 0; i < 14; i++) { const v = cs.indexOf(g[i]) * (i % 2 === 0 ? 1 : 2); sum += Math.floor(v / 36) + (v % 36); }
+      return cs[(36 - (sum % 36)) % 36] === g[14];
+    }
+    function gstInfo(raw) {
+      const g = String(raw || '').trim().toUpperCase();
+      if (!gstOk(g) || !STATES[g.slice(0, 2)]) return null;
+      return { gstin: g, pan: g.slice(2, 12), state: STATES[g.slice(0, 2)] };
+    }
+    const R = {
+      name: v => /^[A-Za-z][A-Za-z .'-]{2,59}$/.test(v) || 'Enter a valid full name (letters only)',
+      phone: v => /^[6-9]\d{9}$/.test(v) || 'Enter a valid 10 digit mobile number',
+      email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) || 'Enter a valid email ID',
+      gstin: v => (gstInfo(v) ? true : 'Enter a valid 15 character GSTIN'),
+      tan: v => /^[A-Z]{4}[0-9]{5}[A-Z]$/.test(v) || 'Enter a valid TAN (e.g. ABCD12345E)',
+      ifsc: v => /^[A-Z]{4}0[A-Z0-9]{6}$/.test(v) || 'Enter a valid 11 character IFSC code',
+      acc: v => /^\d{9,18}$/.test(v) || 'Account number must be 9 to 18 digits',
+      pin: v => /^[1-9]\d{5}$/.test(v) || 'Enter a valid 6 digit pincode',
+      int: v => /^[1-9]\d{0,8}$/.test(v) || 'Enter a whole number greater than 0',
+      num: v => (/^\d+(\.\d{1,2})?$/.test(v) && +v > 0) || 'Enter a valid amount greater than 0',
+      text: v => v.length >= 2 || 'Enter at least 2 characters',
+      url: v => /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,}(\/\S*)?$/i.test(v) || 'Enter a valid link'
+    };
+    function msg(el) {
+      if (el.closest('[hidden]')) return '';
+      let v = (el.value || '').trim();
+      if (el.dataset.upper) v = v.toUpperCase();
+      if (!v) return el.hasAttribute('data-opt') ? '' : (el.tagName === 'SELECT' ? 'Please select an option' : 'This field is required');
+      const f = R[el.dataset.rule]; if (!f) return '';
+      const r = f(v); return r === true ? '' : r;
+    }
+    function setErr(el, m) {
+      const f = el.closest('.f'); if (!f) return;
+      f.classList.toggle('bad', !!m);
+      const e = f.querySelector('.err'); if (e) e.textContent = m || '';
+    }
+    function quiet(scope) { return $$('[data-rule]', scope).every(el => !msg(el)); }
+    function loud(scope) {
+      let first = null;
+      $$('[data-rule]', scope).forEach(el => { const m = msg(el); setErr(el, m); if (m && !first) first = el; });
+      return first;
+    }
+
+    /* ---------- state ---------- */
+    const S = { gst: [], wh: [], br: [], bankReq: false };
+    const FILES = { signature: null, cheque: null, brandLogo: null, brandDoc: null };
+    const M = { gst: null, wh: null, whEdit: -1, brEdit: -1 };
+    let cur = 0;
+
+    const val = n => { const e = $('[name="' + n + '"]'); return e ? e.value.trim() : ''; };
+    const tdsVal = () => (($('input[name=tds]:checked') || {}).value) || '';
+
+    function toast(t) {
+      const el = $('#toast'); el.textContent = t; el.classList.add('show');
+      clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 3200);
+    }
+    const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+
+    /* ---------- file drop zones ---------- */
+    $$('.drop').forEach(d => {
+      const key = d.dataset.key, input = $('input[type=file]', d);
+      d.addEventListener('click', e => { if (e.target.closest('[data-remove]')) return; input.click(); });
+      d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+      input.addEventListener('click', e => e.stopPropagation());
+      input.addEventListener('change', () => { if (input.files[0]) takeFile(key, input.files[0]); input.value = ''; });
+      ['dragenter', 'dragover'].forEach(ev => d.addEventListener(ev, e => { e.preventDefault(); d.classList.add('over'); }));
+      ['dragleave', 'drop'].forEach(ev => d.addEventListener(ev, e => { e.preventDefault(); d.classList.remove('over'); }));
+      d.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) takeFile(key, f); });
+      $('[data-remove]', d).addEventListener('click', e => { e.stopPropagation(); FILES[key] = null; drawDrop(key); refresh(); });
+    });
+    function drawDrop(key, err) {
+      const d = $('.drop[data-key="' + key + '"]'), f = FILES[key];
+      d.classList.toggle('has', !!f); d.classList.toggle('bad', !!err);
+      $('.drop-name', d).textContent = f ? f.name + ' (' + fmtSize(f.size) + ')' : '';
+      $('.drop-err', d).textContent = err || '';
+    }
+    function takeFile(key, file) {
+      const d = $('.drop[data-key="' + key + '"]'), accept = $('input[type=file]', d).accept.split(',');
+      const okType = accept.some(a => a.endsWith('/*') ? file.type.startsWith(a.slice(0, -1)) : a === file.type);
+      if (!okType) return drawDrop(key, 'Unsupported file type. Upload ' + accept.map(a => a.split('/')[1]).join(' / ').toUpperCase());
+      if (file.size > cfg.maxMb * 1048576) return drawDrop(key, 'File is too large. Maximum ' + cfg.maxMb + ' MB');
+      const rd = new FileReader();
+      rd.onload = () => { FILES[key] = { name: file.name, type: file.type, size: file.size, data: rd.result }; drawDrop(key); refresh(); };
+      rd.onerror = () => drawDrop(key, 'Could not read the file. Try again');
+      rd.readAsDataURL(file);
+    }
+
+    /* ---------- generic input handling ---------- */
+    root.addEventListener('input', e => {
+      const el = e.target;
+      if (el.dataset && el.dataset.upper) { const p = el.selectionStart; el.value = el.value.toUpperCase().replace(/\s/g, ''); try { el.setSelectionRange(p, p); } catch (x) { } }
+      if (['phone', 'pin', 'int', 'acc'].includes(el.dataset && el.dataset.rule) && el.name !== 'w_gstin') el.value = el.value.replace(/\D/g, '');
+      if (el.matches && el.matches('[data-rule]') && el.closest('.f').classList.contains('bad')) setErr(el, msg(el));
+      if (el.name === 'ifsc') { const b = BANKS[el.value.slice(0, 4)]; if (b && el.value.length >= 4 && !val('bank')) { $('[name=bank]').value = b; } }
+      if (['pname', 'pphone', 'pemail'].includes(el.name) && $('#same-owner').checked) copyOwner();
+      if (el.name === 'g_gstin') { M.gst = null; resetGstBox(); }
+      if (el.name === 'w_gstin') { M.wh = null; $('#w-box').hidden = false; $('#w-addr').hidden = true; }
+      if (['ifsc', 'acc', 'bank', 'holder'].includes(el.name) && S.bankReq) { S.bankReq = false; drawBankVerify(); }
+      refresh();
+    });
+    root.addEventListener('change', e => {
+      const el = e.target;
+      if (el.name === 'tds') { $('#tan-wrap').hidden = el.value !== 'yes'; $('#tds-err').hidden = true; }
+      if (el.id === 'same-owner') { toggleOwner(el.checked); }
+      if (el.name === 'b_cat') drawSecondary();
+      if (el.name === 'b_other') $('#b-plat-wrap').hidden = el.value !== 'Yes';
+      if (el.matches('select[data-rule]')) setErr(el, msg(el));
+      refresh();
+    });
+    root.addEventListener('focusout', e => { const el = e.target; if (el.matches && el.matches('[data-rule]') && el.tagName !== 'SELECT') setErr(el, msg(el)); });
+
+    /* ---------- owner = primary ---------- */
+    function copyOwner() {
+      $('[name=oname]').value = val('pname'); $('[name=ophone]').value = val('pphone'); $('[name=oemail]').value = val('pemail');
+      ['oname', 'ophone', 'oemail'].forEach(n => setErr($('[name=' + n + ']'), ''));
+    }
+    function toggleOwner(on) {
+      ['oname', 'ophone', 'oemail'].forEach(n => { const e = $('[name=' + n + ']'); e.disabled = on; if (!on) e.value = ''; });
+      if (on) copyOwner();
+    }
+
+    /* ---------- tabs / nav ---------- */
+    function sellerReady() { return quiet($('[data-panel="0"]')) && S.gst.length > 0 && !!tdsVal() && !!FILES.signature && !!FILES.cheque && S.bankReq; }
+    function validateSeller() {
+      const p = $('[data-panel="0"]'); const first = loud(p); let target = first;
+      $('#gst-err').hidden = S.gst.length > 0; if (!S.gst.length && !target) target = $('#gst-err');
+      $('#tds-err').hidden = !!tdsVal(); if (!tdsVal() && !target) target = $('#tds-err');
+      ['signature', 'cheque'].forEach(k => { if (!FILES[k]) { drawDrop(k, 'This file is required'); if (!target) target = $('.drop[data-key=' + k + ']'); } });
+      $('#bank-err').hidden = S.bankReq; if (!S.bankReq && !target) target = $('#bank-err');
+      if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); if (target.focus) target.focus({ preventScroll: true }); toast('Please complete the highlighted details'); return false; }
+      return true;
+    }
+    function goTab(n) {
+      if (n > 0 && !sellerReady()) { if (cur === 0) validateSeller(); else n = 0; if (cur === 0) return; }
+      if (n > 1 && !S.wh.length) { $('#wh-err').hidden = false; n = 1; if (cur === 1) { toast('Add at least one warehouse'); return; } }
+      cur = n;
+      $$('.tab').forEach((t, i) => t.classList.toggle('on', i === n));
+      $$('.panel').forEach((p, i) => p.hidden = i !== n);
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      refresh();
+    }
+    $$('.tab').forEach(t => t.addEventListener('click', () => goTab(+t.dataset.tab)));
+
+    /* ---------- GSTIN list + modal ---------- */
+    function drawGst() {
+      $('#gst-list').innerHTML = S.gst.map((g, i) => '<div class="chip"><b>' + esc(g.gstin) + '</b><span>PAN ' + esc(g.pan) + ' · ' + esc(g.state) + '</span><button type="button" class="link" data-act="del-gst" data-i="' + i + '">Remove</button></div>').join('');
+      $('#gst-err').hidden = true;
+      $('#wh-gst-list').innerHTML = S.gst.map(g => '<option value="' + esc(g.gstin) + '">').join('');
+    }
+    function resetGstBox() { const b = $('#g-box'); b.className = 'gbox'; b.innerHTML = '<p>Enter GST number to view details</p>'; }
+    function openModal(name) {
+      const m = $('[data-modal="' + name + '"]'); m.hidden = false; document.documentElement.style.overflow = 'hidden';
+      const f = $('input:not([readonly]):not([type=hidden])', m); if (f) setTimeout(() => f.focus(), 30); refresh();
+    }
+    function closeModal(m) {
+      m.hidden = true; document.documentElement.style.overflow = '';
+      $$('.f.bad', m).forEach(f => f.classList.remove('bad'));
+    }
+    $$('.modal').forEach(m => {
+      m.addEventListener('mousedown', e => { if (e.target === m) closeModal(m); });
+      $$('[data-close]', m).forEach(b => b.addEventListener('click', () => closeModal(m)));
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.modal').forEach(m => { if (!m.hidden && root.contains(m)) closeModal(m); }); });
+
+    function verifyGst(input, onOk) {
+      const info = gstInfo(input.value);
+      if (!info) { setErr(input, 'Enter a valid 15 character GSTIN'); return null; }
+      setErr(input, ''); onOk(info); return info;
+    }
+
+    /* ---------- warehouse ---------- */
+    const timeOpts = (() => { let h = ''; for (let i = 0; i < 48; i++) { const hh = Math.floor(i / 2), mm = i % 2 ? '30' : '00', ap = hh >= 12 ? 'PM' : 'AM', h12 = hh % 12 || 12; h += '<option value="' + String(hh).padStart(2, '0') + ':' + mm + '">' + h12 + ':' + mm + ' ' + ap + '</option>'; } return h; })();
+    $('[name=w_start]').insertAdjacentHTML('beforeend', timeOpts);
+    $('[name=w_end]').insertAdjacentHTML('beforeend', timeOpts);
+    const t12 = v => { if (!v) return ''; const [h, m] = v.split(':'); const n = +h; return (n % 12 || 12) + ':' + m + ' ' + (n >= 12 ? 'PM' : 'AM'); };
+
+    function whValid() { return !!M.wh && M.wh.gstin === val('w_gstin').toUpperCase() && quiet($('[data-modal=wh]')) && val('w_start') < val('w_end'); }
+    function showWhAddr(info) {
+      M.wh = info; $('#w-box').hidden = true; $('#w-addr').hidden = false;
+      $('#w-v-gstin').value = info.gstin; $('#w-v-pan').value = info.pan; $('#w-v-state').value = info.state;
+    }
+    function openWh(i) {
+      M.whEdit = i; const m = $('[data-modal=wh]');
+      $$('input:not([readonly]),select', m).forEach(e => { if (e.type !== 'button') e.value = ''; });
+      $('#w-box').hidden = false; $('#w-addr').hidden = true; M.wh = null;
+      $('#wh-title').textContent = 'Warehouse ' + (i >= 0 ? i + 1 : S.wh.length + 1) + ' Details :';
+      $('[data-act=save-wh]').textContent = i >= 0 ? 'Save Warehouse' : 'Add Warehouse';
+      if (i >= 0) {
+        const w = S.wh[i]; showWhAddr({ gstin: w.gstin, pan: w.pan, state: w.state });
+        Object.entries({ w_gstin: w.gstin, w_a1: w.address1, w_a2: w.address2, w_city: w.city, w_pin: w.pincode, w_phone: w.phone, w_email: w.email, w_cap: w.capacity, w_start: w.startTime, w_end: w.endTime }).forEach(([k, v]) => $('[name=' + k + ']').value = v || '');
+      }
+      openModal('wh');
+    }
+    function drawWh() {
+      $('#wh-list').innerHTML = S.wh.map((w, i) => '<div class="item"><div class="item-h"><svg><use href="#i-wh"/></svg><b>Warehouse ' + (i + 1) + '</b><div class="acts"><button type="button" class="link" data-act="edit-wh" data-i="' + i + '">Edit</button><button type="button" class="link" data-act="del-wh" data-i="' + i + '">Delete</button></div></div><dl>'
+        + '<div><dt>GSTIN</dt><dd>' + esc(w.gstin) + '</dd></div>'
+        + '<div style="grid-column:span 2"><dt>Address</dt><dd>' + esc([w.address1, w.address2, w.city, w.state, w.pincode].filter(Boolean).join(', ')) + '</dd></div>'
+        + '<div><dt>Contact</dt><dd>' + esc(w.phone) + '</dd></div><div><dt>Email</dt><dd>' + esc(w.email) + '</dd></div><div><dt>Per day capacity</dt><dd>' + esc(w.capacity) + ' units</dd></div>'
+        + '<div><dt>Timings</dt><dd>' + t12(w.startTime) + ' – ' + t12(w.endTime) + '</dd></div></dl></div>').join('');
+      $('#wh-err').hidden = true;
+    }
+
+    /* ---------- brand ---------- */
+    $('[name=b_cat]').insertAdjacentHTML('beforeend', Object.keys(CATS).map(k => '<option>' + esc(k) + '</option>').join(''));
+    $('#b-plat').innerHTML = PLATFORMS.map(p => '<label><input type="checkbox" value="' + p + '"> ' + p + '</label>').join('');
+    function drawSecondary(sel) {
+      const c = val('b_cat'), w = $('#b-sec-wrap'); w.hidden = !c;
+      $('#b-sec').innerHTML = (CATS[c] || []).map(s => '<label><input type="checkbox" value="' + esc(s) + '"' + (sel && sel.includes(s) ? ' checked' : '') + '> ' + esc(s) + '</label>').join('');
+    }
+    const checked = sel => $$(sel + ' input:checked').map(i => i.value);
+    function brValid() {
+      const m = $('[data-modal=br]');
+      return quiet(m) && !!$('input[name=b_type]:checked') && checked('#b-sec').length > 0 && !!$('input[name=b_other]:checked') && ($('input[name=b_other]:checked').value === 'No' || checked('#b-plat').length > 0);
+    }
+    function openBr(i) {
+      M.brEdit = i; const m = $('[data-modal=br]');
+      $$('input[type=text],select', m).forEach(e => e.value = '');
+      $$('input[type=radio],input[type=checkbox]', m).forEach(e => e.checked = false);
+      FILES.brandLogo = FILES.brandDoc = null; drawDrop('brandLogo'); drawDrop('brandDoc');
+      $('#b-sec-wrap').hidden = true; $('#b-plat-wrap').hidden = true;
+      $('#br-title').textContent = 'Brand ' + (i >= 0 ? i + 1 : S.br.length + 1) + ' Details :';
+      $('[data-act=save-br]').textContent = i >= 0 ? 'Save Brand' : 'Add Brand';
+      if (i >= 0) {
+        const b = S.br[i];
+        Object.entries({ b_name: b.name, b_cat: b.primaryCategory, b_sku: b.totalSkus, b_asp: b.avgSellingPrice, b_web: b.website }).forEach(([k, v]) => $('[name=' + k + ']').value = v || '');
+        const t = $('input[name=b_type][value="' + b.sellerType + '"]'); if (t) t.checked = true;
+        drawSecondary(b.secondaryCategories);
+        const o = $('input[name=b_other][value="' + b.sellsElsewhere + '"]'); if (o) o.checked = true;
+        $('#b-plat-wrap').hidden = b.sellsElsewhere !== 'Yes';
+        $$('#b-plat input').forEach(c => c.checked = (b.platforms || []).includes(c.value));
+        FILES.brandLogo = b.logo; FILES.brandDoc = b.document; drawDrop('brandLogo'); drawDrop('brandDoc');
+      }
+      openModal('br');
+    }
+    function drawBr() {
+      $('#br-list').innerHTML = S.br.map((b, i) => '<div class="item"><div class="item-h"><svg><use href="#i-tag"/></svg><b>' + esc(b.name) + '</b><div class="acts"><button type="button" class="link" data-act="edit-br" data-i="' + i + '">Edit</button><button type="button" class="link" data-act="del-br" data-i="' + i + '">Delete</button></div></div><dl>'
+        + '<div><dt>Seller type</dt><dd>' + esc(b.sellerType) + '</dd></div><div><dt>Primary category</dt><dd>' + esc(b.primaryCategory) + '</dd></div><div><dt>Secondary categories</dt><dd>' + esc(b.secondaryCategories.join(', ')) + '</dd></div>'
+        + '<div><dt>Total SKUs</dt><dd>' + esc(b.totalSkus) + '</dd></div><div><dt>Avg. selling price</dt><dd>₹' + esc(b.avgSellingPrice) + '</dd></div><div><dt>Other platforms</dt><dd>' + esc(b.sellsElsewhere === 'Yes' ? b.platforms.join(', ') : 'No') + '</dd></div></dl></div>').join('');
+      $('#br-err').hidden = true;
+    }
+
+    /* ---------- bank verification ---------- */
+    function bankFieldsOk() { return ['bank', 'ifsc', 'acc', 'holder'].every(n => !msg($('[name=' + n + ']'))); }
+    function drawBankVerify() {
+      const b = $('#bank-verify'); b.textContent = S.bankReq ? 'Verification requested' : 'Send Amount To Verify Account';
+      $('#bank-note').hidden = !S.bankReq;
+    }
+
+    /* ---------- refresh (checks / disabled states) ---------- */
+    function refresh() {
+      const secs = {
+        gst: () => S.gst.length > 0,
+        primary: () => quiet($('#sec-primary')),
+        owner: () => quiet($('#sec-owner')),
+        tds: () => tdsVal() === 'no' || (tdsVal() === 'yes' && !msg($('[name=tan]'))),
+        sign: () => !!FILES.signature,
+        bank: () => !!FILES.cheque && bankFieldsOk(),
+        bverify: () => S.bankReq
+      };
+      $$('.panel[data-panel="0"] .sec').forEach(s => s.classList.toggle('done', !!(secs[s.dataset.sec] && secs[s.dataset.sec]())));
+      $('#bank-verify').disabled = !(bankFieldsOk() && FILES.cheque) || S.bankReq;
+      const gi = $('[name=g_gstin]'); $('[data-act=verify-gst]').disabled = gi.value.length !== 15;
+      $('[data-act=save-gst]').disabled = !(M.gst && M.gst.gstin === gi.value.toUpperCase());
+      $('[data-act=verify-wh]').disabled = val('w_gstin').length !== 15;
+      $('[data-act=save-wh]').disabled = !whValid();
+      $('[data-act=save-br]').disabled = !brValid();
+      $('#submit-btn').disabled = !S.br.length;
+      const ok0 = sellerReady(), ok1 = S.wh.length > 0, ok2 = S.br.length > 0;
+      $$('.tab').forEach((t, i) => t.classList.toggle('ok', [ok0, ok1, ok2][i] && !t.classList.contains('on')));
+    }
+
+    /* ---------- click actions ---------- */
+    root.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]'); if (!b) return;
+      const act = b.dataset.act, i = +b.dataset.i;
+      switch (act) {
+        case 'open-gst': $('[name=g_gstin]').value = ''; M.gst = null; resetGstBox(); setErr($('[name=g_gstin]'), ''); openModal('gst'); break;
+        case 'verify-gst': verifyGst($('[name=g_gstin]'), info => {
+          M.gst = info; const bx = $('#g-box'); bx.className = 'gbox found';
+          bx.innerHTML = '<dl><div><dt>GSTIN</dt><dd>' + esc(info.gstin) + '</dd></div><div><dt>PAN</dt><dd>' + esc(info.pan) + '</dd></div><div><dt>State</dt><dd>' + esc(info.state) + '</dd></div></dl>';
+        }); refresh(); break;
+        case 'save-gst':
+          if (S.gst.some(g => g.gstin === M.gst.gstin)) { setErr($('[name=g_gstin]'), 'This GSTIN is already added'); break; }
+          S.gst.push(M.gst); drawGst(); closeModal($('[data-modal=gst]')); refresh(); break;
+        case 'del-gst': S.gst.splice(i, 1); drawGst(); refresh(); break;
+        case 'open-wh': openWh(-1); break;
+        case 'edit-wh': openWh(i); break;
+        case 'del-wh': if (confirm('Delete this warehouse?')) { S.wh.splice(i, 1); drawWh(); refresh(); } break;
+        case 'verify-wh': verifyGst($('[name=w_gstin]'), showWhAddr); refresh(); break;
+        case 'save-wh': {
+          if (!whValid()) { loud($('[data-modal=wh]')); break; }
+          const w = { gstin: M.wh.gstin, pan: M.wh.pan, state: M.wh.state, address1: val('w_a1'), address2: val('w_a2'), city: val('w_city'), pincode: val('w_pin'), phone: val('w_phone'), email: val('w_email'), capacity: val('w_cap'), startTime: val('w_start'), endTime: val('w_end') };
+          if (M.whEdit >= 0) S.wh[M.whEdit] = w; else S.wh.push(w);
+          drawWh(); closeModal($('[data-modal=wh]')); refresh(); break;
+        }
+        case 'open-br': openBr(-1); break;
+        case 'edit-br': openBr(i); break;
+        case 'del-br': if (confirm('Delete this brand?')) { S.br.splice(i, 1); drawBr(); refresh(); } break;
+        case 'save-br': {
+          if (!brValid()) { loud($('[data-modal=br]')); break; }
+          const br = { name: val('b_name'), sellerType: $('input[name=b_type]:checked').value, logo: FILES.brandLogo, document: FILES.brandDoc, primaryCategory: val('b_cat'), secondaryCategories: checked('#b-sec'), totalSkus: val('b_sku'), avgSellingPrice: val('b_asp'), sellsElsewhere: $('input[name=b_other]:checked').value, platforms: $('input[name=b_other]:checked').value === 'Yes' ? checked('#b-plat') : [], website: val('b_web') };
+          if (M.brEdit >= 0) S.br[M.brEdit] = br; else S.br.push(br);
+          FILES.brandLogo = FILES.brandDoc = null; drawBr(); closeModal($('[data-modal=br]')); refresh(); break;
+        }
+        case 'next': goTab(cur + 1); break;
+        case 'prev': goTab(cur - 1); break;
+        case 'submit': submit(b); break;
+      }
+    });
+    $('#bank-verify').addEventListener('click', () => {
+      /* Real penny-drop needs a payment API (Razorpay / Cashfree). Hook it here; for now the request is recorded. */
+      if (!bankFieldsOk()) return;
+      S.bankReq = true; $('#bank-err').hidden = true; drawBankVerify(); refresh();
+    });
+
+    /* ---------- submit to Google Sheet ---------- */
+    async function submit(btn) {
+      if (!sellerReady()) { goTab(0); validateSeller(); return; }
+      if (!S.wh.length) { goTab(1); return; }
+      if (!S.br.length) { $('#br-err').hidden = false; return; }
+      const id = 'SLR-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 5).toUpperCase();
+      const payload = {
+        submissionId: id, submittedAt: new Date().toISOString(), pageUrl: location.href,
+        seller: {
+          gstins: S.gst,
+          primaryContact: { name: val('pname'), phone: val('pphone'), email: val('pemail') },
+          owner: { sameAsPrimary: $('#same-owner').checked, name: val('oname'), phone: val('ophone'), email: val('oemail') },
+          tds: { claim: tdsVal(), tan: tdsVal() === 'yes' ? val('tan').toUpperCase() : '' },
+          signature: FILES.signature,
+          bank: { cheque: FILES.cheque, bankName: val('bank'), accountType: 'Current Account', ifsc: val('ifsc').toUpperCase(), accountNumber: val('acc'), holderName: val('holder'), verification: S.bankReq ? 'Requested' : 'Pending' }
+        },
+        warehouses: S.wh, brands: S.br
+      };
+      if (!cfg.endpoint) { console.log('Payload (no endpoint set):', payload); toast('Google Sheet link is not set. Add the Apps Script URL in the section settings.'); return; }
+      const old = btn.innerHTML; btn.disabled = true; btn.textContent = 'Submitting…';
+      try {
+        const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+        const j = await res.json();
+        if (!j.ok) throw new Error(j.error || 'Server error');
+        $$('.panel').forEach(p => p.hidden = true); $('.msp-tabs').hidden = true;
+        $('#done-title').textContent = root.dataset.successTitle || 'Registration submitted';
+        $('#done-text').textContent = root.dataset.successText || '';
+        $('#done-id').textContent = id; $('#done').hidden = false; root.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        console.error(err); toast('Could not submit right now. Check your internet and try again.');
+        btn.innerHTML = old; btn.disabled = false;
+      }
+    }
+
+    drawGst(); drawWh(); drawBr(); refresh();
+  }
+})();
+{% endraw %}
+</script>
+
+{% schema %}
+{
+  "name": "Seller Registration Form",
+  "tag": "section",
+  "class": "msp-section",
+  "settings": [
+    { "type": "header", "content": "Google Sheet" },
+    { "type": "text", "id": "endpoint", "label": "Google Apps Script Web App URL", "info": "Paste the /exec URL after deploying google-apps-script.gs" },
+    { "type": "range", "id": "max_file_mb", "label": "Max upload size per file (MB)", "min": 1, "max": 5, "step": 1, "default": 2 },
+    { "type": "header", "content": "Look" },
+    { "type": "color", "id": "accent", "label": "Accent colour", "default": "#5333d6" },
+    { "type": "text", "id": "notice", "label": "Top notice bar text", "info": "Leave empty to hide" },
+    { "type": "header", "content": "Brand categories" },
+    { "type": "textarea", "id": "categories", "label": "Categories", "info": "One per line. Format: Primary: Secondary 1, Secondary 2", "default": "Men's Fashion: T-Shirts, Shirts, Jeans, Trousers, Ethnic Wear, Innerwear, Footwear\nWomen's Fashion: Kurtas & Suits, Sarees, Dresses, Tops, Jeans, Lingerie, Footwear\nKids: Boys Clothing, Girls Clothing, Infants, Footwear, Toys\nHome & Living: Bedding, Furniture, Decor, Kitchen & Dining, Storage\nBeauty & Personal Care: Skincare, Makeup, Haircare, Fragrances, Grooming\nAccessories: Bags, Watches, Jewellery, Sunglasses, Belts & Wallets\nElectronics & Gadgets: Audio, Wearables, Mobile Accessories, Smart Home" },
+    { "type": "header", "content": "After submit" },
+    { "type": "text", "id": "success_title", "label": "Success title", "default": "Registration submitted" },
+    { "type": "textarea", "id": "success_text", "label": "Success message", "default": "Thank you. Your seller details have been received. Our team will review them and contact you on your registered phone number and email." }
+  ],
+  "presets": [{ "name": "Seller Registration Form" }]
+}
+{% endschema %}
