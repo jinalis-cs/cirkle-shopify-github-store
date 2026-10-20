@@ -11,13 +11,28 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "seller_registration_form_nCnAQz": {
+      "type": "seller-registration-form",
+      "name": "Seller Registration Form",
+      "settings": {
+        "endpoint": "",
+        "max_file_mb": 2,
+        "accent": "#5333d6",
+        "notice": "",
+        "categories": "Men's Fashion: T-Shirts, Shirts, Jeans, Trousers, Ethnic Wear, Innerwear, Footwear\nWomen's Fashion: Kurtas & Suits, Sarees, Dresses, Tops, Jeans, Lingerie, Footwear\nKids: Boys Clothing, Girls Clothing, Infants, Footwear, Toys\nHome & Living: Bedding, Furniture, Decor, Kitchen & Dining, Storage\nBeauty & Personal Care: Skincare, Makeup, Haircare, Fragrances, Grooming\nAccessories: Bags, Watches, Jewellery, Sunglasses, Belts & Wallets\nElectronics & Gadgets: Audio, Wearables, Mobile Accessories, Smart Home",
+        "success_title": "Registration submitted",
+        "success_text": "Thank you. Your seller details have been received. Our team will review them and contact you on your registered phone number and email."
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "seller_registration_form_nCnAQz"
   ]
 }
