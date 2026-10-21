@@ -11,7 +11,21 @@
   "sections": {
     "main": {
       "type": "seller-main-register",
-      "settings": {}
+      "settings": {
+        "endpoint": "",
+        "login_url": "shopify://pages/seller-register",
+        "terms_url": "",
+        "heading": "Partner with us",
+        "subheading": "One place for all your interactions. Register and start selling today.",
+        "point_1": "Reach millions of customers",
+        "point_2": "Fast, reliable payments",
+        "point_3": "Dedicated partner support",
+        "card_title": "Register as a Partner",
+        "success_title": "Registration successful",
+        "success_text": "Your partner account is ready. Log in with your email and password to complete your seller details.",
+        "color_1": "#ff3f6c",
+        "color_2": "#ff905a"
+      }
     }
   },
   "order": [
