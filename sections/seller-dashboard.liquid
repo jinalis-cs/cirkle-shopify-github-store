@@ -1,0 +1,732 @@
+{%- comment -%}
+  Seller Dashboard (Myntra Partner Portal "Sell With Us" style)
+  Save as: sections/seller-dashboard.liquid  -> add to your dashboard page.
+  Shows the 7-step onboarding form, pre-filled from the Google Sheet for the logged-in seller.
+  Every Save / Next / Submit / later update writes back to the same Google Sheet row.
+{%- endcomment -%}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+
+<div class="mdb" id="mdb-{{ section.id }}" style="--ac: {{ section.settings.accent }};"
+  data-endpoint="{{ section.settings.endpoint | escape }}"
+  data-secret="{{ section.settings.secret | escape }}"
+  data-email="{{ customer.email | escape }}"
+  data-preview="{{ request.design_mode }}"
+  data-login="{{ section.settings.login_url }}"
+  data-logout="{% if customer %}{{ routes.account_logout_url }}{% endif %}"
+  data-gstapi="{{ section.settings.gst_api | escape }}"
+  data-guide="{{ section.settings.guide_url }}"
+  data-maxmb="{{ section.settings.max_file_mb }}"
+  data-cats="{{ section.settings.categories | escape }}"
+  data-terms="{{ section.settings.terms | escape }}">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="d-coins" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3" fill="currentColor"/><path d="M5 9v3c0 1.7 3.1 3 7 3s7-1.3 7-3V9c0 1.7-3.1 3-7 3S5 10.700 5 9zM5 14v3c0 1.7 3.1 3 7 3s7-1.3 7-3v-3c0 1.7-3.1 3-7 3s-7-1.3-7-3z" fill="currentColor"/></symbol>
+    <symbol id="d-id" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 011 1v13a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1zm5 3a2.500 2.500 0 100 5 2.500 2.500 0 000-5zm-4 9h8v-.5c0-1.400-2.700-2-4-2s-4 .6-4 2zM15 9h4v1.500h-4zm0 3h4v1.500h-4zM8 3h8v3H8z" fill="currentColor"/></symbol>
+    <symbol id="d-doc" viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6zM14 2v5h5M9 12h7v1.500H9zm0 3h7v1.500H9z" fill="currentColor"/></symbol>
+    <symbol id="d-wh" viewBox="0 0 24 24"><path d="M3 21V9l9-5 9 5v12h-4v-8H7v8zM9 21v-2h6v2zm0-3.500V16h6v1.500z" fill="currentColor"/></symbol>
+    <symbol id="d-bank" viewBox="0 0 24 24"><path d="M19 9.500c0-3-2.700-5-6-5-2 0-3.800.8-4.900 2H6v3.200C5.300 10.500 5 11.300 5 12.200V16h3v3h3v-1.500h3V19h3v-3.200c1.800-.9 3-2.600 3-4.300V9.500zM15.500 10a1 1 0 110-2 1 1 0 010 2zM3 9h2v3H3z" fill="currentColor"/></symbol>
+    <symbol id="d-tree" viewBox="0 0 24 24"><path d="M9 3h6v5h-2.200v2H18v4h1.500v5h-5v-5H16v-2.200h-8V14h1.500v5h-5v-5H6v-4h5.200V8H9z" fill="currentColor"/></symbol>
+    <symbol id="d-edit" viewBox="0 0 24 24"><path d="M3 4h12v2H5v12h10v-3h2v5H3zM9 14l1.500-4 8-8 2.500 2.500-8 8zM6 8h6v1.500H6z" fill="currentColor"/></symbol>
+    <symbol id="d-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="d-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13M10 11v6M14 11v6" fill="none" stroke="currentColor" stroke-width="1.700" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs></svg>
+
+  {%- if section.settings.notice != blank -%}<div class="mdb-notice">{{ section.settings.notice }}</div>{%- endif -%}
+
+  <div class="mdb-load" id="d-load">Loading your details…</div>
+  <div class="mdb-nologin" id="d-nologin" hidden>
+    <h2>Please log in to continue</h2>
+    <p>You need to be logged in to view and update your seller details.</p>
+    {%- if section.settings.login_url != blank -%}<a class="btn" href="{{ section.settings.login_url }}">Go to login</a>{%- endif -%}
+  </div>
+
+  <div class="mdb-app" id="d-app" hidden>
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="side">
+      <div class="prog"><div class="prog-t"><b>Completion Progress</b><span id="d-pct">0% Complete</span></div><div class="bar"><i id="d-bar"></i></div></div>
+      <nav class="steps" id="d-steps" aria-label="Onboarding steps"></nav>
+      <div class="who"><span id="d-who"></span><button type="button" class="link" data-act="logout">Logout</button></div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <main class="main">
+      <div class="status" id="d-status" role="status"></div>
+
+      <!-- 0 GSTIN CHECK -->
+      <section class="pane" data-pane="0" hidden>
+        <h2>GSTIN Check</h2>
+        <p class="lead">Please enter your GST Identification Number.</p>
+        <p class="lead">Note - Based on this entry, some of the details in the form will be automatically filled.</p>
+        <div class="f wide"><label>GSTIN Details <span class="info" title="15 character GST number, e.g. 24ABCDE1234F1Z5">i</span></label>
+          <input type="text" data-b="gst.gstin" data-upper maxlength="15" placeholder="Enter your GST Number" autocomplete="off"><div class="err"></div></div>
+        <button type="button" class="btn out" data-act="verify-gst" disabled>VERIFY</button>
+        <div id="d-gstbox" hidden>
+          <hr>
+          <p class="lead">Your business details are shown below:</p>
+          <div class="g4">
+            <div class="f"><label>Registered Company Name</label><input type="text" data-b="gst.company" placeholder="Enter registered company name"><div class="err"></div></div>
+            <div class="f"><label>PAN Number</label><input type="text" data-b="gst.pan" class="plain" readonly></div>
+            <div class="f"><label>City</label><input type="text" data-b="gst.city" placeholder="City"><div class="err"></div></div>
+            <div class="f"><label>Pincode</label><input type="text" data-b="gst.pincode" data-digits maxlength="6" inputmode="numeric" placeholder="Pincode"><div class="err"></div></div>
+            <div class="f"><label>Registered Address</label><input type="text" data-b="gst.address" placeholder="Enter registered address"><div class="err"></div></div>
+            <div class="f"><label>State</label><input type="text" data-b="gst.state" class="plain" readonly></div>
+            <div class="f"><label>Country</label><input type="text" data-b="gst.country" class="plain" readonly></div>
+            <div class="f"><label>GSTIN</label><input type="text" data-b="gst.gstin" class="plain" readonly></div>
+          </div>
+        </div>
+        <hr>
+        <div class="actions"><span></span><button type="button" class="btn off" data-act="next">Confirm &amp; Next</button></div>
+      </section>
+
+      <!-- 1 BASIC INFORMATION -->
+      <section class="pane" data-pane="1" hidden>
+        <h2>Basic Information</h2>
+        <h4>Contact Information</h4>
+        <div class="g4">
+          <div class="f"><label>Organization Email ID <span class="info" title="Used to log in">i</span></label><input type="text" data-b="basic.orgEmail" class="ro" readonly><small>Common Email ID for login</small></div>
+          <div class="f"><label class="rq">Primary Contact's Name <span class="info" title="Person we will contact for onboarding">i</span></label><input type="text" data-b="basic.pname" placeholder="Enter primary contact's name"><div class="err"></div></div>
+          <div class="f"><label class="rq">Primary Contact's Phone Number <span class="info" title="10 digit mobile number">i</span></label><input type="text" data-b="basic.pphone" data-digits maxlength="10" inputmode="numeric" placeholder="Enter 10 digit phone number"><div class="err"></div></div>
+          <div class="f"><label class="rq">Primary Contact's Email ID <span class="info" title="Email for all communication">i</span></label><input type="text" data-b="basic.pemail" placeholder="Enter primary contact's email"><div class="err"></div></div>
+        </div>
+        <div class="g3">
+          <div class="f"><label class="rq">Business Owner's Name <span class="info" title="Name of the business owner">i</span></label><input type="text" data-b="basic.oname" placeholder="Enter Owner's Full Name"><div class="err"></div></div>
+          <div class="f"><label class="rq">Owner's Contact Number <span class="info" title="10 digit mobile number">i</span></label><input type="text" data-b="basic.ophone" data-digits maxlength="10" inputmode="numeric" placeholder="Enter Owner's Contact No"><div class="err"></div></div>
+          <div class="f"><label class="rq">Owner's Email ID <span class="info" title="Owner's email">i</span></label><input type="text" data-b="basic.oemail" placeholder="Enter Owner's Email ID"><div class="err"></div></div>
+        </div>
+        <hr>
+        <h4>Company Information</h4>
+        <div class="g4">
+          <div class="f"><label class="rq">Are you an existing Myntra Partner?</label><select data-b="basic.existing" data-opts="yn"></select><div class="err"></div></div>
+          <div class="f"><label>Entity Type</label><input type="text" data-b="basic.entity" class="ro" readonly placeholder="Filled from your GSTIN"></div>
+          <div class="f"><label class="rq">Myntra Generated Invoice <span class="info" title="Do you want Myntra to generate invoices?">i</span></label><select data-b="basic.invoice" data-opts="yn"></select><div class="err"></div></div>
+          <div class="f"><label class="rq">SIGNATURE</label>
+            <div class="file" data-file="basic.signature" data-accept="image/png,image/jpeg,application/pdf"><input class="fname" type="text" readonly placeholder="Select File"><input type="file" hidden><button type="button" class="btn out sm" data-act="pick">Upload</button></div>
+            <div class="err2" data-err="basic.signature" hidden></div></div>
+        </div>
+        <h4 class="light">TAN Details (Optional)</h4>
+        <div class="g3">
+          <div class="f"><label>Do you need TDS benefits?</label><select data-b="basic.tds" data-opts="yn"></select></div>
+          <div class="f" data-showif="basic.tds=Yes"><label class="rq">TAN Number</label><input type="text" data-b="basic.tan" data-upper maxlength="10" placeholder="Enter TAN (e.g. ABCD12345E)"><div class="err"></div></div>
+        </div>
+        <hr>
+        <div class="actions"><button type="button" class="btn out" data-act="save">Save Progress</button><button type="button" class="btn off" data-act="next">Next</button></div>
+      </section>
+
+      <!-- 2 BUSINESS DETAILS -->
+      <section class="pane" data-pane="2" hidden>
+        <h2>Business Details</h2>
+        <div class="g4">
+          <div class="f"><label class="rq">Business Model</label><select data-b="business.model" data-opts="model"></select><div class="err"></div></div>
+          <div class="f"><label class="rq">OMS Type</label><select data-b="business.oms" data-opts="oms"></select><div class="err"></div></div>
+          <div class="f"><label class="rq">API version</label><select data-b="business.api" data-opts="api"></select><div class="err"></div></div>
+          <div class="f guide">{%- if section.settings.guide_url != blank -%}<a href="{{ section.settings.guide_url }}" target="_blank" rel="noopener">OMS and Business Model Guide</a>{%- endif -%}</div>
+        </div>
+        <div class="actions"><button type="button" class="btn out" data-act="save">Save Progress</button><button type="button" class="btn off" data-act="next">Next</button></div>
+      </section>
+
+      <!-- 3 WAREHOUSE DETAILS -->
+      <section class="pane" data-pane="3" hidden>
+        <div class="tabs" id="d-wtabs"></div>
+        <div class="tabbody"><div id="d-wform"></div>
+          <div class="actions"><button type="button" class="btn out" data-act="save">Save Progress</button><button type="button" class="btn off" data-act="next">Next</button></div></div>
+      </section>
+
+      <!-- 4 BANK DETAILS -->
+      <section class="pane" data-pane="4" hidden>
+        <h2>Bank Details</h2>
+        <div class="g3">
+          <div class="f"><label class="rq">Account Holder's Name <span class="info" title="Name exactly as in bank records">i</span></label><input type="text" data-b="bank.holder"><div class="err"></div></div>
+          <div class="f"><label class="rq">Account No <span class="info" title="9 to 18 digits">i</span></label><input type="text" data-b="bank.account" data-digits maxlength="18" inputmode="numeric"><div class="err"></div></div>
+          <div class="f"><label class="rq">IFSC <span class="info" title="11 character IFSC code">i</span></label><input type="text" data-b="bank.ifsc" data-upper maxlength="11"><div class="err"></div></div>
+          <div class="f"><label class="rq">Bank Name <span class="info" title="Filled automatically after IFSC verify">i</span></label><input type="text" data-b="bank.bankName" placeholder="Enter Your Bank's Name"><div class="err"></div></div>
+          <div class="f"><label>Account Type <span class="info" title="Only current accounts are accepted">i</span></label><input type="text" data-b="bank.type" class="ro" readonly></div>
+          <div class="f"><label class="rq sm">CANCELLED CHEQUE</label>
+            <div class="file" data-file="bank.cheque" data-accept="image/png,image/jpeg,application/pdf"><input class="fname" type="text" readonly placeholder="Choose a file..."><input type="file" hidden><button type="button" class="btn out sm" data-act="pick">Upload</button></div>
+            <div class="err2" data-err="bank.cheque" hidden></div></div>
+        </div>
+        <button type="button" class="btn out" data-act="verify-bank" disabled>VERIFY</button>
+        <div class="okmsg" id="d-bankok" hidden></div>
+        <div class="err2" data-err="bank.verified" hidden></div>
+        <div class="actions"><button type="button" class="btn out" data-act="save">Save Progress</button><button type="button" class="btn off" data-act="next">Next</button></div>
+      </section>
+
+      <!-- 5 BRAND DETAILS -->
+      <section class="pane" data-pane="5" hidden>
+        <div id="d-brcount">
+          <h2>Brand Details</h2>
+          <p class="lead">How many brands do you wish to list with Myntra?</p>
+          <div class="f narrow"><label>Number of Brands to be listed</label><select id="d-brsel"></select></div>
+          <button type="button" class="btn out" data-act="proceed-br" disabled>Proceed</button>
+        </div>
+        <div id="d-brwrap" hidden>
+          <div class="tabs" id="d-btabs"></div>
+          <div class="tabbody"><div id="d-bform"></div>
+            <div class="actions"><button type="button" class="btn out" data-act="save">Save Progress</button><button type="button" class="btn off" data-act="next">Next</button></div></div>
+        </div>
+      </section>
+
+      <!-- 6 DECLARATION -->
+      <section class="pane" data-pane="6" hidden>
+        <h2>Declaration</h2>
+        <div class="decl"><label class="chk"><input type="checkbox" data-b="declaration.d1"> <span>I hereby declare that the details furnished are true and correct. I undertake to inform you of any changes therein: immediately &amp; to furnish all pending documents within 30 days of onboarding for verification. I understand that failure to do so may lead to suspension/permanent deactivation.</span></label></div>
+        <div class="decl"><label class="chk"><input type="checkbox" data-b="declaration.d2"> <span>I hereby declare that I will comply with all Myntra policies on ethics and compliance.</span></label> <button type="button" class="link" data-act="readmore">Read More &gt;</button>
+          <div class="more" id="d-more" hidden></div></div>
+        <div class="err2" data-err="declaration.all" hidden></div>
+        <div class="actions"><span></span><button type="button" class="btn off" id="d-submit" data-act="submit">SUBMIT</button></div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="d-toast" role="status" aria-live="polite"></div>
+</div>
+
+<style>
+.mdb{--bd:#d4d5d9;--tx:#282c3f;--mu:#696e79;--er:#d0021b;--ok:#14a76c;font-family:Roboto,"Segoe UI",Arial,sans-serif;color:var(--tx);font-size:14px;line-height:1.45;background:#f4f5f7;min-height:60vh;padding:0 0 40px}
+.mdb *{box-sizing:border-box}
+.mdb svg{width:20px;height:20px;flex:none}
+.mdb button{font-family:inherit;cursor:pointer}
+.mdb [hidden]{display:none!important}
+.mdb-notice{background:#0b57c1;color:#fff;text-align:center;padding:10px 16px;font-size:13px;font-weight:500}
+.mdb-load,.mdb-nologin{text-align:center;padding:80px 16px;color:var(--mu)}
+.mdb-nologin h2{color:var(--tx)}
+.mdb-app{display:grid;grid-template-columns:320px minmax(0,1fr);gap:24px;align-items:start;max-width:1500px;margin:0 auto;padding:12px}
+.side{position:sticky;top:8px}
+.prog{background:linear-gradient(120deg,#fde9e3,#f6ecf7);padding:18px 30px;box-shadow:0 2px 8px rgba(40,44,63,.12)}
+.prog-t{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.prog-t b{font-size:16px;font-weight:500}.prog-t span{font-size:12px}
+.bar{height:3px;background:#e7e0ef;margin-top:6px;width:150px;border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .4s}
+.steps{background:#fff;margin-top:14px;padding:24px 22px;display:flex;flex-direction:column;gap:16px;box-shadow:0 2px 8px rgba(40,44,63,.12);max-height:calc(100vh - 160px);overflow:auto}
+.step{display:flex;align-items:center;gap:12px;width:100%;height:53px;padding:0 12px;background:#fff;border:1px solid var(--ac);color:var(--ac);font-size:18px;font-weight:500;text-align:left}
+.step svg{width:20px;height:20px;align-self:flex-start;margin-top:10px}
+.step span{flex:1}
+.step.on{background:#e3dffa}
+.step .tick{width:22px;height:22px;border-radius:50%;background:var(--ok);display:none;place-items:center;color:#fff;font-size:13px;line-height:1}
+.step.done .tick{display:grid}
+.step:focus-visible,.btn:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.who{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 4px;font-size:12px;color:var(--mu);word-break:break-all}
+.main{background:#fff;padding:20px 32px 28px;min-height:420px;position:relative}
+.status{position:absolute;right:24px;top:10px;font-size:11px;color:var(--mu)}
+.status.err{color:var(--er)}.status.ok{color:var(--ok)}
+.main h2{margin:28px 0 24px;font-size:22px;font-weight:500}
+.main h4{margin:22px 0 12px;font-size:14px;font-weight:500}
+.main h4.light{font-weight:400;font-size:18px;margin-top:34px}
+.lead{margin:0 0 12px;font-size:14px;color:#1b1e2b}
+.main hr{border:0;border-top:1px solid #dcdde1;margin:22px 0}
+.g3,.g4{display:grid;gap:16px 16px;margin-bottom:16px}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.f.wide{margin:22px 0 22px}.f.narrow{max-width:290px;margin:18px 0 16px}
+.f>label{font-size:12px;font-weight:500;color:#1b1e2b;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.f>label.rq::after{content:" *";color:var(--er);margin-left:-3px;margin-right:auto}
+.f>label.sm{font-size:10px}
+.f small{font-size:11px;color:var(--mu)}
+.info{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:50%;background:#4a37b5;color:#fff;font:700 9px/1 Roboto,sans-serif;cursor:help;flex:none}
+.mdb input[type=text],.mdb select{width:100%;height:38px;padding:0 10px;font:400 13px Roboto,Arial,sans-serif;color:var(--tx);background:#fff;border:1px solid var(--bd);border-radius:3px;outline:0}
+.mdb input::placeholder{color:#a4a6ae}
+.mdb select{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23282c3f' stroke-width='3'/%3E%3C/svg%3E") no-repeat right 10px center/15px;padding-right:32px}
+.mdb input:focus,.mdb select:focus{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 16%,transparent)}
+.mdb .ro{background:#f6f6f8;color:#8a8d99}
+.mdb input.plain{border-color:transparent;background:transparent;padding-left:0;font-size:14px;color:var(--tx)}
+.err{display:none;color:var(--er);font-size:11px}
+.f.bad .err{display:block}.f.bad input,.f.bad select{border-color:var(--er)}
+.err2{color:var(--er);font-size:11px;margin-top:4px}
+.okmsg{color:#0a7a62;background:#e6f7f3;display:inline-block;padding:6px 10px;border-radius:4px;font-size:12px;margin:10px 0 0}
+.file{display:flex;gap:10px;align-items:center}.file .fname{cursor:pointer}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 20px;background:var(--ac);color:#fff;border:1px solid var(--ac);border-radius:3px;font-size:14px;font-weight:500;text-decoration:none}
+.btn.out{background:#fff;color:var(--ac);border-color:var(--ac)}
+.btn.sm{height:30px;padding:0 12px;font-size:13px}
+.btn:disabled,.btn.off{background:#d4d5d9;border-color:#d4d5d9;color:#8a8d99}
+.btn.out:disabled,.btn.out.off{background:#fff;border-color:#c4c5cb;color:#7a7d89}
+.btn:disabled{cursor:not-allowed}
+.btn.off:not(:disabled){cursor:pointer}
+.btn[data-act=verify-gst],.btn[data-act=verify-bank],.btn[data-act=verify-wgst]{font-weight:500;letter-spacing:.3px;border-radius:2px}
+.btn[data-act=verify-bank]:disabled{background:#d4d5d9;border-color:#d4d5d9;color:#8a8d99}
+.link{background:none;border:0;color:var(--ac);font-size:12px;padding:0;text-decoration:underline}
+.actions{display:flex;justify-content:flex-end;gap:14px;margin-top:34px}
+.actions:has(>span:first-child){justify-content:space-between}
+.guide{padding-top:20px}.guide a{color:var(--ac);font-size:13px}
+.tabs{display:flex;align-items:stretch;gap:0;margin:-20px -32px 0;background:#f4f5f7;padding:0}
+.tab{height:46px;padding:0 20px;border:0;background:#f4f5f7;color:#696e79;font-size:14px;font-weight:500}
+.tab.on{background:#e3dffa;color:var(--ac);border:1px solid #b9b0ee;border-bottom:0}
+.tab.add{color:#8a8d99;font-weight:500}
+.tabbody{padding-top:26px}
+.tabbody .top{display:flex;justify-content:flex-end;min-height:36px}
+.btn.del{background:#fff;color:var(--ac);border-color:var(--ac);height:36px}
+.btn.del svg{width:15px;height:15px}
+.rowv{display:flex;gap:16px;align-items:flex-end;margin-bottom:18px;flex-wrap:wrap}
+.rowv .f{width:calc(25% - 12px)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags label{display:flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:16px;padding:6px 12px;font-size:12px;cursor:pointer}
+.tags label:has(input:checked){border-color:var(--ac);background:#efeafd;color:var(--ac)}
+.tags input{accent-color:var(--ac);margin:0}
+.decl{border:1px solid #dcdde1;border-radius:4px;padding:26px 28px;margin-bottom:28px;min-height:108px}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:15px;cursor:pointer;max-width:1100px}
+.chk input{width:18px;height:18px;margin-top:3px;accent-color:var(--ac);flex:none}
+.decl .link{font-weight:500;text-decoration:none;margin-left:6px}
+.more{margin-top:12px;font-size:13px;color:#494d5b;white-space:pre-line}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#282c3f;color:#fff;padding:12px 18px;border-radius:6px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:9999;max-width:92vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.rowv .f{width:calc(50% - 8px)}}
+@media (max-width:900px){
+  .mdb-app{grid-template-columns:1fr}.side{position:static}
+  .steps{flex-direction:row;overflow-x:auto;padding:12px;gap:10px;max-height:none}
+  .step{flex:none;width:auto;min-width:170px;font-size:14px;height:46px}
+  .main{padding:16px}.tabs{margin:-16px -16px 0;overflow-x:auto}
+}
+@media (max-width:600px){.g3,.g4{grid-template-columns:1fr}.rowv .f{width:100%}.file{flex-wrap:wrap}.actions{flex-wrap:wrap}}
+@media (prefers-reduced-motion:reduce){.mdb *{transition:none!important}}
+</style>
+
+<script>
+{% raw %}
+(function () {
+  document.querySelectorAll('.mdb').forEach(init);
+
+  function init(root) {
+    const $ = (s, r) => (r || root).querySelector(s), $$ = (s, r) => [...(r || root).querySelectorAll(s)];
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const D = root.dataset;
+    const cfg = { endpoint: (D.endpoint || '').trim(), secret: D.secret || '', maxMb: +D.maxmb || 2, gstapi: (D.gstapi || '').trim(), login: D.login || '', logout: D.logout || '' };
+
+    /* ---------- who is logged in ---------- */
+    let email = (D.email || '').trim().toLowerCase(), user = {};
+    try { user = JSON.parse(sessionStorage.getItem('seller_user') || '{}') || {}; } catch (e) { }
+    if (!email) email = String(user.email || '').trim().toLowerCase();
+    if (!email && D.preview === 'true') email = 'preview@example.com';
+
+    /* ---------- reference data ---------- */
+    const STATES = { '01': 'Jammu & Kashmir', '02': 'Himachal Pradesh', '03': 'Punjab', '04': 'Chandigarh', '05': 'Uttarakhand', '06': 'Haryana', '07': 'Delhi', '08': 'Rajasthan', '09': 'Uttar Pradesh', '10': 'Bihar', '11': 'Sikkim', '12': 'Arunachal Pradesh', '13': 'Nagaland', '14': 'Manipur', '15': 'Mizoram', '16': 'Tripura', '17': 'Meghalaya', '18': 'Assam', '19': 'West Bengal', '20': 'Jharkhand', '21': 'Odisha', '22': 'Chhattisgarh', '23': 'Madhya Pradesh', '24': 'Gujarat', '26': 'Dadra & Nagar Haveli and Daman & Diu', '27': 'Maharashtra', '29': 'Karnataka', '30': 'Goa', '31': 'Lakshadweep', '32': 'Kerala', '33': 'Tamil Nadu', '34': 'Puducherry', '35': 'Andaman & Nicobar Islands', '36': 'Telangana', '37': 'Andhra Pradesh', '38': 'Ladakh', '97': 'Other Territory' };
+    const STATE_LIST = Object.values(STATES).filter(s => s !== 'Other Territory');
+    const BANKS = { SBIN: 'State Bank of India', HDFC: 'HDFC Bank', ICIC: 'ICICI Bank', UTIB: 'Axis Bank', PUNB: 'Punjab National Bank', BARB: 'Bank of Baroda', KKBK: 'Kotak Mahindra Bank', IDIB: 'Indian Bank', CNRB: 'Canara Bank', YESB: 'Yes Bank', UBIN: 'Union Bank of India', INDB: 'IndusInd Bank', BKID: 'Bank of India', IOBA: 'Indian Overseas Bank', FDRL: 'Federal Bank' };
+    const ENTITY = { P: 'PROPRIETORSHIP', C: 'COMPANY', F: 'PARTNERSHIP / LLP', H: 'HUF', A: 'AOP', B: 'BOI', G: 'GOVERNMENT', J: 'ARTIFICIAL JURIDICAL PERSON', L: 'LOCAL AUTHORITY', T: 'TRUST' };
+    const OPTS = {
+      yn: ['Yes', 'No'],
+      model: ['Marketplace (Seller Fulfilled)', 'FBM (Fulfilled by Myntra)', 'FBM Lite', 'Sale or Return (SOR)'],
+      oms: ['Myntra Seller Panel (no OMS)', 'Own OMS / ERP', 'Third-party OMS'],
+      api: ['Not applicable', 'v1', 'v2', 'v3'],
+      floor: ['Basement', 'Ground Floor', '1st Floor', '2nd Floor', '3rd Floor', '4th Floor or above'],
+      btype: ['Brand owner', 'Authorised distributor / reseller']
+    };
+    const PLATFORMS = ['Amazon', 'Flipkart', 'Meesho', 'Ajio', 'Nykaa', 'Own website', 'Other'];
+    const CATS = {};
+    (D.cats || '').split(/\r?\n|<br\s*\/?>/).forEach(l => { const i = l.indexOf(':'); if (i < 1) return; const k = l.slice(0, i).trim(), v = l.slice(i + 1).split(',').map(s => s.trim()).filter(Boolean); if (k && v.length) CATS[k] = v; });
+    const TIMES = (() => { const a = []; for (let i = 0; i < 48; i++) { const h = Math.floor(i / 2), m = i % 2 ? '30' : '00'; a.push([String(h).padStart(2, '0') + ':' + m, ((h % 12) || 12) + ':' + m + ' ' + (h >= 12 ? 'PM' : 'AM')]); } return a; })();
+    const STEPS = [
+      { t: 'GSTIN Check', i: 'coins' }, { t: 'Basic Information', i: 'id' }, { t: 'Business Details', i: 'doc' }, { t: 'Warehouse Details', i: 'wh' },
+      { t: 'Bank Details', i: 'bank' }, { t: 'Brand Details', i: 'tree' }, { t: 'Declaration', i: 'edit' }
+    ];
+
+    /* ---------- validation ---------- */
+    function gstOk(g) {
+      if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g)) return false;
+      const cs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; let sum = 0;
+      for (let i = 0; i < 14; i++) { const v = cs.indexOf(g[i]) * (i % 2 === 0 ? 1 : 2); sum += Math.floor(v / 36) + (v % 36); }
+      return cs[(36 - (sum % 36)) % 36] === g[14];
+    }
+    const gstInfo = raw => { const g = String(raw || '').trim().toUpperCase(); return gstOk(g) && STATES[g.slice(0, 2)] ? { gstin: g, pan: g.slice(2, 12), state: STATES[g.slice(0, 2)] } : null; };
+    const R = {
+      name: v => /^[A-Za-z][A-Za-z .'-]{2,59}$/.test(v) || 'Enter a valid full name (letters only)',
+      phone: v => /^[6-9]\d{9}$/.test(v) || 'Enter a valid 10 digit mobile number',
+      email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) || 'Enter a valid email ID',
+      gstin: v => !!gstInfo(v) || 'Enter a valid 15 character GSTIN',
+      tan: v => /^[A-Z]{4}[0-9]{5}[A-Z]$/.test(v) || 'Enter a valid TAN (e.g. ABCD12345E)',
+      ifsc: v => /^[A-Z]{4}0[A-Z0-9]{6}$/.test(v) || 'Enter a valid 11 character IFSC code',
+      acc: v => /^\d{9,18}$/.test(v) || 'Account number must be 9 to 18 digits',
+      pin: v => /^[1-9]\d{5}$/.test(v) || 'Enter a valid 6 digit pincode',
+      int: v => /^[1-9]\d{0,8}$/.test(v) || 'Enter a whole number greater than 0',
+      num: v => (/^\d+(\.\d{1,2})?$/.test(v) && +v > 0) || 'Enter a valid amount greater than 0',
+      text: v => v.length >= 2 || 'Enter at least 2 characters',
+      url: v => /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,}(\/\S*)?$/i.test(v) || 'Enter a valid link',
+      sel: () => true
+    };
+    const UP = ['gstin', 'tan', 'ifsc'];
+    const F = {
+      gst: [['company', 'text'], ['address', 'text'], ['city', 'text'], ['pincode', 'pin']],
+      basic: [['pname', 'name'], ['pphone', 'phone'], ['pemail', 'email'], ['oname', 'name'], ['ophone', 'phone'], ['oemail', 'email'], ['existing', 'sel'], ['invoice', 'sel'], ['tan', 'tan', { when: o => o.tds === 'Yes' }]],
+      business: [['model', 'sel'], ['oms', 'sel'], ['api', 'sel']],
+      wh: [['pincode', 'pin'], ['gstin', 'gstin', { opt: 1 }], ['city', 'text'], ['state', 'sel'], ['floor', 'sel'], ['address', 'text'], ['start', 'sel'], ['end', 'sel'], ['email', 'email'], ['phone', 'phone'], ['capacity', 'int']],
+      bank: [['holder', 'name'], ['account', 'acc'], ['ifsc', 'ifsc'], ['bankName', 'text']],
+      br: [['name', 'text'], ['type', 'sel'], ['primary', 'sel'], ['sku', 'int'], ['asp', 'num'], ['other', 'sel'], ['website', 'url', { opt: 1 }]]
+    };
+    function vo(obj, fields, pre) {
+      const m = {};
+      fields.forEach(([k, rule, o]) => {
+        o = o || {}; if (o.when && !o.when(obj)) return;
+        let v = String(obj[k] == null ? '' : obj[k]).trim(); if (UP.includes(rule)) v = v.toUpperCase();
+        if (!v) { if (!o.opt) m[pre + k] = rule === 'sel' ? 'Please select an option' : 'This field is required'; return; }
+        const r = R[rule](v); if (r !== true) m[pre + k] = r;
+      });
+      return m;
+    }
+
+    /* ---------- state ---------- */
+    const newWh = () => ({ pincode: '', gstin: '', city: '', state: '', country: 'India', floor: '', address: '', start: '', end: '', email: '', phone: '', capacity: '' });
+    const newBr = () => ({ name: '', type: '', primary: '', secondary: [], sku: '', asp: '', other: '', platforms: [], website: '', logo: null, doc: null });
+    const blank = () => ({
+      gst: { gstin: '', verified: false, verifiedFor: '', company: '', pan: '', address: '', city: '', state: '', pincode: '', country: 'India' },
+      basic: { orgEmail: email, pname: '', pphone: '', pemail: '', oname: '', ophone: '', oemail: '', existing: '', entity: '', invoice: '', signature: null, tds: '', tan: '' },
+      business: { model: '', oms: '', api: '' },
+      warehouses: [newWh()],
+      bank: { holder: '', account: '', ifsc: '', bankName: '', type: 'CURRENT', cheque: null, verified: false, verifiedFor: '', verifiedInfo: '' },
+      brandCount: 0, brands: [],
+      declaration: { d1: false, d2: false },
+      meta: { status: 'In Progress', createdAt: '', updatedAt: '', submittedAt: '' }
+    });
+    let P = blank(), step = 0, wi = 0, bi = 0, dirty = false, brChoose = false, saveChain = Promise.resolve();
+
+    const getP = path => path.split('.').reduce((o, k) => (o == null ? o : o[k]), P);
+    const setP = (path, v) => { const ks = path.split('.'); let o = P; ks.slice(0, -1).forEach(k => o = o[k]); o[ks[ks.length - 1]] = v; };
+
+    function toast(t) { const el = $('#d-toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 3200); }
+    function setStatus(k) {
+      const el = $('#d-status'); el.className = 'status';
+      const t = { saved: 'All changes saved', saving: 'Saving…', dirty: 'Unsaved changes', error: 'Could not save. Check your internet and try again', local: 'Saved on this device only (Google Sheet is not connected)' }[k] || '';
+      if (k === 'saved') el.classList.add('ok'); if (k === 'error') el.classList.add('err'); el.textContent = t;
+    }
+
+    /* ---------- errors per step ---------- */
+    function whErrs(w, i) {
+      const m = vo(w, F.wh, 'warehouses.' + i + '.');
+      if (w.start && w.end && w.start >= w.end) m['warehouses.' + i + '.end'] = 'End time must be after start time';
+      return m;
+    }
+    function brErrs(b, i) {
+      const p = 'brands.' + i + '.', m = vo(b, F.br, p);
+      if (b.primary && !(b.secondary || []).length) m[p + 'secondary'] = 'Select at least one secondary category';
+      if (b.other === 'Yes' && !(b.platforms || []).length) m[p + 'platforms'] = 'Select at least one platform';
+      return m;
+    }
+    function errsAll(n) {
+      let m = {};
+      if (n === 0) { if (!(P.gst.verified && P.gst.verifiedFor === P.gst.gstin && gstInfo(P.gst.gstin))) m['gst.gstin'] = P.gst.gstin ? 'Please verify your GSTIN' : 'GSTIN is required'; else m = vo(P.gst, F.gst, 'gst.'); }
+      if (n === 1) { m = vo(P.basic, F.basic, 'basic.'); if (!P.basic.signature) m['basic.signature'] = 'Signature file is required'; }
+      if (n === 2) m = vo(P.business, F.business, 'business.');
+      if (n === 3) { if (!P.warehouses.length) m['warehouses.0.pincode'] = 'Add at least one warehouse'; P.warehouses.forEach((w, i) => Object.assign(m, whErrs(w, i))); }
+      if (n === 4) { m = vo(P.bank, F.bank, 'bank.'); if (!P.bank.cheque) m['bank.cheque'] = 'Cancelled cheque is required'; if (!(P.bank.verified && P.bank.verifiedFor === bankKey())) m['bank.verified'] = 'Click VERIFY to verify your bank details'; }
+      if (n === 5) { if (!P.brands.length) m['brands.count'] = 'Select the number of brands'; P.brands.forEach((b, i) => Object.assign(m, brErrs(b, i))); }
+      if (n === 6) { if (!P.declaration.d1 || !P.declaration.d2) m['declaration.all'] = 'Please accept both declarations to continue'; }
+      return m;
+    }
+    const stepDone = n => !Object.keys(errsAll(n)).length;
+    const bankKey = () => [P.bank.ifsc, P.bank.account, P.bank.holder].join('|').toUpperCase();
+    const pct = () => Math.ceil(STEPS.reduce((a, _, i) => a + (stepDone(i) ? 1 : 0), 0) / STEPS.length * 100);
+
+    function setErr(el, m) { const f = el.closest('.f'); if (!f) return; f.classList.toggle('bad', !!m); const e = $('.err', f); if (e) e.textContent = m || ''; }
+    function showErrors(map, scope) {
+      $$('[data-b]', scope).forEach(el => setErr(el, map[el.dataset.b]));
+      $$('[data-err]', scope).forEach(el => { const m = map[el.dataset.err]; el.textContent = m || ''; el.hidden = !m; });
+    }
+
+    /* ---------- fill / bind ---------- */
+    function fillOptions(sel) {
+      if (sel.options.length) return;
+      const k = sel.dataset.opts, list = OPTS[k] || [];
+      sel.innerHTML = '<option value="">Select' + (k === 'yn' ? ' Yes / No' : '') + '</option>' + list.map(o => '<option>' + esc(o) + '</option>').join('');
+    }
+    function fill(scope) {
+      $$('select[data-opts]', scope).forEach(fillOptions);
+      $$('[data-b]', scope).forEach(el => {
+        const v = getP(el.dataset.b);
+        if (el.type === 'checkbox') el.checked = !!v; else if (document.activeElement !== el) el.value = v == null ? '' : v;
+      });
+      $$('[data-file]', scope).forEach(c => { const f = getP(c.dataset.file); $('.fname', c).value = f ? f.name : ''; });
+      $$('[data-bm]', scope).forEach(g => { const arr = getP(g.dataset.bm) || []; $$('input', g).forEach(i => i.checked = arr.includes(i.value)); });
+      syncVis(scope);
+    }
+    function syncVis(scope) {
+      $$('[data-showif]', scope || root).forEach(el => {
+        const [p, val] = el.dataset.showif.split('='); const v = getP(p);
+        el.hidden = val === undefined ? !v : v !== val;
+      });
+    }
+
+    /* ---------- field events ---------- */
+    function onField(el) {
+      const path = el.dataset.b; let v = el.type === 'checkbox' ? el.checked : el.value;
+      if (typeof v === 'string') {
+        if (el.hasAttribute('data-upper')) { v = v.toUpperCase().replace(/\s/g, ''); el.value = v; }
+        if (el.hasAttribute('data-digits')) { v = v.replace(/\D/g, ''); el.value = v; }
+      }
+      if (getP(path) === v) return;
+      setP(path, v); dirty = true; setStatus('dirty'); effects(path, el);
+      const f = el.closest('.f'); if (f && f.classList.contains('bad')) setErr(el, errsAll(step)[path]);
+      refresh();
+    }
+    function effects(path) {
+      const [a, b, c] = path.split('.');
+      if (path === 'gst.gstin' && P.gst.gstin !== P.gst.verifiedFor) P.gst.verified = false;
+      if (path === 'basic.tds' && P.basic.tds !== 'Yes') P.basic.tan = '';
+      if (a === 'bank' && ['holder', 'account', 'ifsc'].includes(b)) { P.bank.verified = false; if (b === 'ifsc') { const nm = BANKS[P.bank.ifsc.slice(0, 4)]; if (nm && !P.bank.bankName) { P.bank.bankName = nm; fill($('[data-pane="4"]')); } } }
+      if (a === 'warehouses' && c === 'pincode' && /^[1-9]\d{5}$/.test(P.warehouses[+b].pincode)) lookupPin(+b);
+      if (a === 'brands' && c === 'primary') { P.brands[+b].secondary = []; renderBr(); }
+      if (a === 'brands' && c === 'other' && P.brands[+b].other !== 'Yes') P.brands[+b].platforms = [];
+    }
+    root.addEventListener('input', e => { if (e.target.matches('[data-b]')) onField(e.target); });
+    root.addEventListener('change', e => {
+      const el = e.target;
+      if (el.matches('[data-b]')) onField(el);
+      else if (el.matches('[data-bm] input')) { const g = el.closest('[data-bm]'); setP(g.dataset.bm, $$('input:checked', g).map(i => i.value)); dirty = true; setStatus('dirty'); const m = errsAll(step); const er = $('[data-err="' + g.dataset.bm + '"]'); if (er) { er.textContent = m[g.dataset.bm] || ''; er.hidden = !m[g.dataset.bm]; } refresh(); }
+      else if (el.type === 'file') takeFile(el);
+      else if (el.id === 'd-brsel') refresh();
+    });
+    root.addEventListener('focusout', e => { const el = e.target; if (el.matches && el.matches('[data-b]') && el.type !== 'checkbox' && !el.readOnly) setErr(el, errsAll(step)[el.dataset.b]); });
+
+    /* ---------- files (name + size only; nothing is uploaded) ---------- */
+    root.addEventListener('click', e => { const c = e.target.closest('.file'); if (c && !e.target.matches('input[type=file]')) { const i = $('input[type=file]', c); i.accept = c.dataset.accept; i.click(); } });
+    function takeFile(input) {
+      const c = input.closest('.file'), path = c.dataset.file, file = input.files[0]; input.value = ''; if (!file) return;
+      const er = $('[data-err="' + path + '"]', c.parentNode), accept = c.dataset.accept.split(',');
+      const ok = accept.some(a => a.endsWith('/*') ? file.type.startsWith(a.slice(0, -1)) : a === file.type);
+      const bad = m => { er.textContent = m; er.hidden = false; };
+      if (!ok) return bad('Unsupported file. Upload ' + accept.map(a => a.split('/')[1]).join(' / ').toUpperCase());
+      if (file.size > cfg.maxMb * 1048576) return bad('File is too large. Maximum ' + cfg.maxMb + ' MB');
+      setP(path, { name: file.name, size: file.size, type: file.type }); er.hidden = true; dirty = true; setStatus('dirty');
+      if (path === 'bank.cheque') { /* cheque change does not affect IFSC check */ }
+      fill(c.parentNode); refresh();
+    }
+
+    /* ---------- lookups ---------- */
+    async function lookupPin(i) {
+      const pin = P.warehouses[i].pincode;
+      try {
+        const j = await (await fetch('https://api.postalpincode.in/pincode/' + pin)).json();
+        const po = j && j[0] && j[0].PostOffice && j[0].PostOffice[0]; const w = P.warehouses[i];
+        if (!po || !w || w.pincode !== pin) return;
+        w.city = po.District || w.city;
+        const norm = s => String(s).toLowerCase().replace(/&/g, 'and').replace(/\s+/g, ' ').trim();
+        const st = STATE_LIST.find(s => norm(s) === norm(po.State)); if (st) w.state = st;
+        if (step === 3 && wi === i) fill($('#d-wform')); refresh();
+      } catch (e) { /* leave city and state for manual entry */ }
+    }
+    async function verifyGst() {
+      const b = $('[data-act=verify-gst]'), info = gstInfo(P.gst.gstin);
+      if (!info) return showErrors({ 'gst.gstin': 'Enter a valid 15 character GSTIN' }, $('[data-pane="0"]'));
+      b.disabled = true; b.textContent = 'VERIFYING…'; let extra = {};
+      if (cfg.gstapi) {
+        try { const j = await (await fetch(cfg.gstapi + (cfg.gstapi.includes('?') ? '&' : '?') + 'gstin=' + info.gstin)).json(); extra = j && (j.data || j) || {}; }
+        catch (e) { toast('GST lookup is not available. Please fill the details manually.'); }
+      }
+      Object.assign(P.gst, { gstin: info.gstin, pan: info.pan, state: extra.state || info.state, country: 'India', verified: true, verifiedFor: info.gstin });
+      ['company', 'address', 'city', 'pincode'].forEach(k => { const v = extra[k] || (k === 'company' && (extra.legalName || extra.tradeName)); if (v) P.gst[k] = String(v); });
+      P.basic.entity = ENTITY[info.pan[3]] || '';
+      dirty = true; setStatus('dirty'); b.textContent = 'VERIFY';
+      fill($('[data-pane="0"]')); showErrors({}, $('[data-pane="0"]')); refresh();
+    }
+    async function verifyWgst(i) {
+      const w = P.warehouses[i], info = gstInfo(w.gstin);
+      if (!info) return showErrors({ ['warehouses.' + i + '.gstin']: w.gstin ? 'Enter a valid 15 character GSTIN' : 'Enter a GSTIN to verify' }, $('#d-wform'));
+      if (!w.state) w.state = info.state; fill($('#d-wform')); showErrors({}, $('#d-wform')); toast('GSTIN is valid (' + info.state + ')'); refresh();
+    }
+    async function verifyBank() {
+      const m = vo(P.bank, F.bank, 'bank.'); if (Object.keys(m).length) return showErrors(m, $('[data-pane="4"]'));
+      const b = $('[data-act=verify-bank]'); b.disabled = true; b.textContent = 'VERIFYING…';
+      try {
+        const r = await fetch('https://ifsc.razorpay.com/' + P.bank.ifsc.toUpperCase());
+        if (!r.ok) throw new Error('bad');
+        const j = await r.json();
+        P.bank.verified = true; P.bank.verifiedFor = bankKey(); P.bank.verifiedInfo = [j.BANK, j.BRANCH].filter(Boolean).join(', ');
+        if (!P.bank.bankName && j.BANK) P.bank.bankName = j.BANK;
+        dirty = true; setStatus('dirty'); fill($('[data-pane="4"]')); showErrors({}, $('[data-pane="4"]'));
+      } catch (e) { showErrors({ 'bank.ifsc': 'IFSC code not found. Check the code and try again' }, $('[data-pane="4"]')); }
+      b.textContent = 'VERIFY'; refresh();
+    }
+
+    /* ---------- warehouses ---------- */
+    const optHtml = (list, sel, ph) => '<option value="">' + ph + '</option>' + list.map(o => { const [v, l] = Array.isArray(o) ? o : [o, o]; return '<option value="' + esc(v) + '"' + (v === sel ? ' selected' : '') + '>' + esc(l) + '</option>'; }).join('');
+    function whForm(i) {
+      const p = 'warehouses.' + i + '.', f = (k, label, inner, rq) => '<div class="f"><label' + (rq ? ' class="rq"' : '') + '>' + label + '</label>' + inner + '<div class="err"></div></div>';
+      const inp = (k, ph, extra) => '<input type="text" data-b="' + p + k + '" placeholder="' + ph + '" ' + (extra || '') + '>';
+      const sel = (k, list, ph) => '<select data-b="' + p + k + '">' + optHtml(list, P.warehouses[i][k], ph) + '</select>';
+      return '<div class="top"><button type="button" class="btn del" data-act="wdel"><svg><use href="#d-trash"/></svg> Delete</button></div>'
+        + '<div class="rowv">' + f('pincode', 'Warehouse Pincode', inp('pincode', 'Enter Pincode', 'data-digits maxlength="6" inputmode="numeric"'), 1)
+        + f('gstin', 'GSTIN Details', inp('gstin', 'Enter warehouse\'s GSTIN', 'data-upper maxlength="15"'))
+        + '<div class="f" style="width:auto"><button type="button" class="btn out" data-act="verify-wgst">VERIFY</button></div></div>'
+        + '<div class="rowv">' + f('city', 'CITY', inp('city', 'Type City Name'), 1) + f('state', 'STATE', sel('state', STATE_LIST, 'Select State'), 1)
+        + '<div class="f"><label>Country</label><input type="text" data-b="' + p + 'country" class="ro" readonly></div></div>'
+        + '<div class="g3" style="grid-template-columns:1fr 2fr">' + f('floor', 'Floor Details', sel('floor', OPTS.floor, 'Select W/H floor'), 1) + f('address', 'Full Address', inp('address', 'Input Text'), 1) + '</div>'
+        + '<div class="g3">' + f('start', 'W/H Operating Start Time', sel('start', TIMES, 'Select Start Timings'), 1) + f('end', 'W/H Operating End Time', sel('end', TIMES, 'Select End Timings'), 1) + f('email', 'Warehouse Email Address', inp('email', 'Enter Email ID'), 1) + '</div>'
+        + '<div class="g3" style="grid-template-columns:1fr 1fr">' + f('phone', 'Warehouse Contact Number', inp('phone', 'Enter contact number', 'data-digits maxlength="10" inputmode="numeric"'), 1) + f('capacity', 'Per Day Order Processing Capacity', inp('capacity', 'Enter Value (Eg. 10 Units)', 'data-digits inputmode="numeric"'), 1) + '</div>';
+    }
+    function renderWh() {
+      wi = Math.min(wi, P.warehouses.length - 1);
+      $('#d-wtabs').innerHTML = P.warehouses.map((w, i) => '<button type="button" class="tab' + (i === wi ? ' on' : '') + '" data-act="wtab" data-i="' + i + '">Warehouse ' + (i + 1) + '</button>').join('') + (P.warehouses.length < 10 ? '<button type="button" class="tab add" data-act="wadd">+ ADD Warehouse</button>' : '');
+      $('#d-wform').innerHTML = whForm(wi); fill($('#d-wform'));
+    }
+
+    /* ---------- brands ---------- */
+    function brForm(i) {
+      const b = P.brands[i], p = 'brands.' + i + '.', f = (label, inner, rq, extra) => '<div class="f"' + (extra || '') + '><label' + (rq ? ' class="rq"' : '') + '>' + label + '</label>' + inner + '<div class="err"></div></div>';
+      const inp = (k, ph, x) => '<input type="text" data-b="' + p + k + '" placeholder="' + ph + '" ' + (x || '') + '>';
+      const sel = (k, list, ph) => '<select data-b="' + p + k + '">' + optHtml(list, b[k], ph) + '</select>';
+      const tags = (k, list) => '<div class="tags" data-bm="' + p + k + '">' + list.map(s => '<label><input type="checkbox" value="' + esc(s) + '"> ' + esc(s) + '</label>').join('') + '</div>';
+      const file = (k, ph, rq) => '<div class="f"><label>' + ph + '</label><div class="file" data-file="' + p + k + '" data-accept="' + (k === 'logo' ? 'image/png,image/jpeg,image/webp' : 'image/png,image/jpeg,application/pdf') + '"><input class="fname" type="text" readonly placeholder="Choose a file..."><input type="file" hidden><button type="button" class="btn out sm" data-act="pick">Upload</button></div><div class="err2" data-err="' + p + k + '" hidden></div></div>';
+      return '<div class="top"><button type="button" class="btn del" data-act="bdel"><svg><use href="#d-trash"/></svg> Delete</button></div>'
+        + '<div class="g3">' + f('Brand Name', inp('name', 'Enter brand name', 'maxlength="60"'), 1) + f('Seller Type', sel('type', OPTS.btype, 'Select seller type'), 1) + f('Primary Category You Sell', sel('primary', Object.keys(CATS), 'Select Category'), 1) + '</div>'
+        + '<div class="f" data-showif="' + p + 'primary" style="margin-bottom:16px"><label class="rq">Secondary Categories</label>' + tags('secondary', CATS[b.primary] || []) + '<div class="err2" data-err="' + p + 'secondary" hidden></div></div>'
+        + '<div class="g3">' + f('Total SKUs Under This Brand', inp('sku', 'Enter no. of SKUs', 'data-digits inputmode="numeric"'), 1) + f('Average Selling Price (₹)', inp('asp', 'Enter average selling price', 'inputmode="decimal"'), 1) + f('Do you sell this brand on other platforms?', sel('other', OPTS.yn, 'Select Yes / No'), 1) + '</div>'
+        + '<div class="f" data-showif="' + p + 'other=Yes" style="margin-bottom:16px"><label class="rq">Platforms</label>' + tags('platforms', PLATFORMS) + '<div class="err2" data-err="' + p + 'platforms" hidden></div></div>'
+        + '<div class="g3">' + f('Brand Website / Store Link', inp('website', 'https://')) + file('logo', 'Brand Logo') + file('doc', 'Brand Document (optional)') + '</div>';
+    }
+    function renderBr() {
+      const hasBr = P.brands.length > 0 && !brChoose;
+      $('#d-brcount').hidden = hasBr; $('#d-brwrap').hidden = !hasBr;
+      if (!hasBr) {
+        const s = $('#d-brsel'); s.innerHTML = '<option value="">Select Quantity</option>' + Array.from({ length: 10 }, (_, i) => '<option' + (P.brands.length === i + 1 ? ' selected' : '') + '>' + (i + 1) + '</option>').join('');
+        return;
+      }
+      bi = Math.min(bi, P.brands.length - 1);
+      $('#d-btabs').innerHTML = P.brands.map((b, i) => '<button type="button" class="tab' + (i === bi ? ' on' : '') + '" data-act="btab" data-i="' + i + '">' + esc(b.name || 'Brand ' + (i + 1)) + '</button>').join('') + '<button type="button" class="tab add" data-act="bchange">Change number of brands</button>';
+      $('#d-bform').innerHTML = brForm(bi); fill($('#d-bform'));
+    }
+
+    /* ---------- step navigation / refresh ---------- */
+    function renderSteps() {
+      $('#d-steps').innerHTML = STEPS.map((s, i) => '<button type="button" class="step' + (i === step ? ' on' : '') + (stepDone(i) ? ' done' : '') + '" data-act="go" data-i="' + i + '"' + (i === step ? ' aria-current="step"' : '') + '><svg><use href="#d-' + s.i + '"/></svg><span>' + s.t + '</span><b class="tick">✓</b></button>').join('');
+    }
+    function refresh() {
+      renderSteps();
+      const p = pct(); $('#d-pct').textContent = p + '% Complete'; $('#d-bar').style.width = p + '%';
+      const done = stepDone(step);
+      $$('.pane:not([hidden]) [data-act=next]').forEach(b => b.classList.toggle('off', !done));
+      const g = P.gst; $('[data-act=verify-gst]').disabled = (g.gstin || '').length !== 15 || (g.verified && g.verifiedFor === g.gstin);
+      $('#d-gstbox').hidden = !(g.verified && g.verifiedFor === g.gstin);
+      const bankReady = !Object.keys(vo(P.bank, F.bank, 'bank.')).length, bv = P.bank.verified && P.bank.verifiedFor === bankKey();
+      const vb = $('[data-act=verify-bank]'); vb.disabled = !bankReady || bv; vb.textContent = bv ? 'VERIFIED' : 'VERIFY';
+      const ok = $('#d-bankok'); ok.hidden = !bv; ok.textContent = bv ? 'IFSC verified' + (P.bank.verifiedInfo ? ' · ' + P.bank.verifiedInfo : '') : '';
+      const sel = $('#d-brsel'); $('[data-act=proceed-br]').disabled = !sel || !sel.value;
+      const sb = $('#d-submit'); sb.textContent = P.meta.submittedAt ? 'UPDATE' : 'SUBMIT'; sb.classList.toggle('off', !(P.declaration.d1 && P.declaration.d2));
+      syncVis();
+    }
+    function go(n, quiet) {
+      if (n !== step && dirty && !quiet) save('progress', true);
+      step = n; $$('.pane').forEach(p => p.hidden = +p.dataset.pane !== n);
+      const pane = $('[data-pane="' + n + '"]');
+      if (n === 3) renderWh(); else if (n === 5) { brChoose = false; renderBr(); } else fill(pane);
+      if (n === 6) { $('#d-more').textContent = D.terms || ''; }
+      refresh(); if (!quiet) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function focusFirstError(scope) { const el = $('.bad input,.bad select,.err2:not([hidden])', scope); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); if (el.focus && el.matches('input,select')) el.focus({ preventScroll: true }); } }
+    function attemptNext() {
+      const m = errsAll(step), keys = Object.keys(m);
+      if (keys.length) {
+        if (step === 3) { const bad = P.warehouses.findIndex((w, i) => Object.keys(whErrs(w, i)).length); if (bad >= 0 && bad !== wi) { wi = bad; renderWh(); } }
+        if (step === 5) { if (!P.brands.length) { toast('Select the number of brands and click Proceed'); return; } const bad = P.brands.findIndex((b, i) => Object.keys(brErrs(b, i)).length); if (bad >= 0 && bad !== bi) { bi = bad; renderBr(); } }
+        const pane = $('[data-pane="' + step + '"]'); showErrors(m, pane); toast('Please complete the highlighted details'); focusFirstError(pane); return;
+      }
+      save('progress', true); go(step + 1);
+    }
+
+    /* ---------- save / load ---------- */
+    function stamp(kind) {
+      const now = new Date().toISOString(); P.meta.updatedAt = now; if (!P.meta.createdAt) P.meta.createdAt = now;
+      if (kind === 'submit') { P.meta.status = P.meta.submittedAt ? 'Updated' : 'Submitted'; if (!P.meta.submittedAt) P.meta.submittedAt = now; }
+      else P.meta.status = P.meta.submittedAt ? 'Updated' : 'In Progress';
+    }
+    function save(kind, silent) {
+      stamp(kind);
+      try { localStorage.setItem('mdb:' + email, JSON.stringify(P)); } catch (e) { }
+      saveChain = saveChain.then(async () => {
+        if (!cfg.endpoint) { setStatus('local'); if (!silent) toast('Saved on this device. Add the Apps Script URL to save to Google Sheet.'); return { ok: false }; }
+        setStatus('saving');
+        try {
+          const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'save', secret: cfg.secret, email, completion: pct(), profile: P }) });
+          const j = await res.json(); if (!j.ok) throw new Error(j.error || 'save failed');
+          dirty = false; setStatus('saved'); if (!silent) toast(kind === 'submit' ? 'Details submitted' : 'Progress saved'); return j;
+        } catch (e) { setStatus('error'); toast('Could not save to Google Sheet. Try again.'); return { ok: false, error: e }; }
+      });
+      return saveChain;
+    }
+    async function load() {
+      let prof = null;
+      if (cfg.endpoint) {
+        try {
+          const u = cfg.endpoint + (cfg.endpoint.includes('?') ? '&' : '?') + 'action=get&email=' + encodeURIComponent(email) + '&secret=' + encodeURIComponent(cfg.secret);
+          const j = await (await fetch(u)).json(); if (!j.ok) throw new Error(j.error); prof = j.profile || null;
+        } catch (e) { toast('Could not load your saved details. Showing the copy on this device.'); }
+      }
+      if (!prof) { try { prof = JSON.parse(localStorage.getItem('mdb:' + email) || 'null'); } catch (e) { } }
+      P = blank();
+      if (prof) {
+        ['gst', 'basic', 'business', 'bank', 'declaration', 'meta'].forEach(k => Object.assign(P[k], prof[k] || {}));
+        if (prof.warehouses && prof.warehouses.length) P.warehouses = prof.warehouses.map(w => Object.assign(newWh(), w));
+        P.brands = (prof.brands || []).map(b => Object.assign(newBr(), b)); P.brandCount = P.brands.length;
+      } else {
+        if (user.name && !P.basic.pname) P.basic.pname = user.name;
+      }
+      P.basic.orgEmail = email;
+    }
+
+    /* ---------- clicks ---------- */
+    root.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act, i = +b.dataset.i;
+      switch (a) {
+        case 'go': go(i); break;
+        case 'next': attemptNext(); break;
+        case 'save': save('progress'); break;
+        case 'pick': break; /* the .file container click handler opens the picker */
+        case 'verify-gst': verifyGst(); break;
+        case 'verify-bank': verifyBank(); break;
+        case 'verify-wgst': verifyWgst(wi); break;
+        case 'wtab': wi = i; renderWh(); break;
+        case 'wadd': { const m = errsAll(3); const bad = Object.keys(whErrs(P.warehouses[wi], wi)).length; if (bad) { showErrors(m, $('#d-wform')); toast('Complete this warehouse before adding another'); break; } P.warehouses.push(newWh()); wi = P.warehouses.length - 1; dirty = true; renderWh(); refresh(); break; }
+        case 'wdel': if (confirm('Delete this warehouse?')) { if (P.warehouses.length > 1) P.warehouses.splice(wi, 1); else P.warehouses = [newWh()]; wi = 0; dirty = true; setStatus('dirty'); renderWh(); refresh(); } break;
+        case 'btab': bi = i; renderBr(); break;
+        case 'bchange': brChoose = true; renderBr(); refresh(); break;
+        case 'proceed-br': {
+          const n = +$('#d-brsel').value; if (!n) break;
+          if (n < P.brands.length && !confirm('This will remove Brand ' + (n + 1) + (P.brands.length > n + 1 ? ' to ' + P.brands.length : '') + '. Continue?')) break;
+          while (P.brands.length < n) P.brands.push(newBr()); P.brands.length = n; P.brandCount = n; bi = 0; brChoose = false; dirty = true; setStatus('dirty'); renderBr(); refresh(); break;
+        }
+        case 'bdel': if (confirm('Delete this brand?')) { P.brands.splice(bi, 1); P.brandCount = P.brands.length; bi = 0; dirty = true; setStatus('dirty'); renderBr(); refresh(); } break;
+        case 'readmore': { const m = $('#d-more'); m.hidden = !m.hidden; b.textContent = m.hidden ? 'Read More >' : 'Show Less'; break; }
+        case 'submit': submit(); break;
+        case 'logout': try { sessionStorage.removeItem('seller_user'); } catch (x) { } location.href = cfg.logout || cfg.login || '/'; break;
+      }
+    });
+    async function submit() {
+      if (!(P.declaration.d1 && P.declaration.d2)) return showErrors(errsAll(6), $('[data-pane="6"]'));
+      for (let n = 0; n < 6; n++) { if (!stepDone(n)) { toast('Please complete "' + STEPS[n].t + '" first'); go(n, true); const m = errsAll(n); if (n === 3) { wi = Math.max(0, P.warehouses.findIndex((w, i) => Object.keys(whErrs(w, i)).length)); renderWh(); } if (n === 5) { bi = Math.max(0, P.brands.findIndex((b, i) => Object.keys(brErrs(b, i)).length)); renderBr(); } showErrors(m, $('[data-pane="' + n + '"]')); return; } }
+      const b = $('#d-submit'), old = b.textContent; b.disabled = true; b.textContent = 'SAVING…';
+      const r = await save('submit'); b.disabled = false;
+      if (r && r.ok === false && cfg.endpoint) { b.textContent = old; return; }
+      refresh(); if (!cfg.endpoint) toast('Saved on this device only. Connect the Apps Script URL to store in Google Sheet.');
+    }
+    window.addEventListener('beforeunload', e => { if (dirty && cfg.endpoint) { e.preventDefault(); e.returnValue = ''; } });
+
+    /* ---------- start ---------- */
+    (async function start() {
+      if (!email) { $('#d-load').hidden = true; $('#d-nologin').hidden = false; return; }
+      await load();
+      $('#d-who').textContent = email; $('#d-load').hidden = true; $('#d-app').hidden = false;
+      let first = STEPS.findIndex((_, i) => !stepDone(i)); if (first < 0) first = 6;
+      go(first, true); setStatus(cfg.endpoint ? 'saved' : 'local');
+    })();
+  }
+})();
+{% endraw %}
+</script>
+
+{% schema %}
+{
+  "name": "Seller Dashboard",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Google Sheet" },
+    { "type": "text", "id": "endpoint", "label": "Google Apps Script Web App URL", "info": "The /exec URL from google-apps-script-dashboard.gs" },
+    { "type": "text", "id": "secret", "label": "API secret (optional)", "info": "Must match SECRET in the script. Visible in page source, so it only blocks casual misuse." },
+    { "type": "range", "id": "max_file_mb", "label": "Max file size (MB)", "min": 1, "max": 5, "step": 1, "default": 2 },
+    { "type": "header", "content": "Login" },
+    { "type": "url", "id": "login_url", "label": "Login page URL", "info": "Used for Logout and when the seller is not logged in" },
+    { "type": "header", "content": "Optional lookups and links" },
+    { "type": "text", "id": "gst_api", "label": "GST lookup API URL", "info": "Optional. Called as URL?gstin=XXXX and should return JSON with company, address, city, pincode, state. Leave empty to enter these manually." },
+    { "type": "url", "id": "guide_url", "label": "OMS and Business Model Guide link" },
+    { "type": "text", "id": "notice", "label": "Top notice bar text", "info": "Leave empty to hide" },
+    { "type": "header", "content": "Look and content" },
+    { "type": "color", "id": "accent", "label": "Accent colour", "default": "#5333d6" },
+    { "type": "textarea", "id": "categories", "label": "Brand categories", "info": "One per line. Format: Primary: Secondary 1, Secondary 2", "default": "Men's Fashion: T-Shirts, Shirts, Jeans, Trousers, Ethnic Wear, Innerwear, Footwear\nWomen's Fashion: Kurtas & Suits, Sarees, Dresses, Tops, Jeans, Lingerie, Footwear\nKids: Boys Clothing, Girls Clothing, Infants, Footwear, Toys\nHome & Living: Bedding, Furniture, Decor, Kitchen & Dining, Storage\nBeauty & Personal Care: Skincare, Makeup, Haircare, Fragrances, Grooming\nAccessories: Bags, Watches, Jewellery, Sunglasses, Belts & Wallets\nElectronics & Gadgets: Audio, Wearables, Mobile Accessories, Smart Home" },
+    { "type": "textarea", "id": "terms", "label": "Policy text shown in Declaration > Read More", "default": "You agree to follow all platform policies, sell only genuine and legally compliant products, keep your business, tax and bank information up to date, and cooperate with any verification requested by the platform." }
+  ],
+  "presets": [{ "name": "Seller Dashboard" }]
+}
+{% endschema %}
