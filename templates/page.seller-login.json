@@ -11,7 +11,13 @@
   "sections": {
     "main": {
       "type": "seller-login",
-      "settings": {}
+      "settings": {
+        "title": "partners_mdirect",
+        "subtitle": "Powered by Krimmple",
+        "redirect_url": "",
+        "endpoint": "",
+        "google_client_id": ""
+      }
     }
   },
   "order": [
