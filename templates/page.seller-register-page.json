@@ -21,7 +21,7 @@
       "type": "seller-registration-form",
       "name": "Seller Registration Form",
       "settings": {
-        "endpoint": "https://script.google.com/macros/s/AKfycbxw9Mb4BWP-e5t7dc_VtJZCp0t3VtrVwwKLkzkPPQQMSaUwZlxAysqnZ__BFS-Tnmgh5Q/exec",
+        "endpoint": "https://script.google.com/macros/s/AKfycbymPj1uVcLP7_wfCETQ-gnkEq70SCIC3mNj3Vw-IdIKhQdvVqK1ugxN7LN1EG2P7gqIwQ/exec",
         "max_file_mb": 2,
         "accent": "#5333d6",
         "notice": "",
