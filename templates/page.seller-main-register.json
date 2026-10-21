@@ -12,7 +12,7 @@
     "main": {
       "type": "seller-main-register",
       "settings": {
-        "endpoint": "",
+        "endpoint": "https://script.google.com/macros/s/AKfycbxZtO8WhgsLCM5RIxtDVTwoFv5fc2S5ilc833QRDMQ-URCiD5I7dSuGQN9d6QDOPs9-bg/exec",
         "login_url": "shopify://pages/seller-register",
         "terms_url": "",
         "heading": "Partner with us",
