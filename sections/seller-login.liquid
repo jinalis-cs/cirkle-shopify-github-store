@@ -93,36 +93,49 @@
     const cfg = { endpoint: (root.dataset.endpoint || '').trim(), redirect: (root.dataset.redirect || '').trim(), gclient: (root.dataset.gclient || '').trim() };
     const views = { choose: $('[data-view=choose]'), email: $('[data-view=email]') };
     const email = $('[name=email]'), pass = $('[name=password]'), formErr = $('.mlg-form-err'), loginBtn = $('[data-act=login]');
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
     function toast(t) { const el = $('.mlg-toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 3200); }
     function show(v) { Object.keys(views).forEach(k => views[k].hidden = k !== v); if (v === 'email') email.focus(); }
     function setErr(input, m) { const f = input.closest('.mlg-f'); f.classList.toggle('bad', !!m); f.querySelector('.mlg-err').textContent = m || ''; }
+    function showFormErr(m) { formErr.textContent = m; formErr.hidden = !m; }
+
+    // Already logged in on this tab? Go straight to the dashboard (add ?relogin to the URL to see the form).
+    try {
+      if (cfg.redirect && !/[?&]relogin/.test(location.search) && JSON.parse(sessionStorage.getItem('seller_user') || '{}').email) { location.replace(cfg.redirect); return; }
+    } catch (e) { }
+
     function done(user) {
-      root.dispatchEvent(new CustomEvent('seller-login', { bubbles: true, detail: user }));
+      user.email = String(user.email || '').trim().toLowerCase();
       try { sessionStorage.setItem('seller_user', JSON.stringify(user)); } catch (e) { }
+      root.dispatchEvent(new CustomEvent('seller-login', { bubbles: true, detail: user }));
       if (cfg.redirect) location.href = cfg.redirect; else toast('Logged in');
     }
 
     function validate() {
       let ok = true;
       const e = email.value.trim(), p = pass.value;
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) { setErr(email, e ? 'Enter a valid email ID' : 'Email is required'); ok = false; } else setErr(email, '');
-      if (!p) { setErr(pass, 'Password is required'); ok = false; } else if (p.length < 6) { setErr(pass, 'Password must be at least 6 characters'); ok = false; } else setErr(pass, '');
+      if (!EMAIL_RE.test(e)) { setErr(email, e ? 'Enter a valid email ID' : 'Email is required'); ok = false; } else setErr(email, '');
+      if (!p) { setErr(pass, 'Password is required'); ok = false; } else setErr(pass, '');
       return ok;
     }
 
+    function busy(on) { loginBtn.disabled = on; email.disabled = on; pass.disabled = on; loginBtn.textContent = on ? 'Logging in…' : 'Login'; }
+
     async function login() {
-      formErr.hidden = true;
+      showFormErr('');
       if (!validate()) return;
-      if (!cfg.endpoint) { formErr.textContent = 'Login is not connected yet. Add the endpoint URL in the section settings.'; formErr.hidden = false; return; }
-      loginBtn.disabled = true; loginBtn.textContent = 'Logging in…';
+      if (!cfg.endpoint) return showFormErr('Login is not connected yet. Add the Apps Script URL in the section settings.');
+      busy(true);
       try {
-        const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'login', email: email.value.trim(), password: pass.value }) });
-        const j = await res.json();
+        let res, j;
+        try { res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'login', email: email.value.trim().toLowerCase(), password: pass.value }) }); }
+        catch (n) { throw new Error('Could not reach the server. Check your internet and try again.'); }
+        try { j = await res.json(); }
+        catch (n) { throw new Error('Server error. Check that the Apps Script is deployed as a Web app with access set to Anyone.'); }
         if (!j.ok) throw new Error(j.error || 'Invalid email or password');
-        done({ email: email.value.trim(), method: 'password' });
-      } catch (err) { formErr.textContent = err.message || 'Could not log in. Try again.'; formErr.hidden = false; }
-      loginBtn.disabled = false; loginBtn.textContent = 'Login';
+        done({ email: email.value, method: 'password' });
+      } catch (err) { showFormErr(err.message || 'Could not log in. Try again.'); busy(false); pass.focus(); }
     }
 
     function loadGsi() {
@@ -132,7 +145,7 @@
         s.onload = res; s.onerror = () => rej(new Error('Could not load Google sign-in')); document.head.appendChild(s);
       });
     }
-    async function google_() {
+    async function googleLogin() {
       if (!cfg.gclient) { toast('Add the Google Client ID in the section settings'); return; }
       try {
         await loadGsi();
@@ -140,8 +153,11 @@
           client_id: cfg.gclient, scope: 'openid email profile',
           callback: async (r) => {
             if (!r || r.error) return toast('Google login cancelled');
-            const u = await (await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: 'Bearer ' + r.access_token } })).json();
-            done({ email: u.email, name: u.name, method: 'google' });
+            try {
+              const u = await (await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: 'Bearer ' + r.access_token } })).json();
+              if (!u.email) throw new Error('no email');
+              done({ email: u.email, name: u.name, method: 'google' });
+            } catch (e) { toast('Could not read your Google account. Try again.'); }
           }
         }).requestAccessToken();
       } catch (err) { toast(err.message); }
@@ -150,13 +166,13 @@
     root.addEventListener('click', (e) => {
       const b = e.target.closest('[data-act]'); if (!b) return;
       ({
-        'show-email': () => show('email'), 'back': () => { formErr.hidden = true; show('choose'); },
-        'login': login, 'google': google_,
+        'show-email': () => show('email'), 'back': () => { showFormErr(''); show('choose'); },
+        'login': login, 'google': googleLogin,
         'toggle-pw': () => { const h = pass.type === 'password'; pass.type = h ? 'text' : 'password'; b.textContent = h ? 'Hide' : 'Show'; }
       }[b.dataset.act] || function () { })();
     });
     root.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !views.email.hidden && e.target.matches('input')) login(); });
-    email.addEventListener('blur', () => email.value && setErr(email, /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()) ? '' : 'Enter a valid email ID'));
+    email.addEventListener('blur', () => email.value && setErr(email, EMAIL_RE.test(email.value.trim()) ? '' : 'Enter a valid email ID'));
   });
 })();
 {% endraw %}
