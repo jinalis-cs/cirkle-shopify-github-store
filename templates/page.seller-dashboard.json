@@ -12,7 +12,7 @@
     "main": {
       "type": "seller-dashboard",
       "settings": {
-        "endpoint": "https://script.google.com/macros/s/AKfycbymPj1uVcLP7_wfCETQ-gnkEq70SCIC3mNj3Vw-IdIKhQdvVqK1ugxN7LN1EG2P7gqIwQ/exec",
+        "endpoint": "https://script.google.com/macros/s/AKfycbzOVmIVIK1xKbz3YLwKBO9TRH2MPE_w-BWbNByV7Md26vewKe-rbXpzsZbD3YA-X9RrkA/exec",
         "secret": "",
         "max_file_mb": 2,
         "login_url": "shopify://pages/seller-login",
