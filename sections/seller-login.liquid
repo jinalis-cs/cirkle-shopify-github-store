@@ -1,0 +1,181 @@
+{%- comment -%}
+  Seller Login page (Myntra Partner login style)
+  Save as: sections/seller-login.liquid  -> add the section to a page.
+  Set background image, logo, redirect URL, Google Client ID in the section settings.
+{%- endcomment -%}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
+
+<div class="mlg" id="mlg-{{ section.id }}"
+  data-endpoint="{{ section.settings.endpoint | escape }}"
+  data-redirect="{{ section.settings.redirect_url | escape }}"
+  data-gclient="{{ section.settings.google_client_id | escape }}"
+  {% if section.settings.bg_image %}style="background-image:url('{{ section.settings.bg_image | image_url: width: 2400 }}')"{% endif %}>
+
+  <div class="mlg-card">
+    <div class="mlg-logo">
+      {%- if section.settings.logo -%}
+        <img src="{{ section.settings.logo | image_url: width: 240 }}" alt="{{ section.settings.title | escape }}" width="120" height="40">
+      {%- else -%}
+        <svg viewBox="0 0 64 40" width="44" height="28" aria-label="Logo"><defs><linearGradient id="mlgg-{{ section.id }}" x1="0" x2="1"><stop offset="0" stop-color="#ff3f6c"/><stop offset=".6" stop-color="#ff527b"/><stop offset="1" stop-color="#ff905a"/></linearGradient></defs><path d="M4 36 14 6c1-3 5-3 7 0l9 16 9-16c2-3 6-3 7 0l10 30" fill="none" stroke="url(#mlgg-{{ section.id }})" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {%- endif -%}
+    </div>
+
+    <h1 class="mlg-title">{{ section.settings.title }}</h1>
+    <p class="mlg-sub">{{ section.settings.subtitle }}</p>
+
+    <!-- Step 1: choose method -->
+    <div class="mlg-choose" data-view="choose">
+      <button type="button" class="mlg-opt" data-act="show-email">
+        <svg viewBox="0 0 36 26" width="30" height="22" aria-hidden="true"><rect x="1" y="1" width="34" height="24" fill="none" stroke="#282c3f" stroke-width="1.5"/><path d="M1 1l17 14L35 1M1 25l12-12M35 25L23 13" fill="none" stroke="#282c3f" stroke-width="1.5"/></svg>
+        <span>Use Email And Password</span>
+      </button>
+      <button type="button" class="mlg-opt" data-act="google">
+        <svg viewBox="0 0 48 48" width="26" height="26" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.9 2.4 30.4 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 010-9.4l-7.9-6.1a24 24 0 000 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+        <span>Login In With Google</span>
+      </button>
+    </div>
+
+    <!-- Step 2: email + password -->
+    <div class="mlg-email" data-view="email" hidden>
+      <div class="mlg-f"><label for="mlg-e-{{ section.id }}">Email</label>
+        <input id="mlg-e-{{ section.id }}" type="email" name="email" autocomplete="username" placeholder="Enter your email ID">
+        <div class="mlg-err"></div></div>
+      <div class="mlg-f"><label for="mlg-p-{{ section.id }}">Password</label>
+        <div class="mlg-pw"><input id="mlg-p-{{ section.id }}" type="password" name="password" autocomplete="current-password" placeholder="Enter your password"><button type="button" data-act="toggle-pw" aria-label="Show password">Show</button></div>
+        <div class="mlg-err"></div></div>
+      <div class="mlg-form-err" role="alert" hidden></div>
+      <button type="button" class="mlg-btn" data-act="login">Login</button>
+      <button type="button" class="mlg-link" data-act="back">&larr; Back to login options</button>
+    </div>
+  </div>
+  <div class="mlg-toast" role="status" aria-live="polite"></div>
+</div>
+
+<style>
+.mlg{--ac:#282c3f;position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 16px;font-family:"Open Sans",Arial,sans-serif;color:#282c3f;background-color:#02040b;background-size:cover;background-position:center;
+  background-image:radial-gradient(ellipse 60% 30% at 28% 78%,rgba(255,190,110,.55),transparent 70%),radial-gradient(ellipse 45% 22% at 78% 70%,rgba(255,170,80,.45),transparent 70%),radial-gradient(ellipse 120% 55% at 50% 118%,#233a66 0%,#0a1328 55%,transparent 75%),radial-gradient(ellipse 140% 30% at 50% 36%,#07142b 0%,transparent 70%),#01030a}
+.mlg *{box-sizing:border-box}
+.mlg-card{position:relative;width:360px;max-width:100%;min-height:450px;background:#fff;padding:52px 40px 40px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.mlg-logo{position:absolute;left:50%;top:-31px;transform:translateX(-50%);width:200px;height:66px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.mlg-logo img{max-width:140px;max-height:44px;object-fit:contain}
+.mlg-title{margin:22px 0 0;font-size:16px;font-weight:600;line-height:1.3}
+.mlg-sub{margin:10px 0 26px;font-size:11px;color:#7e818c}
+.mlg-opt{display:flex;align-items:center;gap:14px;width:100%;height:47px;margin-bottom:20px;padding:0 26px;background:#fff;border:1px solid #d4d5d9;font:400 13px "Open Sans",Arial,sans-serif;color:#282c3f;cursor:pointer;transition:box-shadow .2s,border-color .2s}
+.mlg-opt:hover{border-color:#b5b7bf;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.mlg-opt:focus-visible,.mlg-btn:focus-visible,.mlg-link:focus-visible{outline:2px solid #5333d6;outline-offset:2px}
+.mlg-opt svg{flex:none}
+.mlg-email{text-align:left}
+.mlg-f{margin-bottom:16px}
+.mlg-f label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
+.mlg-f input{width:100%;height:42px;padding:0 12px;border:1px solid #d4d5d9;font:400 13px "Open Sans",Arial,sans-serif;color:#282c3f;outline:0;border-radius:0}
+.mlg-f input:focus{border-color:#282c3f}
+.mlg-f.bad input{border-color:#d0021b}
+.mlg-err{display:none;color:#d0021b;font-size:11px;margin-top:4px}
+.mlg-f.bad .mlg-err{display:block}
+.mlg-pw{position:relative}.mlg-pw input{padding-right:58px}
+.mlg-pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;font:600 11px "Open Sans",Arial,sans-serif;color:#696e79;cursor:pointer}
+.mlg-form-err{background:#fdecee;color:#d0021b;font-size:12px;padding:8px 10px;margin-bottom:14px}
+.mlg-btn{width:100%;height:44px;border:0;background:#282c3f;color:#fff;font:600 13px "Open Sans",Arial,sans-serif;letter-spacing:.4px;cursor:pointer}
+.mlg-btn:disabled{opacity:.6;cursor:wait}
+.mlg-link{display:block;margin:16px auto 0;border:0;background:none;color:#696e79;font:400 12px "Open Sans",Arial,sans-serif;cursor:pointer;text-decoration:underline}
+.mlg-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#fff;color:#282c3f;padding:12px 18px;font-size:13px;border-radius:4px;opacity:0;pointer-events:none;transition:.25s;max-width:92vw;z-index:50}
+.mlg-toast.show{opacity:1;transform:translate(-50%,0)}
+.mlg [hidden]{display:none!important}
+@media (max-width:420px){.mlg-card{padding:52px 20px 32px}}
+@media (prefers-reduced-motion:reduce){.mlg *{transition:none!important}}
+</style>
+
+<script>
+{% raw %}
+(function () {
+  document.querySelectorAll('.mlg').forEach(function (root) {
+    const $ = (s) => root.querySelector(s);
+    const cfg = { endpoint: (root.dataset.endpoint || '').trim(), redirect: (root.dataset.redirect || '').trim(), gclient: (root.dataset.gclient || '').trim() };
+    const views = { choose: $('[data-view=choose]'), email: $('[data-view=email]') };
+    const email = $('[name=email]'), pass = $('[name=password]'), formErr = $('.mlg-form-err'), loginBtn = $('[data-act=login]');
+
+    function toast(t) { const el = $('.mlg-toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 3200); }
+    function show(v) { Object.keys(views).forEach(k => views[k].hidden = k !== v); if (v === 'email') email.focus(); }
+    function setErr(input, m) { const f = input.closest('.mlg-f'); f.classList.toggle('bad', !!m); f.querySelector('.mlg-err').textContent = m || ''; }
+    function done(user) {
+      root.dispatchEvent(new CustomEvent('seller-login', { bubbles: true, detail: user }));
+      try { sessionStorage.setItem('seller_user', JSON.stringify(user)); } catch (e) { }
+      if (cfg.redirect) location.href = cfg.redirect; else toast('Logged in');
+    }
+
+    function validate() {
+      let ok = true;
+      const e = email.value.trim(), p = pass.value;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) { setErr(email, e ? 'Enter a valid email ID' : 'Email is required'); ok = false; } else setErr(email, '');
+      if (!p) { setErr(pass, 'Password is required'); ok = false; } else if (p.length < 6) { setErr(pass, 'Password must be at least 6 characters'); ok = false; } else setErr(pass, '');
+      return ok;
+    }
+
+    async function login() {
+      formErr.hidden = true;
+      if (!validate()) return;
+      if (!cfg.endpoint) { formErr.textContent = 'Login is not connected yet. Add the endpoint URL in the section settings.'; formErr.hidden = false; return; }
+      loginBtn.disabled = true; loginBtn.textContent = 'Logging in…';
+      try {
+        const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'login', email: email.value.trim(), password: pass.value }) });
+        const j = await res.json();
+        if (!j.ok) throw new Error(j.error || 'Invalid email or password');
+        done({ email: email.value.trim(), method: 'password' });
+      } catch (err) { formErr.textContent = err.message || 'Could not log in. Try again.'; formErr.hidden = false; }
+      loginBtn.disabled = false; loginBtn.textContent = 'Login';
+    }
+
+    function loadGsi() {
+      return new Promise((res, rej) => {
+        if (window.google && google.accounts && google.accounts.oauth2) return res();
+        const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+        s.onload = res; s.onerror = () => rej(new Error('Could not load Google sign-in')); document.head.appendChild(s);
+      });
+    }
+    async function google_() {
+      if (!cfg.gclient) { toast('Add the Google Client ID in the section settings'); return; }
+      try {
+        await loadGsi();
+        google.accounts.oauth2.initTokenClient({
+          client_id: cfg.gclient, scope: 'openid email profile',
+          callback: async (r) => {
+            if (!r || r.error) return toast('Google login cancelled');
+            const u = await (await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: 'Bearer ' + r.access_token } })).json();
+            done({ email: u.email, name: u.name, method: 'google' });
+          }
+        }).requestAccessToken();
+      } catch (err) { toast(err.message); }
+    }
+
+    root.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-act]'); if (!b) return;
+      ({
+        'show-email': () => show('email'), 'back': () => { formErr.hidden = true; show('choose'); },
+        'login': login, 'google': google_,
+        'toggle-pw': () => { const h = pass.type === 'password'; pass.type = h ? 'text' : 'password'; b.textContent = h ? 'Hide' : 'Show'; }
+      }[b.dataset.act] || function () { })();
+    });
+    root.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !views.email.hidden && e.target.matches('input')) login(); });
+    email.addEventListener('blur', () => email.value && setErr(email, /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()) ? '' : 'Enter a valid email ID'));
+  });
+})();
+{% endraw %}
+</script>
+
+{% schema %}
+{
+  "name": "Seller Login",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "bg_image", "label": "Background image", "info": "Recommended 2400 x 1200. A dark night-sky gradient shows if empty." },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "text", "id": "title", "label": "Title", "default": "partners_mdirect" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Powered by Myntra" },
+    { "type": "header", "content": "Login behaviour" },
+    { "type": "url", "id": "redirect_url", "label": "Redirect after login", "info": "e.g. your dashboard page" },
+    { "type": "text", "id": "endpoint", "label": "Email login endpoint URL", "info": "Server URL that checks email and password and returns { ok: true }" },
+    { "type": "text", "id": "google_client_id", "label": "Google OAuth Client ID", "info": "From Google Cloud Console. Add your store domain as an authorised JavaScript origin." }
+  ],
+  "presets": [{ "name": "Seller Login" }]
+}
+{% endschema %}
