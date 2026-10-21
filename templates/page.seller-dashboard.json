@@ -15,7 +15,7 @@
         "endpoint": "https://script.google.com/macros/s/AKfycbymPj1uVcLP7_wfCETQ-gnkEq70SCIC3mNj3Vw-IdIKhQdvVqK1ugxN7LN1EG2P7gqIwQ/exec",
         "secret": "",
         "max_file_mb": 2,
-        "login_url": "",
+        "login_url": "shopify://pages/seller-login",
         "gst_api": "",
         "guide_url": "",
         "notice": "",
