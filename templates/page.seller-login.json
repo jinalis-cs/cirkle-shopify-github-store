@@ -14,7 +14,7 @@
       "settings": {
         "title": "partners_mdirect",
         "subtitle": "Powered by Krimmple",
-        "redirect_url": "",
+        "redirect_url": "shopify://pages/seller-dashboard",
         "endpoint": "",
         "google_client_id": ""
       }
