@@ -1,102 +1,299 @@
-<section class="pr" id="pr-template--27363366305901__partner_register_Ff6Mjq" data-send-mobile="" data-verify-mobile="" data-send-email="" data-verify-email="" data-submit="" data-gmail-only="false" data-demo="true" data-ready="1">
+{%- comment -%}
+  Seller Register ("Register as a Partner") - 3 steps: Mobile > Email > Password
+  Save as: sections/seller-register.liquid -> add to the page /pages/seller-register
+  The email + password created here are what the seller uses on the Seller Login section.
+  Mobile + email are saved in your Google Sheet by google-apps-script-dashboard.gs.
+{%- endcomment -%}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap">
 
-  <div class="pr__wrap" bis_skin_checked="1">
-    <div class="pr__brand" bis_skin_checked="1">
-      <h1>Partner with us</h1>
-      <p>One place for all your interactions. Register and start selling today.</p>
-      <ul><li>Reach millions of customers</li><li>Fast, reliable payments</li><li>Dedicated partner support</li></ul>
-    </div>
+<div class="mrg" id="mrg-{{ section.id }}"
+  style="--c1: {{ section.settings.color_1 }}; --c2: {{ section.settings.color_2 }};"
+  data-endpoint="{{ section.settings.endpoint | escape }}"
+  data-login="{{ section.settings.login_url }}">
 
-    <form class="pr__card" novalidate="">
-      <h2>Register as a Partner</h2>
+  <div class="mrg-wrap">
 
-      <ol class="pr__steps" aria-label="Registration steps">
-        <li class="is-active" data-dot="1"><span>1</span>Mobile</li>
-        <li data-dot="2"><span>2</span>Email</li>
-        <li data-dot="3"><span>3</span>Password</li>
-      </ol><div class="pr__step" data-step="1" bis_skin_checked="1">
-        <div class="pr__field" data-verify="mobile" bis_skin_checked="1">
-          <label for="pr-mobile-template--27363366305901__partner_register_Ff6Mjq">Mobile Number</label>
-          <div class="pr__row" bis_skin_checked="1">
-            <span class="pr__prefix">+91</span>
-            <input type="tel" id="pr-mobile-template--27363366305901__partner_register_Ff6Mjq" name="mobile" inputmode="numeric" maxlength="10" autocomplete="tel-national" required="">
-            <button type="button" class="pr__btn pr__btn--ghost" data-action="send">Send OTP</button>
+    <!-- ============ LEFT: PITCH ============ -->
+    <aside class="mrg-hero">
+      <h1>{{ section.settings.heading }}</h1>
+      <p class="mrg-sub">{{ section.settings.subheading }}</p>
+      <ul class="mrg-points">
+        {%- for i in (1..3) -%}
+          {%- assign key = 'point_' | append: i -%}
+          {%- if section.settings[key] != blank -%}
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.500l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></svg><span>{{ section.settings[key] }}</span></li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </aside>
+
+    <!-- ============ RIGHT: FORM ============ -->
+    <section class="mrg-card" aria-labelledby="mrg-title-{{ section.id }}">
+      <div class="mrg-form-area">
+        <h2 id="mrg-title-{{ section.id }}">{{ section.settings.card_title }}</h2>
+
+        <ol class="mrg-steps" aria-label="Registration progress">
+          <li class="on" data-dot="1"><button type="button" class="dot" data-goto="1" aria-label="Step 1: Mobile">1</button><span class="lbl">Mobile</span></li>
+          <li data-dot="2"><button type="button" class="dot" data-goto="2" aria-label="Step 2: Email" disabled>2</button><span class="lbl">Email</span></li>
+          <li data-dot="3"><button type="button" class="dot" data-goto="3" aria-label="Step 3: Password" disabled>3</button><span class="lbl">Password</span></li>
+        </ol>
+
+        <form id="mrg-form-{{ section.id }}" novalidate autocomplete="on">
+          <!-- honeypot for bots -->
+          <div class="mrg-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+          <!-- Step 1 : mobile -->
+          <div class="mrg-step" data-step="1">
+            <label class="mrg-label" for="mrg-mobile-{{ section.id }}">Mobile Number</label>
+            <div class="mrg-phone">
+              <span class="cc">+91</span>
+              <input id="mrg-mobile-{{ section.id }}" name="mobile" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="10 digit mobile number" aria-describedby="mrg-e1-{{ section.id }}">
+            </div>
+            <p class="mrg-err" id="mrg-e1-{{ section.id }}" role="alert" hidden></p>
+            <div class="mrg-actions"><button type="button" class="mrg-btn off" data-next aria-disabled="true">Continue</button></div>
           </div>
-          <div class="pr__row pr__otp" hidden="" bis_skin_checked="1">
-            <input type="text" name="mobile_otp" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP">
-            <button type="button" class="pr__btn pr__btn--ghost" data-action="verify">Verify</button>
+
+          <!-- Step 2 : email -->
+          <div class="mrg-step" data-step="2" hidden>
+            <label class="mrg-label" for="mrg-email-{{ section.id }}">Email Address</label>
+            <input id="mrg-email-{{ section.id }}" class="mrg-input" name="email" type="email" autocomplete="username" placeholder="you@example.com" aria-describedby="mrg-e2-{{ section.id }}">
+            <p class="mrg-hint">You will use this email and your password to log in.</p>
+            <p class="mrg-err" id="mrg-e2-{{ section.id }}" role="alert" hidden></p>
+            <div class="mrg-actions two"><button type="button" class="mrg-back" data-back>Back</button><button type="button" class="mrg-btn off" data-next aria-disabled="true">Continue</button></div>
           </div>
-          <small class="pr__msg"></small>
-        </div>
-        <button type="button" class="pr__btn pr__btn--primary" data-next="" disabled="">Continue</button>
-      </div><div class="pr__step" data-step="2" hidden="" bis_skin_checked="1">
-        <div class="pr__field" data-verify="email" bis_skin_checked="1">
-          <label for="pr-email-template--27363366305901__partner_register_Ff6Mjq">Email</label>
-          <div class="pr__row" bis_skin_checked="1">
-            <input type="email" id="pr-email-template--27363366305901__partner_register_Ff6Mjq" name="email" autocomplete="email" required="">
-            <button type="button" class="pr__btn pr__btn--ghost" data-action="send">Send OTP</button>
+
+          <!-- Step 3 : password -->
+          <div class="mrg-step" data-step="3" hidden>
+            <label class="mrg-label" for="mrg-pw-{{ section.id }}">Set Password</label>
+            <div class="mrg-pw"><input id="mrg-pw-{{ section.id }}" class="mrg-input" name="password" type="password" autocomplete="new-password" placeholder="Create a password"><button type="button" class="mrg-show" data-toggle="password" aria-label="Show password">Show</button></div>
+            <ul class="mrg-rules" id="mrg-rules-{{ section.id }}" aria-label="Password rules">
+              <li data-r="len">At least 8 characters</li><li data-r="letter">One letter</li><li data-r="num">One number</li>
+            </ul>
+            <label class="mrg-label" for="mrg-cpw-{{ section.id }}">Confirm Password</label>
+            <div class="mrg-pw"><input id="mrg-cpw-{{ section.id }}" class="mrg-input" name="confirm" type="password" autocomplete="new-password" placeholder="Re-enter your password"><button type="button" class="mrg-show" data-toggle="confirm" aria-label="Show confirm password">Show</button></div>
+            <label class="mrg-check"><input type="checkbox" name="terms"><span>I agree to the {% if section.settings.terms_url != blank %}<a href="{{ section.settings.terms_url }}" target="_blank" rel="noopener">Terms &amp; Conditions</a>{% else %}Terms &amp; Conditions{% endif %}</span></label>
+            <p class="mrg-err" id="mrg-e3-{{ section.id }}" role="alert" hidden></p>
+            <div class="mrg-actions two"><button type="button" class="mrg-back" data-back>Back</button><button type="submit" class="mrg-btn off" data-submit aria-disabled="true">Register</button></div>
           </div>
-          <div class="pr__row pr__otp" hidden="" bis_skin_checked="1">
-            <input type="text" name="email_otp" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP">
-            <button type="button" class="pr__btn pr__btn--ghost" data-action="verify">Verify</button>
-          </div>
-          <small class="pr__msg"></small>
-        </div>
-        <div class="pr__nav" bis_skin_checked="1">
-          <button type="button" class="pr__btn pr__btn--ghost" data-back="">Back</button>
-          <button type="button" class="pr__btn pr__btn--primary" data-next="" disabled="">Continue</button>
-        </div>
-      </div><div class="pr__step" data-step="3" hidden="" bis_skin_checked="1">
-        <div class="pr__field" bis_skin_checked="1">
-          <label for="pr-name-template--27363366305901__partner_register_Ff6Mjq">Full Name</label>
-          <input type="text" id="pr-name-template--27363366305901__partner_register_Ff6Mjq" name="name" autocomplete="name" required="">
-          <small class="pr__err"></small>
-        </div>
+        </form>
 
-        <div class="pr__field" bis_skin_checked="1">
-          <label for="pr-brand-template--27363366305901__partner_register_Ff6Mjq">Business / Brand Name</label>
-          <input type="text" id="pr-brand-template--27363366305901__partner_register_Ff6Mjq" name="brand" required="">
-          <small class="pr__err"></small>
-        </div>
-
-        <div class="pr__field" bis_skin_checked="1">
-          <label for="pr-gst-template--27363366305901__partner_register_Ff6Mjq">GST Number (optional)</label>
-          <input type="text" id="pr-gst-template--27363366305901__partner_register_Ff6Mjq" name="gst" maxlength="15" style="text-transform:uppercase">
-          <small class="pr__err"></small>
-        </div>
-
-        <div class="pr__field" bis_skin_checked="1">
-          <label for="pr-pass-template--27363366305901__partner_register_Ff6Mjq">Set Password</label>
-          <div class="pr__pass" bis_skin_checked="1">
-            <input type="password" id="pr-pass-template--27363366305901__partner_register_Ff6Mjq" name="password" autocomplete="new-password" placeholder="Min 8 characters, letters &amp; numbers" required="">
-            <button type="button" class="pr__eye" data-eye="" aria-label="Show password">Show</button>
-          </div>
-          <small class="pr__err"></small>
-        </div>
-
-        <div class="pr__field" bis_skin_checked="1">
-          <label for="pr-cpass-template--27363366305901__partner_register_Ff6Mjq">Confirm Password</label>
-          <div class="pr__pass" bis_skin_checked="1">
-            <input type="password" id="pr-cpass-template--27363366305901__partner_register_Ff6Mjq" name="confirm_password" autocomplete="new-password" required="">
-            <button type="button" class="pr__eye" data-eye="" aria-label="Show password">Show</button>
-          </div>
-          <small class="pr__err"></small>
-        </div>
-
-        <label class="pr__check">
-          <input type="checkbox" name="terms" required="">
-          <span>I agree to the <a href="">Terms &amp; Conditions</a></span>
-        </label>
-        <small class="pr__err" data-terms-err=""></small>
-
-        <div class="pr__nav" bis_skin_checked="1">
-          <button type="button" class="pr__btn pr__btn--ghost" data-back="">Back</button>
-          <button type="submit" class="pr__btn pr__btn--primary">Register</button>
-        </div>
+        <p class="mrg-login">Already a partner? <a href="{{ section.settings.login_url | default: '#' }}">Login</a></p>
       </div>
 
-      <p class="pr__status" role="status"></p>
-      <p class="pr__login">Already a partner? <a href="">Login</a></p>
-    </form>
+      <!-- Success -->
+      <div class="mrg-done" hidden tabindex="-1">
+        <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2>{{ section.settings.success_title }}</h2>
+        <p>{{ section.settings.success_text }}</p>
+        <a class="mrg-btn link" href="{{ section.settings.login_url | default: '/' }}">Go to Login</a>
+      </div>
+    </section>
   </div>
-</section>
+</div>
+
+<style>
+.mrg{--tx:#3a3a3a;--mu:#7a7a7a;--bd:#d9d9d9;--er:#d0021b;--ok:#14a76c;background:#f4f4f4;padding:48px 16px 56px;font-family:Arial,Helvetica,sans-serif;color:var(--tx);font-size:14px;line-height:1.45}
+.mrg *{box-sizing:border-box}
+.mrg [hidden]{display:none!important}
+.mrg-wrap{max-width:990px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:stretch}
+/* hero */
+.mrg-hero{background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 100%);border-radius:8px;padding:36px 36px 48px;color:#fff;min-height:420px}
+.mrg-hero h1{margin:0 0 10px;font-family:Lora,Georgia,serif;font-weight:400;font-size:38px;line-height:1.2;color:#333}
+.mrg-sub{margin:0 0 28px;font-size:17px;max-width:30em}
+.mrg-points{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.mrg-points li{display:flex;align-items:center;gap:12px;font-size:15px}
+.mrg-points svg{width:18px;height:18px;flex:none}
+/* card */
+.mrg-card{background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:28px;align-self:start}
+.mrg-card h2{margin:0 0 22px;font-family:Lora,Georgia,serif;font-weight:400;font-size:25px;color:#333}
+/* stepper */
+.mrg-steps{list-style:none;margin:0 0 26px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);position:relative}
+.mrg-steps li{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+.mrg-steps li::before{content:"";position:absolute;top:15px;left:calc(-50% + 16px);right:calc(50% + 16px);height:2px;background:#e4e4e4}
+.mrg-steps li:first-child::before{display:none}
+.mrg-steps li.done::before,.mrg-steps li.on::before{background:var(--c1)}
+.dot{width:30px;height:30px;border-radius:50%;border:0;background:#e4e4e4;color:#fff;font:700 13px Arial,sans-serif;display:grid;place-items:center;padding:0;position:relative;z-index:1}
+.mrg-steps li.on .dot{background:var(--c1)}
+.mrg-steps li.done .dot{background:var(--c1);cursor:pointer;font-size:0}
+.mrg-steps li.done .dot::after{content:"";width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.mrg-steps li:not(.done):not(.on) .dot{cursor:default}
+.lbl{font-size:12px;font-weight:700;color:#8c8c8c}
+.mrg-steps li.on .lbl,.mrg-steps li.done .lbl{color:var(--c1)}
+.dot:focus-visible,.mrg-btn:focus-visible,.mrg-back:focus-visible,.mrg-show:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+/* fields */
+.mrg-label{display:block;margin:0 0 8px;font-size:13px;font-weight:700;color:#555}
+.mrg-step .mrg-label:not(:first-child){margin-top:18px}
+.mrg-input,.mrg-phone input{width:100%;height:42px;padding:0 12px;border:1px solid var(--bd);border-radius:4px;font:400 14px Arial,sans-serif;color:var(--tx);background:#fff;outline:0}
+.mrg-input:focus,.mrg-phone input:focus{border-color:var(--c1);box-shadow:0 0 0 3px rgba(255,63,108,.14)}
+.mrg-input.bad,.mrg-phone input.bad{border-color:var(--er)}
+.mrg-phone{display:flex;gap:8px}
+.mrg-phone .cc{flex:none;display:grid;place-items:center;width:52px;height:42px;border:1px solid var(--bd);border-radius:4px;background:#f6f6f6;font-size:14px}
+.mrg-phone input{flex:1;min-width:0}
+.mrg-pw{position:relative}.mrg-pw .mrg-input{padding-right:62px}
+.mrg-show{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--c1);font:700 12px Arial,sans-serif;cursor:pointer;padding:6px}
+.mrg-hint{margin:8px 0 0;font-size:12px;color:var(--mu)}
+.mrg-err{margin:8px 0 0;font-size:12px;color:var(--er)}
+.mrg-rules{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--mu)}
+.mrg-rules li::before{content:"○ ";}
+.mrg-rules li.ok{color:var(--ok)}.mrg-rules li.ok::before{content:"✓ "}
+.mrg-check{display:flex;gap:10px;align-items:flex-start;margin-top:18px;font-size:13px;cursor:pointer}
+.mrg-check input{width:16px;height:16px;margin:2px 0 0;accent-color:var(--c1);flex:none}
+.mrg-check a{color:var(--c1)}
+.mrg-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* buttons */
+.mrg-actions{margin-top:26px}
+.mrg-actions.two{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.mrg-actions.two .mrg-btn{flex:1}
+.mrg-btn{display:flex;align-items:center;justify-content:center;width:100%;height:42px;border:0;border-radius:4px;background:var(--c1);color:#fff;font:700 13px Arial,sans-serif;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;text-decoration:none}
+.mrg-btn:hover{filter:brightness(.95)}
+.mrg-btn.off{background:#f4a3b6;cursor:pointer}
+.mrg-btn:disabled{cursor:wait;opacity:.8}
+.mrg-back{flex:none;background:none;border:0;color:var(--c1);font:700 13px Arial,sans-serif;padding:10px 6px;cursor:pointer}
+.mrg-login{margin:16px 0 0;text-align:center;font-size:13px}
+.mrg-login a{color:var(--c1);font-weight:700;text-decoration:none}
+/* success */
+.mrg-done{text-align:center;padding:24px 4px}
+.mrg-done .tick{width:60px;height:60px;border-radius:50%;background:var(--ok);display:grid;place-items:center;margin:0 auto 16px}
+.mrg-done .tick svg{width:30px;height:30px}
+.mrg-done h2{margin-bottom:10px}
+.mrg-done p{margin:0 0 22px;color:#555}
+.mrg-btn.link{display:inline-flex;width:auto;padding:0 28px}
+/* responsive */
+@media (max-width:860px){
+  .mrg{padding:24px 14px 40px}
+  .mrg-wrap{grid-template-columns:1fr;gap:20px}
+  .mrg-hero{min-height:0;padding:26px 22px 28px}
+  .mrg-hero h1{font-size:30px}
+  .mrg-sub{font-size:15px;margin-bottom:20px}
+  .mrg-points{gap:12px}
+}
+@media (max-width:480px){
+  .mrg-card{padding:22px 16px}
+  .mrg-card h2{font-size:22px;margin-bottom:18px}
+  .mrg-input,.mrg-phone input,.mrg-phone .cc{height:46px;font-size:16px}
+  .mrg-btn{height:46px}
+  .lbl{font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){.mrg *{transition:none!important}}
+</style>
+
+<script>
+{% raw %}
+(function () {
+  document.querySelectorAll('.mrg').forEach(function (root) {
+    const $ = (s, r) => (r || root).querySelector(s), $$ = (s, r) => [...(r || root).querySelectorAll(s)];
+    const cfg = { endpoint: (root.dataset.endpoint || '').trim(), login: root.dataset.login || '' };
+    const form = $('form'), steps = $$('.mrg-step'), dots = $$('.mrg-steps li');
+    const q = n => form.querySelector('[name="' + n + '"]');
+    const f = { mobile: q('mobile'), email: q('email'), password: q('password'), confirm: q('confirm'), terms: q('terms') };
+    const MOBILE = /^[6-9]\d{9}$/, EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    let step = 1, maxStep = 1, sending = false;
+
+    /* ---------- helpers ---------- */
+    const normMobile = v => { let d = String(v || '').replace(/\D/g, ''); if (d.length === 12 && d.startsWith('91')) d = d.slice(2); else if (d.length === 11 && d.startsWith('0')) d = d.slice(1); return d.slice(0, 10); };
+    const rules = p => ({ len: p.length >= 8, letter: /[A-Za-z]/.test(p), num: /\d/.test(p) });
+    const errEl = n => $('[data-step="' + n + '"] .mrg-err');
+    function setErr(n, input, msg) { const e = errEl(n); e.textContent = msg || ''; e.hidden = !msg; if (input) { input.classList.toggle('bad', !!msg); input.setAttribute('aria-invalid', msg ? 'true' : 'false'); } }
+
+    /* returns an error message, or '' when the step is valid */
+    function check(n) {
+      if (n === 1) { const v = normMobile(f.mobile.value); return !v ? 'Enter your mobile number' : (MOBILE.test(v) ? '' : 'Enter a valid 10 digit mobile number'); }
+      if (n === 2) { const v = f.email.value.trim(); return !v ? 'Enter your email address' : (EMAIL.test(v) ? '' : 'Enter a valid email address'); }
+      const p = f.password.value, r = rules(p);
+      if (!p) return 'Create a password';
+      if (!(r.len && r.letter && r.num)) return 'Password needs at least 8 characters, one letter and one number';
+      if (!f.confirm.value) return 'Confirm your password';
+      if (f.confirm.value !== p) return 'Passwords do not match';
+      if (!f.terms.checked) return 'Please accept the Terms & Conditions';
+      return '';
+    }
+    const inputFor = n => (n === 1 ? f.mobile : n === 2 ? f.email : (f.confirm.value !== f.password.value && f.confirm.value ? f.confirm : f.password));
+
+    function refresh() {
+      steps.forEach(s => s.hidden = +s.dataset.step !== step);
+      dots.forEach((d, i) => {
+        const n = i + 1; d.classList.toggle('on', n === step); d.classList.toggle('done', n < step);
+        const b = $('.dot', d); b.disabled = n >= step || n > maxStep; if (n === step) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      });
+      const ok = !check(step), btn = $('[data-step="' + step + '"] .mrg-btn');
+      btn.classList.toggle('off', !ok); btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
+      const r = rules(f.password.value); $$('#' + $('.mrg-rules').id + ' li').forEach(li => li.classList.toggle('ok', !!r[li.dataset.r]));
+    }
+    function go(n, focus) { step = n; maxStep = Math.max(maxStep, n); refresh(); if (focus !== false) { const t = $('[data-step="' + n + '"] input'); if (t) t.focus(); } }
+
+    /* ---------- events ---------- */
+    f.mobile.addEventListener('input', () => { const pos = f.mobile.value; f.mobile.value = normMobile(pos); setErr(1, f.mobile, ''); refresh(); });
+    f.email.addEventListener('input', () => { setErr(2, f.email, ''); refresh(); });
+    [f.password, f.confirm, f.terms].forEach(el => el.addEventListener('input', () => { setErr(3, null, ''); f.password.classList.remove('bad'); f.confirm.classList.remove('bad'); refresh(); }));
+    f.mobile.addEventListener('blur', () => { if (f.mobile.value) setErr(1, f.mobile, check(1)); });
+    f.email.addEventListener('blur', () => { if (f.email.value) setErr(2, f.email, check(2)); });
+    f.confirm.addEventListener('blur', () => { if (f.confirm.value && f.confirm.value !== f.password.value) setErr(3, f.confirm, 'Passwords do not match'); });
+
+    root.addEventListener('click', e => {
+      const t = e.target.closest('button'); if (!t) return;
+      if (t.hasAttribute('data-next')) { const m = check(step); if (m) { setErr(step, inputFor(step), m); inputFor(step).focus(); return; } go(step + 1); }
+      else if (t.hasAttribute('data-back')) go(step - 1);
+      else if (t.dataset.goto) { const n = +t.dataset.goto; if (n < step) go(n); }
+      else if (t.dataset.toggle) { const i = f[t.dataset.toggle], show = i.type === 'password'; i.type = show ? 'text' : 'password'; t.textContent = show ? 'Hide' : 'Show'; t.setAttribute('aria-label', (show ? 'Hide ' : 'Show ') + (t.dataset.toggle === 'password' ? 'password' : 'confirm password')); }
+    });
+    form.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox' && step < 3) { e.preventDefault(); $('[data-step="' + step + '"] [data-next]').click(); } });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault(); if (sending) return;
+      const m = check(3); if (m) { setErr(3, inputFor(3), m); return; }
+      if (q('website').value) { showDone(); return; }   // bot: pretend success, send nothing
+      if (!cfg.endpoint) { setErr(3, null, 'Registration is not connected yet. Add the Apps Script URL in the section settings.'); return; }
+      sending = true; const btn = $('[data-submit]'), old = btn.textContent; btn.textContent = 'Please wait…'; btn.disabled = true; setErr(3, null, '');
+      try {
+        let res, j;
+        try { res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'register', mobile: normMobile(f.mobile.value), email: f.email.value.trim().toLowerCase(), password: f.password.value }) }); }
+        catch (n) { throw { msg: 'Could not reach the server. Check your internet and try again.' }; }
+        try { j = await res.json(); } catch (n) { throw { msg: 'Server error. Check that the Apps Script is deployed as a Web app with access set to Anyone.' }; }
+        if (!j.ok) throw { msg: j.error || 'Could not register. Try again.', field: j.field };
+        showDone();
+      } catch (err) {
+        if (err.field === 'mobile') { go(1, false); setErr(1, f.mobile, err.msg); f.mobile.focus(); }
+        else if (err.field === 'email') { go(2, false); setErr(2, f.email, err.msg); f.email.focus(); }
+        else setErr(3, null, err.msg);
+      }
+      sending = false; btn.textContent = old; btn.disabled = false; refresh();
+    });
+
+    function showDone() {
+      f.password.value = f.confirm.value = '';
+      $('.mrg-form-area').hidden = true; const d = $('.mrg-done'); d.hidden = false; d.focus();
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    refresh();
+  });
+})();
+{% endraw %}
+</script>
+
+{% schema %}
+{
+  "name": "Seller Register",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Google Sheet" },
+    { "type": "text", "id": "endpoint", "label": "Google Apps Script Web App URL", "info": "The same /exec URL used by the login and dashboard sections" },
+    { "type": "header", "content": "Links" },
+    { "type": "url", "id": "login_url", "label": "Login page URL" },
+    { "type": "url", "id": "terms_url", "label": "Terms & Conditions page URL" },
+    { "type": "header", "content": "Left panel" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Partner with us" },
+    { "type": "textarea", "id": "subheading", "label": "Sub heading", "default": "One place for all your interactions. Register and start selling today." },
+    { "type": "text", "id": "point_1", "label": "Point 1", "default": "Reach millions of customers" },
+    { "type": "text", "id": "point_2", "label": "Point 2", "default": "Fast, reliable payments" },
+    { "type": "text", "id": "point_3", "label": "Point 3", "default": "Dedicated partner support" },
+    { "type": "header", "content": "Form" },
+    { "type": "text", "id": "card_title", "label": "Form title", "default": "Register as a Partner" },
+    { "type": "text", "id": "success_title", "label": "Success title", "default": "Registration successful" },
+    { "type": "textarea", "id": "success_text", "label": "Success message", "default": "Your partner account is ready. Log in with your email and password to complete your seller details." },
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "color_1", "label": "Gradient start / accent", "default": "#ff3f6c" },
+    { "type": "color", "id": "color_2", "label": "Gradient end", "default": "#ff905a" }
+  ],
+  "presets": [{ "name": "Seller Register" }]
+}
+{% endschema %}
