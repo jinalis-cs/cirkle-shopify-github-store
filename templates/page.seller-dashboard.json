@@ -11,7 +11,18 @@
   "sections": {
     "main": {
       "type": "seller-dashboard",
-      "settings": {}
+      "settings": {
+        "endpoint": "https://script.google.com/macros/s/AKfycbymPj1uVcLP7_wfCETQ-gnkEq70SCIC3mNj3Vw-IdIKhQdvVqK1ugxN7LN1EG2P7gqIwQ/exec",
+        "secret": "",
+        "max_file_mb": 2,
+        "login_url": "",
+        "gst_api": "",
+        "guide_url": "",
+        "notice": "",
+        "accent": "#5333d6",
+        "categories": "Men's Fashion: T-Shirts, Shirts, Jeans, Trousers, Ethnic Wear, Innerwear, Footwear\nWomen's Fashion: Kurtas & Suits, Sarees, Dresses, Tops, Jeans, Lingerie, Footwear\nKids: Boys Clothing, Girls Clothing, Infants, Footwear, Toys\nHome & Living: Bedding, Furniture, Decor, Kitchen & Dining, Storage\nBeauty & Personal Care: Skincare, Makeup, Haircare, Fragrances, Grooming\nAccessories: Bags, Watches, Jewellery, Sunglasses, Belts & Wallets\nElectronics & Gadgets: Audio, Wearables, Mobile Accessories, Smart Home",
+        "terms": "You agree to follow all platform policies, sell only genuine and legally compliant products, keep your business, tax and bank information up to date, and cooperate with any verification requested by the platform."
+      }
     }
   },
   "order": [
