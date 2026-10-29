@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "intl_hidden_product": {
+    "title": "Product unavailable",
+    "message": "This product isn't available in your region yet."
+  },
   "general": {
     "password_page": {
       "login_form_heading": "Enter store using password:",

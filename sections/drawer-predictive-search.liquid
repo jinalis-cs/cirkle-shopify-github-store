@@ -23,6 +23,9 @@
       <ul class="predictive-search-list">
 
       {% for product in predictive_search.resources.products %}
+        {%- if product.tags contains 'hide-intl-until-first-stock' and localization.country.iso_code != 'US' -%}
+          {%- continue -%}
+        {%- endif -%}
 
           <li>
 

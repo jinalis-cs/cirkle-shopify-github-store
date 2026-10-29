@@ -124,6 +124,9 @@ variant-swatchs .swatch{
           <div class="featured-products prod-list-slider">
             <div class="product-list-wrap swiper-wrapper">
               {% for product in section.settings.collection.products %}
+                {%- if product.tags contains 'hide-intl-until-first-stock' and localization.country.iso_code != 'US' -%}
+                  {%- continue -%}
+                {%- endif -%}
                 {% render 'custom-prod-card', product: product, index: forloop.index %}
               {% endfor %}
             </div>

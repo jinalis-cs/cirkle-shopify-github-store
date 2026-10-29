@@ -43,6 +43,9 @@
       >
         {% assign skip_card_product_styles = false %}
         {% for recommendation in collections[collection_handle].products limit:4 %}
+          {%- if recommendation.tags contains 'hide-intl-until-first-stock' and localization.country.iso_code != 'US' -%}
+            {%- continue -%}
+          {%- endif -%}
           <li class="grid__item">
             {% render 'card-product',
               card_product: recommendation,

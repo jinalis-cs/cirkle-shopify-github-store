@@ -1,3 +1,9 @@
+{%- if product.tags contains 'hide-intl-until-first-stock' and localization.country.iso_code != 'US' -%}
+  <div class="page-width" style="padding: 6rem 0; text-align: center;">
+    <h1>{{ 'intl_hidden_product.title' | t }}</h1>
+    <p>{{ 'intl_hidden_product.message' | t }}</p>
+  </div>
+{%- else -%}
 <product-info
   id="MainProduct-{{ section.id }}"
   class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} main-product"
@@ -778,6 +784,8 @@
     </script>
   </div>
 </product-info>
+
+{%- endif -%}
 
 {% schema %}
 {
