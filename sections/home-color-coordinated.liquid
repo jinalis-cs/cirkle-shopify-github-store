@@ -1,0 +1,33 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+<link
+  rel="preload"
+  href="{{ 'component-rte.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'">
+  {% assign page = pages[section.settings.pagr_val] %}
+  {% if page.metafields.custom.product_variants.value != blank %}
+    <div class="product-grid-container product--main--container" id="main_category_top">
+      <div class="category-product-list">
+        {% for variant in page.metafields.custom.product_variants.value %}
+          <div class="list-products" >
+            {% render 'card-product-variant',card_product: variant, show_secondary_image: true , product: variant.product %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+  
+{% schema %}
+  {
+    "name": "Home Color Coordinated",    
+    "settings": [
+      {
+        "type": "page",
+        "id": "pagr_val",
+        "label": "Select Page"
+      }
+    ],
+    "presets": [{"name": "Home Color Coordinated"}]
+  }
+{% endschema %}
