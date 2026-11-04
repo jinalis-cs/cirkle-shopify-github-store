@@ -13,6 +13,8 @@
           {% assign show_product = true %}
           {% if product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %}
             {% assign show_product = false %}
+          {% else %}
+            {% assign show_product = true %}
           {% endif %}
           {% if show_product %}
             {% for variant in product.variants %}            
