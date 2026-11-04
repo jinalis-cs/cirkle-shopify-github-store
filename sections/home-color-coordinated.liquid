@@ -6,7 +6,7 @@
   as="style"
   onload="this.onload=null;this.rel='stylesheet'">
   {% assign page = pages[section.settings.pagr_val] %}
-  {% if page.metafields.custom.product_variants.value != blank %}
+  {% comment %} {% if page.metafields.custom.product_variants.value != blank %} {% endcomment %}
     <div class="product-grid-container product--main--container" id="main_category_top">
       <div class="category-product-list">
         {% for variant in collection.products %}
@@ -19,7 +19,7 @@
         {% endfor %}
       </div>
     </div>
-  {% endif %}
+  {% comment %} {% endif %} {% endcomment %}
   
 {% schema %}
   {
