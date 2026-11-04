@@ -16,7 +16,7 @@
           {% else %}
             {% assign show_product = true %}
           {% endif %}
-          --->{{  product.title }} -  {{ show_product }} <br>
+          
           {% if show_product %}
             {% for variant in product.variants %}            
               <div class="list-products" >
