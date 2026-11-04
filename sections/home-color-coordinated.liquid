@@ -14,12 +14,13 @@
           {% if product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %}
             {% assign show_product = false %}
           {% endif %}
-          {% for variant in product.variants %}
-            
-            <div class="list-products" >
-              {{  product.title }}
-            </div>
-          {% endfor %}
+          {% if show_product %}
+            {% for variant in product.variants %}            
+              <div class="list-products" >
+                {{  product.title }}
+              </div>
+            {% endfor %}
+          {% endif %}
         {% endfor %}
       </div>
     </div>
