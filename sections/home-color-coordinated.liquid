@@ -10,10 +10,9 @@
     <div class="product-grid-container product--main--container" id="main_category_top">
       <div class="category-product-list">
         {% for product in collections['all'].products %}
+          {% assign show_product = true %}
           {% if product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %}
             {% assign show_product = false %}
-          {% else %}
-            {% assign show_product = true %}
           {% endif %}
           
           {% if show_product %}
