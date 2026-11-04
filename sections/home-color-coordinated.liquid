@@ -10,7 +10,7 @@
     <div class="product-grid-container product--main--container" id="main_category_top">
       <div class="category-product-list">
         {% for product in collections['all'].products %}
-          {% if product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %} 55
+          {% if product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %}
             {% continue %}
           {% endif %}
           {% for variant in product.variants %}
