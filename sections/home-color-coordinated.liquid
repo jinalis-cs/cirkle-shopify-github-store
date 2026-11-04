@@ -10,6 +10,9 @@
     <div class="product-grid-container product--main--container" id="main_category_top">
       <div class="category-product-list">
         {% for variant in page.metafields.custom.product_variants.value %}
+          {% if variant.product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %}
+            {% continue %}
+          {% endif %}
           <div class="list-products" >
             {% render 'card-product-variant',card_product: variant, show_secondary_image: true , product: variant.product %}
           </div>
