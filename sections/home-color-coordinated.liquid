@@ -9,13 +9,15 @@
   {% comment %} {% if page.metafields.custom.product_variants.value != blank %} {% endcomment %}
     <div class="product-grid-container product--main--container" id="main_category_top">
       <div class="category-product-list">
-        {% for variant in collections['all'].products %}
+        {% for product in collections['all'].products %}
+        {% for variant in product.variants %}
           {% if variant.product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %} 55
             {% continue %}
           {% endif %}
           <div class="list-products" >
             {{  variant.title }}
           </div>
+        {% endfor %}
         {% endfor %}
       </div>
     </div>
