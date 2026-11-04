@@ -9,7 +9,7 @@
   {% comment %} {% if page.metafields.custom.product_variants.value != blank %} {% endcomment %}
     <div class="product-grid-container product--main--container" id="main_category_top">
       <div class="category-product-list">
-        {% for variant in collection.products %}
+        {% for variant in collection['all'].products %}
           {% if variant.product.tags contains 'hide-from-mayple' and localization.country.iso_code != 'US' %}
             {% continue %}
           {% endif %}
